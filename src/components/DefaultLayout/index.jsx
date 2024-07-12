@@ -8,10 +8,10 @@ export default function DefaultLayout({ children }) {
     <Box>
       <Header />
       <Grid container flexWrap='nowrap' spacing={2} sx={{ pt: '80px' }}>
-        <Grid item md={3}>
+        <Grid item md={3} sm={3} xs={3}>
           <Sidebar />
         </Grid>
-        <Grid item md={9}>{children}</Grid>
+        <Grid item md={9} sm={9} xs={9}>{children}</Grid>
       </Grid>
     </Box>
   );

@@ -27,7 +27,7 @@ export default function Header() {
         pl: "16px",
         top: "0",
         bgcolor: "#23272f",
-        zIndex: "1000",
+        zIndex: "10000",
       }}
     >
       <Grid item>

@@ -12,7 +12,7 @@ export default function MediaCard() {
   return (
     <Card sx={{ cursor: "pointer" }}>
       <CardMedia component='img' height='200px' image='../../public/vite.svg' />
-      <CardContent sx={{ "&:last-child": { pb: '8px' } }}>
+      <CardContent sx={{ "&:last-child": { pb: "8px" } }}>
         <Grid container flexWrap='nowrap' spacing={2}>
           <Grid item>
             <Avatar alt='' src='../../public/vite.svg' />
@@ -22,16 +22,17 @@ export default function MediaCard() {
               variant='h6'
               component='div'
               sx={{
-                lineHeight: "1.2",
-                mb: "8px",
                 display: "-webkit-box",
                 WebkitBoxOrient: "vertical",
                 overflow: "hidden",
-                WebkitLineClamp: 2,
+                WebkitLineClamp: 1,
                 textOverflow: "ellipsis",
               }}
             >
-              Title
+              Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm
+              bảo nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá
+              dài. Dưới đây là cách bạn có thể sử dụng thuộc tính này với
+              Typography:
             </Typography>
             <Typography
               variant='subtitle2'

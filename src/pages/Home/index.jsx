@@ -1,25 +1,26 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React from "react";
 import MediaCard from "../../components/MediaCard";
+import ListCategory from "../../components/ListCategory";
 
 export default function Home() {
   return (
-    <Grid container spacing={2}>
-      <Grid item md={6}>
-        <MediaCard />
+    <Box>
+      <ListCategory />
+      <Grid container spacing={2}>
+        <Grid item md={6} sm={6} xs={12}>
+          <MediaCard />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <MediaCard />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <MediaCard />
+        </Grid>
+        <Grid item md={6} sm={6} xs={12}>
+          <MediaCard />
+        </Grid>
       </Grid>
-      <Grid item md={6}>
-        <MediaCard />
-      </Grid>
-      <Grid item md={6}>
-        <MediaCard />
-      </Grid>
-      <Grid item md={6}>
-        <MediaCard />
-      </Grid>
-      <Grid item md={6}>
-        <MediaCard />
-      </Grid>
-    </Grid>
-  )
+    </Box>
+  );
 }
