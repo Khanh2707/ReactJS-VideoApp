@@ -1,5 +1,4 @@
 import {
-  Divider,
   Drawer,
   List,
   ListItem,
@@ -9,8 +8,24 @@ import {
 } from "@mui/material";
 import React from "react";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
+  const listContent = [
+    {
+      name: "Trang chủ",
+      route: "/",
+    },
+    {
+      name: "Kênh của bạn",
+      route: "",
+    },
+    {
+      name: "Video đã xem",
+      route: "/feed/history",
+    },
+  ];
+
   return (
     <Drawer
       variant='permanent'
@@ -25,9 +40,11 @@ export default function Sidebar() {
       }}
     >
       <List sx={{ p: "0", position: "fixed", width: "275px" }}>
-        {["Trang chủ", "Kênh của bạn", "Video đã xem"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {listContent.map((item, index) => (
+          <ListItem key={item.name} disablePadding>
             <ListItemButton
+              component={Link}
+              to={item.route}
               sx={{
                 "&:hover": {
                   backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -44,7 +61,7 @@ export default function Sidebar() {
               <ListItemIcon sx={{ color: "#fff", minWidth: "40px" }}>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={item.name} />
             </ListItemButton>
           </ListItem>
         ))}

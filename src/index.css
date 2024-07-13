@@ -4,7 +4,8 @@
   margin: 0;
 }
 
-#root {
+:root {
+  color-scheme: dark;
   width: 100%;
 }
 

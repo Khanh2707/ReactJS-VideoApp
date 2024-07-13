@@ -11,7 +11,7 @@ import React from "react";
 export default function MediaCard() {
   return (
     <Card sx={{ cursor: "pointer" }}>
-      <CardMedia component='img' height='200px' image='../../public/vite.svg' />
+      <CardMedia component='img' height='200px' image='../../public/vite.svg' sx={{ objectFit: 'contain' }} />
       <CardContent sx={{ "&:last-child": { pb: "8px" } }}>
         <Grid container flexWrap='nowrap' spacing={2}>
           <Grid item>

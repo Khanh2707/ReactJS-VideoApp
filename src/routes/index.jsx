@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import Home from "../pages/Home";
 import Error from "../pages/Error";
+import WatchedVideo from "../pages/WatchedVideo";
 import AuthProvider from "../context/AuthProvider";
 import DefaultLayout from "../components/DefaultLayout";
 
@@ -34,6 +35,14 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/",
+          },
+          {
+            element: (
+              <DefaultLayout>
+                <WatchedVideo />
+              </DefaultLayout>
+            ),
+            path: "/feed/history",
           },
         ],
       },
