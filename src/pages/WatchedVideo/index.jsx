@@ -1,10 +1,20 @@
-import { Box, Grid, IconButton, InputBase, Typography } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Grid,
+  IconButton,
+  InputBase,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import WatchedVideoCard from "../../components/WatchedVideoCard";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function WatchedVideo() {
+  const deleteAllWatchedVideo = () => {};
+
   return (
     <>
       <Typography sx={{ fontWeight: "700", fontSize: "36px", mb: "32px" }}>
@@ -28,7 +38,11 @@ export default function WatchedVideo() {
             />
           </Box>
         </Grid>
-        <Grid item flexGrow={1} sx={{ display: "flex", alignItems: "start" }}>
+        <Grid
+          item
+          flexGrow={1}
+          sx={{ display: "flex", alignItems: "start", flexDirection: "column" }}
+        >
           <Box sx={{ display: "flex", borderBottom: "1px solid #fff" }}>
             <IconButton type='button' sx={{ color: "#fff" }}>
               <SearchIcon />
@@ -44,6 +58,20 @@ export default function WatchedVideo() {
               <ClearIcon />
             </IconButton>
           </Box>
+          <Chip
+            label='Xóa tất cả nhật ký xem'
+            icon={<DeleteIcon color="#fff" />}
+            sx={{
+              mt: "24px",
+              p: '4px',
+              color: "#fff",
+              bgcolor: "#23272f",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
+              },
+            }}
+            onClick={deleteAllWatchedVideo}
+          />
         </Grid>
       </Grid>
     </>
