@@ -1,8 +1,6 @@
 import {
   Avatar,
   Badge,
-  Box,
-  Container,
   Grid,
   IconButton,
   InputBase,
@@ -49,24 +47,24 @@ export default function Header() {
             sx={{ flex: 1, ml: "10px", color: "#fff" }}
             placeholder='Tìm kiếm... '
           />
-          <IconButton type='button' sx={{ p: "10px", color: "#fff" }}>
+          <IconButton type='button' sx={{ color: "#fff" }}>
             <ClearIcon />
           </IconButton>
-          <IconButton type='button' sx={{ p: "10px", color: "#fff" }}>
+          <IconButton type='button' sx={{ color: "#fff" }}>
             <SearchIcon />
           </IconButton>
         </Paper>
       </Grid>
       <Grid item>
-        <IconButton type='button' sx={{ p: "10px", color: "#fff", m: "0 2px" }}>
+        <IconButton type='button' sx={{ color: "#fff", m: "0 2px" }}>
           <AddCircleOutlineIcon />
         </IconButton>
-        <IconButton type='button' sx={{ p: "10px", color: "#fff", m: "0 2px" }}>
+        <IconButton type='button' sx={{ color: "#fff", m: "0 2px" }}>
           <Badge badgeContent='4' color='success'>
             <NotificationsNoneIcon />
           </Badge>
         </IconButton>
-        <IconButton type='button' sx={{ p: "10px", color: "#fff", m: "0 2px" }}>
+        <IconButton type='button' sx={{ color: "#fff", m: "0 2px" }}>
           <Avatar alt='' src='' sx={{ width: "32px", height: "32px" }} />
         </IconButton>
       </Grid>

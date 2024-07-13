@@ -40,11 +40,10 @@ export default function ListCategory() {
       container
       alignItems='center'
       flexWrap='nowrap'
-      spacing={1}
       sx={{ pb: "16px" }}
     >
       <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' sx={{ p: "10px", color: "#fff" }} onClick={handlePrev}>
+        <IconButton type='button' sx={{ color: "#fff" }} onClick={handlePrev}>
           <ArrowBackIosNewIcon />
         </IconButton>
       </Grid>
@@ -76,7 +75,7 @@ export default function ListCategory() {
         </Grid>
       </Grid>
       <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' sx={{ p: "10px", color: "#fff" }} onClick={handleNext}>
+        <IconButton type='button' sx={{ color: "#fff" }} onClick={handleNext}>
           <ArrowForwardIosIcon />
         </IconButton>
       </Grid>

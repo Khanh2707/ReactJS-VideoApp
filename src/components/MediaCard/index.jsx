@@ -8,10 +8,20 @@ import {
 } from "@mui/material";
 import React from "react";
 
-export default function MediaCard() {
+export default function MediaCard({
+  title,
+  nameChannel,
+  viewVideo,
+  dateTimeCreateVideo,
+}) {
   return (
     <Card sx={{ cursor: "pointer" }}>
-      <CardMedia component='img' height='200px' image='../../public/vite.svg' sx={{ objectFit: 'contain' }} />
+      <CardMedia
+        component='img'
+        height='200px'
+        image='../../public/vite.svg'
+        sx={{ objectFit: "contain" }}
+      />
       <CardContent sx={{ "&:last-child": { pb: "8px" } }}>
         <Grid container flexWrap='nowrap' spacing={2}>
           <Grid item>
@@ -29,10 +39,7 @@ export default function MediaCard() {
                 textOverflow: "ellipsis",
               }}
             >
-              Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm
-              bảo nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá
-              dài. Dưới đây là cách bạn có thể sử dụng thuộc tính này với
-              Typography:
+              {title}
             </Typography>
             <Typography
               variant='subtitle2'
@@ -43,7 +50,7 @@ export default function MediaCard() {
                 },
               }}
             >
-              Name Channel
+              {nameChannel}
             </Typography>
             <Typography
               variant='subtitle2'
@@ -51,7 +58,7 @@ export default function MediaCard() {
               component='span'
               sx={{ mr: "8px" }}
             >
-              View
+              {viewVideo}
             </Typography>
             <Typography
               variant='subtitle2'
@@ -66,7 +73,7 @@ export default function MediaCard() {
               color='text.secondary'
               component='span'
             >
-              Date Time Create
+              {dateTimeCreateVideo}
             </Typography>
           </Grid>
         </Grid>
