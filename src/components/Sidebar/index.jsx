@@ -7,30 +7,41 @@ import {
   ListItemText,
 } from "@mui/material";
 import React from "react";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
+import RestoreIcon from "@mui/icons-material/Restore";
+import EditIcon from '@mui/icons-material/Edit';
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 
 export default function Sidebar() {
+  const location = useLocation();
+
   const listContent = [
     {
       name: "Trang chủ",
       route: "/",
+      icon: <HomeIcon />,
     },
     {
       name: "Kênh của bạn",
       route: "/abc",
+      icon: <SwitchAccountIcon />,
     },
     {
       name: "Video đã xem",
       route: "/feed/history",
+      icon: <RestoreIcon />,
     },
     {
       name: "Tùy chỉnh kênh",
       route: "",
+      icon: <EditIcon />,
     },
     {
       name: "Nội dung của kênh",
       route: "",
+      icon: <VideoLibraryIcon />,
     },
   ];
 
@@ -53,6 +64,7 @@ export default function Sidebar() {
             <ListItemButton
               component={Link}
               to={item.route}
+              selected={location.pathname === item.route}
               sx={{
                 "&:hover": {
                   backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -60,14 +72,14 @@ export default function Sidebar() {
                 "&.Mui-selected": {
                   backgroundColor: "rgba(255, 255, 255, 0.1)",
                   "&:hover": {
-                    backgroundColor: "rgba(0, 0, 0, 0.2)",
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
                   },
                 },
                 borderRadius: "12px",
               }}
             >
               <ListItemIcon sx={{ color: "#fff", minWidth: "40px" }}>
-                <InboxIcon />
+                {item.icon}
               </ListItemIcon>
               <ListItemText primary={item.name} />
             </ListItemButton>

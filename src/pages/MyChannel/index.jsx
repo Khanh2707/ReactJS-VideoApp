@@ -31,7 +31,7 @@ export default function MyChannel() {
     {
       value: "2",
       label: "Video",
-    }
+    },
   ];
 
   return (
@@ -130,16 +130,34 @@ export default function MyChannel() {
             </TabList>
           </Box>
           {data.map((item) => (
-            <TabPanel key={item.value} value={item.value} sx={{ pl: "0" }}>
+            <TabPanel
+              key={item.value}
+              value={item.value}
+              sx={{ pl: "0", pr: "0" }}
+            >
               <Grid container spacing={2}>
-                <Grid item>
+                <Grid item md={4} sm={6} xs={12}>
                   <MyVideoCard
                     title='Title 1'
                     viewVideo='Lượt xem'
                     dateTimeCreate='Thời gian đăng'
                   />
                 </Grid>
-                <Grid item>
+                <Grid item md={4} sm={6} xs={12}>
+                  <MyVideoCard
+                    title='Title 2'
+                    viewVideo='Lượt xem'
+                    dateTimeCreate='Thời gian đăng'
+                  />
+                </Grid>
+                <Grid item md={4} sm={6} xs={12}>
+                  <MyVideoCard
+                    title='Title 2'
+                    viewVideo='Lượt xem'
+                    dateTimeCreate='Thời gian đăng'
+                  />
+                </Grid>
+                <Grid item md={4} sm={6} xs={12}>
                   <MyVideoCard
                     title='Title 2'
                     viewVideo='Lượt xem'

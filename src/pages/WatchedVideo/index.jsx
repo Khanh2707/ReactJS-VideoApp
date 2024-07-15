@@ -36,6 +36,14 @@ export default function WatchedVideo() {
               viewVideo='View Video'
               dateTimeCreateVideo='Date time create video'
             />
+            <WatchedVideoCard
+              title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
+            nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
+            Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
+              nameChannel='Name Channel'
+              viewVideo='View Video'
+              dateTimeCreateVideo='Date time create video'
+            />
           </Box>
         </Grid>
         <Grid

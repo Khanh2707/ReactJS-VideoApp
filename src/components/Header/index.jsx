@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import VideoCallIcon from '@mui/icons-material/VideoCall';
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -21,7 +21,7 @@ export default function Header() {
         justifyContent: "space-between",
         position: "fixed",
         maxWidth: "1152px",
-        p: "4px 0",
+        p: "8px 0",
         pl: "16px",
         top: "0",
         bgcolor: "#23272f",
@@ -57,7 +57,7 @@ export default function Header() {
       </Grid>
       <Grid item>
         <IconButton type='button' sx={{ color: "#fff", m: "0 2px" }}>
-          <AddCircleOutlineIcon />
+          <VideoCallIcon />
         </IconButton>
         <IconButton type='button' sx={{ color: "#fff", m: "0 2px" }}>
           <Badge badgeContent='4' color='success'>

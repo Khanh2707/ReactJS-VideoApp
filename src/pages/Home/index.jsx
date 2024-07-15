@@ -8,7 +8,7 @@ export default function Home() {
     <Box>
       <ListCategory />
       <Grid container spacing={2}>
-        <Grid item md={6} sm={6} xs={12}>
+        <Grid item md={6} sm={12} xs={12}>
           <MediaCard
             title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
@@ -18,7 +18,7 @@ export default function Home() {
             dateTimeCreateVideo='Date time create video'
           />
         </Grid>
-        <Grid item md={6} sm={6} xs={12}>
+        <Grid item md={6} sm={12} xs={12}>
           <MediaCard
             title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
@@ -28,7 +28,7 @@ export default function Home() {
             dateTimeCreateVideo='Date time create video'
           />
         </Grid>
-        <Grid item md={6} sm={6} xs={12}>
+        <Grid item md={6} sm={12} xs={12}>
           <MediaCard
             title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
@@ -38,7 +38,7 @@ export default function Home() {
             dateTimeCreateVideo='Date time create video'
           />
         </Grid>
-        <Grid item md={6} sm={6} xs={12}>
+        <Grid item md={6} sm={12} xs={12}>
           <MediaCard
             title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.

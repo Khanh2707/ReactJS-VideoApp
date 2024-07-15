@@ -8,14 +8,14 @@ export default function MyVideoCard({ title, viewVideo, dateTimeCreate }) {
         bgcolor: "#23272f",
         boxShadow: "none",
         cursor: "pointer",
-        width: "250px",
+        width: "100%",
       }}
     >
       <CardMedia
         component='img'
         image='../../public/vite.svg'
         sx={{
-          width: "250px",
+          width: "100%",
           height: "140px",
           objectFit: "contain",
         }}
