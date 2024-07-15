@@ -132,11 +132,13 @@ export default function Header() {
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemText primary='Inbox' />
+                    <ClearIcon />
                   </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemText primary='Inbox' />
+                    <ClearIcon />
                   </ListItemButton>
                 </ListItem>
               </List>
