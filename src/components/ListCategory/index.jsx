@@ -57,7 +57,7 @@ export default function ListCategory() {
         >
           {["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"].map(
             (text, index) => (
-              <Grid item>
+              <Grid item key={index}>
                 <Chip
                   label='Category'
                   onClick={handleClick}
