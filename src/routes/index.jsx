@@ -7,6 +7,7 @@ import Error from "../pages/Error";
 import WatchedVideo from "../pages/WatchedVideo";
 import AuthProvider from "../context/AuthProvider";
 import DefaultLayout from "../components/DefaultLayout";
+import MyChannel from "../pages/MyChannel";
 
 const AuthLayout = () => {
   return (
@@ -35,6 +36,14 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/",
+          },
+          {
+            element: (
+              <DefaultLayout>
+                <MyChannel />
+              </DefaultLayout>
+            ),
+            path: "/:idMyChannel",
           },
           {
             element: (

@@ -18,11 +18,19 @@ export default function Sidebar() {
     },
     {
       name: "Kênh của bạn",
-      route: "",
+      route: "/abc",
     },
     {
       name: "Video đã xem",
       route: "/feed/history",
+    },
+    {
+      name: "Tùy chỉnh kênh",
+      route: "",
+    },
+    {
+      name: "Nội dung của kênh",
+      route: "",
     },
   ];
 
