@@ -26,6 +26,7 @@ export default function Header() {
   const listHistorySearchRef = useRef(null);
   const [showListNotification, setShowListNotification] = useState(false);
   const listNotificationRef = useRef(null);
+  const notificationButtonRef = useRef(null);
 
   const handleInputChange = (event) => {
     setValueSearch(event.target.value);
@@ -46,9 +47,10 @@ export default function Header() {
 
     if (
       listNotificationRef.current &&
-      !listNotificationRef.current.contains(event.target)
+      !listNotificationRef.current.contains(event.target) &&
+      !notificationButtonRef.current.contains(event.target)
     ) {
-      setShowListNotification((prev) => !prev);
+      setShowListNotification(false);
     }
   };
 
@@ -154,6 +156,7 @@ export default function Header() {
               type='button'
               sx={{ color: "#fff" }}
               onClick={toggleNotifications}
+              ref={notificationButtonRef}
             >
               <Badge badgeContent='4' color='success'>
                 <NotificationsNoneIcon />
