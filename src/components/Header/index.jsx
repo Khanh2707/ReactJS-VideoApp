@@ -183,8 +183,8 @@ export default function Header() {
                 <Divider sx={{ bgcolor: "rgba(255, 255, 255, 0.2)" }} />
                 <List disablePadding>
                   <ListItem disablePadding>
-                    <ListItemButton>
-                      <Grid container spacing={1} alignItems='center' flexWrap='nowrap'>
+                    <ListItemButton sx={{ p: "16px" }}>
+                      <Grid container spacing={1} flexWrap='nowrap'>
                         <Grid item>
                           <Avatar alt='' src='../../public/vite.svg' />
                         </Grid>
@@ -195,16 +195,29 @@ export default function Header() {
                             Event Tuần 2 Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP
                             Chơi Gì
                           </Typography>
+                          <Typography
+                            variant='subtitle2'
+                            color='rgb(170, 170, 170)'
+                            sx={{ mt: "8px" }}
+                          >
+                            Thời gian đăng
+                          </Typography>
                         </Grid>
                         <Grid item>
-                          <img alt='' src='../../public/vite.svg' />
+                          <Box sx={{ width: "86px" }}>
+                            <img
+                              style={{ width: "100%" }}
+                              alt=''
+                              src='../../public/vite.svg'
+                            />
+                          </Box>
                         </Grid>
                       </Grid>
                     </ListItemButton>
                   </ListItem>
                   <ListItem disablePadding>
-                    <ListItemButton>
-                      <Grid container spacing={1} alignItems='center' flexWrap='nowrap'>
+                    <ListItemButton sx={{ p: "16px" }}>
+                      <Grid container spacing={1} flexWrap='nowrap'>
                         <Grid item>
                           <Avatar alt='' src='../../public/vite.svg' />
                         </Grid>
@@ -215,9 +228,22 @@ export default function Header() {
                             Event Tuần 2 Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP
                             Chơi Gì
                           </Typography>
+                          <Typography
+                            variant='subtitle2'
+                            color='rgb(170, 170, 170)'
+                            sx={{ mt: "8px" }}
+                          >
+                            Thời gian đăng
+                          </Typography>
                         </Grid>
                         <Grid item>
-                          <img alt='' src='../../public/vite.svg' />
+                          <Box sx={{ width: "86px" }}>
+                            <img
+                              style={{ width: "100%" }}
+                              alt=''
+                              src='../../public/vite.svg'
+                            />
+                          </Box>
                         </Grid>
                       </Grid>
                     </ListItemButton>
