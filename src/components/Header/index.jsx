@@ -184,12 +184,42 @@ export default function Header() {
                 <List disablePadding>
                   <ListItem disablePadding>
                     <ListItemButton>
-                      <ListItemText primary='Inbox' />
+                      <Grid container spacing={1} alignItems='center' flexWrap='nowrap'>
+                        <Grid item>
+                          <Avatar alt='' src='../../public/vite.svg' />
+                        </Grid>
+                        <Grid item>
+                          <Typography variant='subtitle2'>
+                            Nước Mía MOBA đang phát hành video ra mắt lần đầu
+                            tiên: Đại Chiến Lục Đạo - Kết Quả 7 Ngày, Review
+                            Event Tuần 2 Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP
+                            Chơi Gì
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <img alt='' src='../../public/vite.svg' />
+                        </Grid>
+                      </Grid>
                     </ListItemButton>
                   </ListItem>
                   <ListItem disablePadding>
                     <ListItemButton>
-                      <ListItemText primary='Inbox' />
+                      <Grid container spacing={1} alignItems='center' flexWrap='nowrap'>
+                        <Grid item>
+                          <Avatar alt='' src='../../public/vite.svg' />
+                        </Grid>
+                        <Grid item>
+                          <Typography variant='subtitle2'>
+                            Nước Mía MOBA đang phát hành video ra mắt lần đầu
+                            tiên: Đại Chiến Lục Đạo - Kết Quả 7 Ngày, Review
+                            Event Tuần 2 Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP
+                            Chơi Gì
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <img alt='' src='../../public/vite.svg' />
+                        </Grid>
+                      </Grid>
                     </ListItemButton>
                   </ListItem>
                 </List>
