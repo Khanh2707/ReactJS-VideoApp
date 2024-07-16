@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -23,13 +22,9 @@ export default function MyChannel() {
     setValue(newValue);
   };
 
-  const data = [
+  const tab = [
     {
       value: "1",
-      label: "Trang chủ",
-    },
-    {
-      value: "2",
       label: "Video",
     },
   ];
@@ -117,7 +112,7 @@ export default function MyChannel() {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label='lab API tabs example'>
-              {data.map((item) => (
+              {tab.map((item) => (
                 <Tab
                   key={item.value}
                   label={item.label}
@@ -129,7 +124,7 @@ export default function MyChannel() {
               ))}
             </TabList>
           </Box>
-          {data.map((item) => (
+          {tab.map((item) => (
             <TabPanel
               key={item.value}
               value={item.value}
@@ -152,14 +147,14 @@ export default function MyChannel() {
                 </Grid>
                 <Grid item md={4} sm={6} xs={12}>
                   <MyVideoCard
-                    title='Title 2'
+                    title='Title 3'
                     viewVideo='Lượt xem'
                     dateTimeCreate='Thời gian đăng'
                   />
                 </Grid>
                 <Grid item md={4} sm={6} xs={12}>
                   <MyVideoCard
-                    title='Title 2'
+                    title='Title 4'
                     viewVideo='Lượt xem'
                     dateTimeCreate='Thời gian đăng'
                   />

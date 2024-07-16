@@ -8,6 +8,7 @@ import WatchedVideo from "../pages/WatchedVideo";
 import AuthProvider from "../context/AuthProvider";
 import DefaultLayout from "../components/DefaultLayout";
 import MyChannel from "../pages/MyChannel";
+import ChannelEditing from "../pages/ChannelEditing";
 
 const AuthLayout = () => {
   return (
@@ -52,6 +53,14 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/feed/history",
+          },
+          {
+            element: (
+              <DefaultLayout>
+                <ChannelEditing />
+              </DefaultLayout>
+            ),
+            path: "/channel/editing",
           },
         ],
       },

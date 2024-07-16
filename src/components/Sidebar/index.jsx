@@ -35,7 +35,7 @@ export default function Sidebar() {
     },
     {
       name: "Tùy chỉnh kênh",
-      route: "",
+      route: "/channel/editing",
       icon: <EditIcon />,
     },
     {
