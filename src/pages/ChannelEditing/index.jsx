@@ -5,7 +5,6 @@ import {
   CardContent,
   CardMedia,
   Chip,
-  Grid,
   Tab,
   Typography,
 } from "@mui/material";
@@ -52,84 +51,89 @@ export default function ChannelEditing() {
               ))}
             </TabList>
           </Box>
-          {tab.map((item) => (
-            <TabPanel
-              key={item.value}
-              value={item.value}
-              sx={{ pl: "0", pr: "0" }}
+          <TabPanel value='1' sx={{ pl: "0", pr: "0" }}>
+            <Card
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                boxShadow: "none",
+                bgcolor: "#23272f",
+                width: "628px",
+                cursor: "pointer",
+              }}
             >
-              <Card
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  boxShadow: "none",
-                  bgcolor: "#23272f",
-                  width: "628px",
-                  cursor: "pointer",
-                }}
-              >
-                <Box sx={{ width: "290px" }}>
-                  <CardMedia
-                    component='img'
-                    image='../../public/vite.svg'
+              <Box sx={{ width: "290px" }}>
+                <CardMedia
+                  component='img'
+                  image='../../public/vite.svg'
+                  sx={{
+                    width: "140px",
+                    height: "140px",
+                    objectFit: "contain",
+                    borderRadius: "50%",
+                    margin: "auto",
+                  }}
+                  alt=''
+                />
+              </Box>
+              <CardContent sx={{ width: "382px" }}>
+                <Typography
+                  variant='h6'
+                  sx={{
+                    color: "#fff",
+                  }}
+                >
+                  Ảnh
+                </Typography>
+                <Typography
+                  variant='subtitle2'
+                  color='rgb(170, 170, 170)'
+                  component='div'
+                >
+                  Ảnh hồ sơ sẽ xuất hiện cùng với kênh của bạn trên YouTube tại
+                  những vị trí như bên cạnh bình luận và video của bạn
+                </Typography>
+                <Box sx={{ mt: "8px" }}>
+                  <Chip
+                    label='Thay đổi'
                     sx={{
-                      width: "140px",
-                      height: "140px",
-                      objectFit: "contain",
-                      borderRadius: "50%",
-                      margin: "auto",
+                      p: "4px",
+                      color: "#fff",
+                      bgcolor: "#3e3e3e",
+                      mr: "8px",
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      },
                     }}
-                    alt=''
+                    onClick={handleChangeAvatar}
+                  />
+                  <Chip
+                    label='Xóa'
+                    sx={{
+                      p: "4px",
+                      color: "#fff",
+                      bgcolor: "#3e3e3e",
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.2)",
+                      },
+                    }}
+                    onClick={handleChangeAvatar}
                   />
                 </Box>
-                <CardContent sx={{ width: "382px" }}>
-                  <Typography
-                    variant='h6'
-                    sx={{
-                      color: "#fff",
-                    }}
-                  >
-                    Ảnh
-                  </Typography>
-                  <Typography
-                    variant='subtitle2'
-                    color='rgb(170, 170, 170)'
-                    component='div'
-                  >
-                    Ảnh hồ sơ sẽ xuất hiện cùng với kênh của bạn trên YouTube
-                    tại những vị trí như bên cạnh bình luận và video của bạn
-                  </Typography>
-                  <Box sx={{ mt: "8px" }}>
-                    <Chip
-                      label='Thay đổi'
-                      sx={{
-                        p: "4px",
-                        color: "#fff",
-                        bgcolor: "#3e3e3e",
-                        mr: "8px",
-                        "&:hover": {
-                          backgroundColor: "rgba(255, 255, 255, 0.2)",
-                        },
-                      }}
-                      onClick={handleChangeAvatar}
-                    />
-                    <Chip
-                      label='Xóa'
-                      sx={{
-                        p: "4px",
-                        color: "#fff",
-                        bgcolor: "#3e3e3e",
-                        "&:hover": {
-                          backgroundColor: "rgba(255, 255, 255, 0.2)",
-                        },
-                      }}
-                      onClick={handleChangeAvatar}
-                    />
-                  </Box>
-                </CardContent>
-              </Card>
-            </TabPanel>
-          ))}
+              </CardContent>
+            </Card>
+          </TabPanel>
+          <TabPanel value='2' sx={{ pl: "0", pr: "0" }}>
+            <Box sx={{ ml: "16px" }}>
+              <Typography variant='subtitle1'>Tên</Typography>
+              <Typography
+                variant='subtitle2'
+                style={{ color: "rgb(170, 170, 170)" }}
+              >
+                Chọn tên kênh thể hiện cá tính và nội dung của bạn
+              </Typography>
+            </Box>
+          </TabPanel>
         </TabContext>
       </Box>
     </>

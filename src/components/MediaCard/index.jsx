@@ -15,7 +15,7 @@ export default function MediaCard({
   dateTimeCreateVideo,
 }) {
   return (
-    <Card sx={{ cursor: "pointer" }}>
+    <Card sx={{ cursor: "pointer", boxShadow: 'none' }}>
       <CardMedia
         component='img'
         height='200px'
