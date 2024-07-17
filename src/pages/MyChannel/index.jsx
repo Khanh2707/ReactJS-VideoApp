@@ -33,8 +33,6 @@ export default function MyChannel() {
     <>
       <Card
         sx={{
-          bgcolor: "#23272f",
-          boxShadow: "none",
           display: "flex",
         }}
       >
@@ -49,14 +47,10 @@ export default function MyChannel() {
           alt=''
         />
         <CardContent sx={{ pt: "0", pb: "0" }}>
-          <Typography variant='h4' sx={{ fontWeight: "700", color: "#fff" }}>
+          <Typography variant='h4' sx={{ fontWeight: "700" }}>
             Khánh Trần Phúc
           </Typography>
-          <Grid
-            container
-            spacing={1}
-            sx={{ color: "rgb(170, 170, 170)", mt: "0" }}
-          >
+          <Grid container spacing={1} sx={{ mt: "0" }}>
             <Grid item>
               <Typography variant='subtitle2'>@khanhtranphuc5193</Typography>
             </Grid>
@@ -73,36 +67,29 @@ export default function MyChannel() {
               <Typography variant='subtitle2'>2 video</Typography>
             </Grid>
           </Grid>
-          <Grid
-            container
-            spacing={1}
-            sx={{ color: "rgb(170, 170, 170)", mt: "0", cursor: "pointer" }}
-          >
+          <Grid container spacing={1} sx={{ mt: "0", cursor: "pointer" }}>
             <Grid item>
               <Typography variant='subtitle2'>
                 Đây là kênh của Trần Phúc Khánh
               </Typography>
             </Grid>
             <Grid item>
-              <Typography variant='subtitle2' color='#fff'>
-                ...xem thêm
-              </Typography>
+              <Typography variant='subtitle2'>...xem thêm</Typography>
             </Grid>
           </Grid>
           <Box
             sx={{ display: "flex", borderBottom: "1px solid #fff", mt: "8px" }}
           >
-            <IconButton type='button' sx={{ color: "#fff" }}>
+            <IconButton type='button'>
               <SearchIcon />
             </IconButton>
             <InputBase
               sx={{
-                color: "#fff",
                 flexGrow: 1, // Cho phép InputBase chiếm hết không gian còn lại
               }}
               placeholder='Tìm kiếm... '
             />
-            <IconButton type='button' sx={{ color: "#fff" }}>
+            <IconButton type='button'>
               <ClearIcon />
             </IconButton>
           </Box>
@@ -110,20 +97,11 @@ export default function MyChannel() {
       </Card>
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label='lab API tabs example'>
-              {tab.map((item) => (
-                <Tab
-                  key={item.value}
-                  label={item.label}
-                  value={item.value}
-                  sx={{
-                    color: "rgb(170, 170, 170)",
-                  }}
-                />
-              ))}
-            </TabList>
-          </Box>
+          <TabList onChange={handleChange} aria-label='lab API tabs example'>
+            {tab.map((item) => (
+              <Tab key={item.value} label={item.label} value={item.value} />
+            ))}
+          </TabList>
           {tab.map((item) => (
             <TabPanel
               key={item.value}

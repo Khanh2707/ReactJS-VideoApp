@@ -1,71 +1,11 @@
-import {
-  Avatar,
-  Badge,
-  Box,
-  Divider,
-  Grid,
-  IconButton,
-  InputBase,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Paper,
-  Typography,
-} from "@mui/material";
-import React, { useState, useRef, useEffect } from "react";
-import SearchIcon from "@mui/icons-material/Search";
+import { Avatar, Grid, IconButton } from "@mui/material";
+import React from "react";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import ClearIcon from "@mui/icons-material/Clear";
 import ThemeSwitcher from "../ThemeSwitcher";
+import SearchHeader from "../SearchHeader";
+import Notification from "../Notification";
 
 export default function Header() {
-  const [valueSearch, setValueSearch] = useState("");
-  const [showResultHistorySearch, setShowResultHistorySearch] = useState(false);
-  const inputSearchRef = useRef(null);
-  const listHistorySearchRef = useRef(null);
-  const [showListNotification, setShowListNotification] = useState(false);
-  const listNotificationRef = useRef(null);
-  const notificationButtonRef = useRef(null);
-
-  const handleInputChange = (event) => {
-    setValueSearch(event.target.value);
-  };
-
-  const clearInput = () => {
-    setValueSearch("");
-  };
-
-  const handleClickOutside = (event) => {
-    if (
-      listHistorySearchRef.current &&
-      !listHistorySearchRef.current.contains(event.target) &&
-      !inputSearchRef.current.contains(event.target)
-    ) {
-      setShowResultHistorySearch(false);
-    }
-
-    if (
-      listNotificationRef.current &&
-      !listNotificationRef.current.contains(event.target) &&
-      !notificationButtonRef.current.contains(event.target)
-    ) {
-      setShowListNotification(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const toggleNotifications = () => {
-    setShowListNotification((prev) => !prev);
-  };
-
   return (
     <Grid
       container
@@ -84,64 +24,7 @@ export default function Header() {
         <img src='../../public/vite.svg' alt='' />
       </Grid>
       <Grid item>
-        <Paper
-          component='form'
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "400px",
-            outline: "1px solid #fff",
-            boxShadow: "none",
-            position: "relative",
-          }}
-        >
-          <InputBase
-            sx={{ flex: 1, ml: "10px" }}
-            placeholder='Tìm kiếm...'
-            value={valueSearch}
-            onChange={handleInputChange}
-            onClick={() => setShowResultHistorySearch(true)}
-            ref={inputSearchRef}
-          />
-          {valueSearch && (
-            <IconButton
-              type='button'
-              sx={{  }}
-              onClick={clearInput}
-            >
-              <ClearIcon />
-            </IconButton>
-          )}
-          <IconButton type='button' sx={{  }}>
-            <SearchIcon />
-          </IconButton>
-          {showResultHistorySearch && (
-            <Box
-              ref={listHistorySearchRef}
-              sx={{
-                width: "100%",
-                position: "absolute",
-                top: "48px",
-                borderRadius: "8px",
-              }}
-            >
-              <List>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemText primary='Inbox' />
-                    <ClearIcon />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemText primary='Inbox' />
-                    <ClearIcon />
-                  </ListItemButton>
-                </ListItem>
-              </List>
-            </Box>
-          )}
-        </Paper>
+        <SearchHeader />
       </Grid>
       <Grid item>
         <Grid container alignItems='center' spacing={1}>
@@ -149,107 +32,15 @@ export default function Header() {
             <ThemeSwitcher />
           </Grid>
           <Grid item>
-            <IconButton type='button' sx={{  }}>
+            <IconButton type='button' sx={{}}>
               <VideoCallIcon />
             </IconButton>
           </Grid>
           <Grid item sx={{ position: "relative" }}>
-            <IconButton
-              type='button'
-              sx={{  }}
-              onClick={toggleNotifications}
-              ref={notificationButtonRef}
-            >
-              <Badge badgeContent='4' color='success'>
-                <NotificationsNoneIcon />
-              </Badge>
-            </IconButton>
-            {showListNotification && (
-              <Box
-                ref={listNotificationRef}
-                sx={{
-                  width: "480px",
-                  position: "absolute",
-                  top: "50px",
-                  left: "-430px",
-                  borderRadius: "8px",
-                }}
-              >
-                <Typography variant='h6' component='div' sx={{ p: "8px 16px" }}>
-                  Thông báo
-                </Typography>
-                <Divider sx={{  }} />
-                <List disablePadding>
-                  <ListItem disablePadding>
-                    <ListItemButton sx={{ p: "16px" }}>
-                      <Grid container spacing={1} flexWrap='nowrap'>
-                        <Grid item>
-                          <Avatar alt='' src='../../public/vite.svg' />
-                        </Grid>
-                        <Grid item>
-                          <Typography variant='subtitle2'>
-                            Nước Mía MOBA đang phát hành video ra mắt lần đầu
-                            tiên: Đại Chiến Lục Đạo - Kết Quả 7 Ngày, Review
-                            Event Tuần 2 Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP
-                            Chơi Gì
-                          </Typography>
-                          <Typography
-                            variant='subtitle2'
-                            sx={{ mt: "8px" }}
-                          >
-                            Thời gian đăng
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Box sx={{ width: "86px" }}>
-                            <img
-                              style={{ width: "100%" }}
-                              alt=''
-                              src='../../public/vite.svg'
-                            />
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton sx={{ p: "16px" }}>
-                      <Grid container spacing={1} flexWrap='nowrap'>
-                        <Grid item>
-                          <Avatar alt='' src='../../public/vite.svg' />
-                        </Grid>
-                        <Grid item>
-                          <Typography variant='subtitle2'>
-                            Nước Mía MOBA đang phát hành video ra mắt lần đầu
-                            tiên: Đại Chiến Lục Đạo - Kết Quả 7 Ngày, Review
-                            Event Tuần 2 Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP
-                            Chơi Gì
-                          </Typography>
-                          <Typography
-                            variant='subtitle2'
-                            sx={{ mt: "8px" }}
-                          >
-                            Thời gian đăng
-                          </Typography>
-                        </Grid>
-                        <Grid item>
-                          <Box sx={{ width: "86px" }}>
-                            <img
-                              style={{ width: "100%" }}
-                              alt=''
-                              src='../../public/vite.svg'
-                            />
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-              </Box>
-            )}
+            <Notification />
           </Grid>
           <Grid item>
-            <IconButton type='button' sx={{  }}>
+            <IconButton type='button' sx={{}}>
               <Avatar alt='' src='' sx={{ width: "32px", height: "32px" }} />
             </IconButton>
           </Grid>

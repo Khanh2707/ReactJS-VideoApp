@@ -36,14 +36,9 @@ export default function ListCategory() {
   };
 
   return (
-    <Grid
-      container
-      alignItems='center'
-      flexWrap='nowrap'
-      sx={{ pb: "16px" }}
-    >
+    <Grid container alignItems='center' flexWrap='nowrap' sx={{ pb: "16px" }}>
       <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' sx={{ color: "#fff" }} onClick={handlePrev}>
+        <IconButton type='button' sx={{}} onClick={handlePrev}>
           <ArrowBackIosNewIcon />
         </IconButton>
       </Grid>
@@ -58,24 +53,14 @@ export default function ListCategory() {
           {["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"].map(
             (text, index) => (
               <Grid item key={index}>
-                <Chip
-                  label='Category'
-                  onClick={handleClick}
-                  sx={{
-                    color: "#fff",
-                    bgcolor: "rgba(255, 255, 255, 0.1)",
-                    "&:hover": {
-                      backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    },
-                  }}
-                />
+                <Chip label='Category' onClick={handleClick} />
               </Grid>
             )
           )}
         </Grid>
       </Grid>
       <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' sx={{ color: "#fff" }} onClick={handleNext}>
+        <IconButton type='button' sx={{}} onClick={handleNext}>
           <ArrowForwardIosIcon />
         </IconButton>
       </Grid>

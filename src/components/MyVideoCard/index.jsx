@@ -5,8 +5,6 @@ export default function MyVideoCard({ title, viewVideo, dateTimeCreate }) {
   return (
     <Card
       sx={{
-        bgcolor: "#23272f",
-        boxShadow: "none",
         cursor: "pointer",
         width: "100%",
       }}
@@ -23,7 +21,6 @@ export default function MyVideoCard({ title, viewVideo, dateTimeCreate }) {
       />
       <CardContent sx={{ "&:last-child": { pb: "8px" } }}>
         <Typography
-          color='#fff'
           variant='subtitle1'
           sx={{
             display: "-webkit-box",
@@ -35,7 +32,7 @@ export default function MyVideoCard({ title, viewVideo, dateTimeCreate }) {
         >
           {title}
         </Typography>
-        <Grid container color='rgb(170, 170, 170)' spacing={1}>
+        <Grid container spacing={1}>
           <Grid item>
             <Typography variant='subtitle2'>{viewVideo}</Typography>
           </Grid>

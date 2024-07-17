@@ -7,7 +7,7 @@ export default function DefaultLayout({ children }) {
   return (
     <>
       <Header />
-      <Grid container flexWrap='nowrap' sx={{ pt: "100px" }}>
+      <Grid container flexWrap='nowrap' sx={{ pt: "96px", pb: "16px" }}>
         <Grid item md={3} sm={3} xs={3}>
           <Sidebar />
         </Grid>

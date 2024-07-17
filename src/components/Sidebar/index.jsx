@@ -11,7 +11,7 @@ import { Link, useLocation } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import RestoreIcon from "@mui/icons-material/Restore";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 
 export default function Sidebar() {
@@ -50,8 +50,6 @@ export default function Sidebar() {
       variant='permanent'
       sx={{
         "& .MuiDrawer-paper": {
-          boxSizing: "border-box",
-          borderRight: "none",
           position: "initial",
         },
       }}
@@ -64,21 +62,10 @@ export default function Sidebar() {
               to={item.route}
               selected={location.pathname === item.route}
               sx={{
-                // "&:hover": {
-                //   backgroundColor: "rgba(255, 255, 255, 0.1)",
-                // },
-                // "&.Mui-selected": {
-                //   backgroundColor: "rgba(255, 255, 255, 0.1)",
-                //   "&:hover": {
-                //     backgroundColor: "rgba(255, 255, 255, 0.1)",
-                //   },
-                // },
                 borderRadius: "12px",
               }}
             >
-              <ListItemIcon sx={{ minWidth: "40px" }}>
-                {item.icon}
-              </ListItemIcon>
+              <ListItemIcon sx={{ minWidth: "40px" }}>{item.icon}</ListItemIcon>
               <ListItemText primary={item.name} />
             </ListItemButton>
           </ListItem>

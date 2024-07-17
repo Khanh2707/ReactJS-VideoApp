@@ -52,31 +52,25 @@ export default function WatchedVideo() {
           sx={{ display: "flex", alignItems: "start", flexDirection: "column" }}
         >
           <Box sx={{ display: "flex", borderBottom: "1px solid #fff" }}>
-            <IconButton type='button' sx={{ color: "#fff" }}>
+            <IconButton type='button'>
               <SearchIcon />
             </IconButton>
             <InputBase
               sx={{
-                color: "#fff",
                 flexGrow: 1, // Cho phép InputBase chiếm hết không gian còn lại
               }}
               placeholder='Tìm kiếm... '
             />
-            <IconButton type='button' sx={{ color: "#fff" }}>
+            <IconButton type='button'>
               <ClearIcon />
             </IconButton>
           </Box>
           <Chip
             label='Xóa tất cả nhật ký xem'
-            icon={<DeleteIcon color="#fff" />}
+            icon={<DeleteIcon />}
             sx={{
               mt: "24px",
-              p: '4px',
-              color: "#fff",
-              bgcolor: "#23272f",
-              "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.2)",
-              },
+              p: "4px",
             }}
             onClick={deleteAllWatchedVideo}
           />

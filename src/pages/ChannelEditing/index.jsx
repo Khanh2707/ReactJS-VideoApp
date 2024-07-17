@@ -37,27 +37,16 @@ export default function ChannelEditing() {
       </Typography>
       <Box sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <TabList onChange={handleChange} aria-label='lab API tabs example'>
-              {tab.map((item) => (
-                <Tab
-                  key={item.value}
-                  label={item.label}
-                  value={item.value}
-                  sx={{
-                    color: "rgb(170, 170, 170)",
-                  }}
-                />
-              ))}
-            </TabList>
-          </Box>
+          <TabList onChange={handleChange} aria-label='lab API tabs example'>
+            {tab.map((item) => (
+              <Tab key={item.value} label={item.label} value={item.value} />
+            ))}
+          </TabList>
           <TabPanel value='1' sx={{ pl: "0", pr: "0" }}>
             <Card
               sx={{
                 display: "flex",
                 alignItems: "center",
-                boxShadow: "none",
-                bgcolor: "#23272f",
                 width: "628px",
                 cursor: "pointer",
               }}
@@ -77,19 +66,8 @@ export default function ChannelEditing() {
                 />
               </Box>
               <CardContent sx={{ width: "382px" }}>
-                <Typography
-                  variant='h6'
-                  sx={{
-                    color: "#fff",
-                  }}
-                >
-                  Ảnh
-                </Typography>
-                <Typography
-                  variant='subtitle2'
-                  color='rgb(170, 170, 170)'
-                  component='div'
-                >
+                <Typography variant='h6'>Ảnh</Typography>
+                <Typography variant='subtitle2' component='div'>
                   Ảnh hồ sơ sẽ xuất hiện cùng với kênh của bạn trên YouTube tại
                   những vị trí như bên cạnh bình luận và video của bạn
                 </Typography>
@@ -98,12 +76,7 @@ export default function ChannelEditing() {
                     label='Thay đổi'
                     sx={{
                       p: "4px",
-                      color: "#fff",
-                      bgcolor: "#3e3e3e",
                       mr: "8px",
-                      "&:hover": {
-                        backgroundColor: "rgba(255, 255, 255, 0.2)",
-                      },
                     }}
                     onClick={handleChangeAvatar}
                   />
@@ -111,11 +84,6 @@ export default function ChannelEditing() {
                     label='Xóa'
                     sx={{
                       p: "4px",
-                      color: "#fff",
-                      bgcolor: "#3e3e3e",
-                      "&:hover": {
-                        backgroundColor: "rgba(255, 255, 255, 0.2)",
-                      },
                     }}
                     onClick={handleChangeAvatar}
                   />
@@ -126,10 +94,7 @@ export default function ChannelEditing() {
           <TabPanel value='2' sx={{ pl: "0", pr: "0" }}>
             <Box sx={{ ml: "16px" }}>
               <Typography variant='subtitle1'>Tên</Typography>
-              <Typography
-                variant='subtitle2'
-                style={{ color: "rgb(170, 170, 170)" }}
-              >
+              <Typography variant='subtitle2'>
                 Chọn tên kênh thể hiện cá tính và nội dung của bạn
               </Typography>
             </Box>

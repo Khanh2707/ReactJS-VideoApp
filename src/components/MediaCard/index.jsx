@@ -15,7 +15,7 @@ export default function MediaCard({
   dateTimeCreateVideo,
 }) {
   return (
-    <Card sx={{ cursor: "pointer", boxShadow: 'none' }}>
+    <Card sx={{ cursor: "pointer" }}>
       <CardMedia
         component='img'
         height='200px'
@@ -41,38 +41,14 @@ export default function MediaCard({
             >
               {title}
             </Typography>
-            <Typography
-              variant='subtitle2'
-              color='text.secondary'
-              sx={{
-                "&:hover": {
-                  color: "#333",
-                },
-              }}
-            >
-              {nameChannel}
-            </Typography>
-            <Typography
-              variant='subtitle2'
-              color='text.secondary'
-              component='span'
-              sx={{ mr: "8px" }}
-            >
+            <Typography variant='subtitle2'>{nameChannel}</Typography>
+            <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
               {viewVideo}
             </Typography>
-            <Typography
-              variant='subtitle2'
-              color='text.secondary'
-              component='span'
-              sx={{ mr: "8px" }}
-            >
+            <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
               -
             </Typography>
-            <Typography
-              variant='subtitle2'
-              color='text.secondary'
-              component='span'
-            >
+            <Typography variant='subtitle2' component='span'>
               {dateTimeCreateVideo}
             </Typography>
           </Grid>
