@@ -41,14 +41,31 @@ export default function MediaCard({
             >
               {title}
             </Typography>
-            <Typography variant='subtitle2'>{nameChannel}</Typography>
-            <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
+            <Typography
+              variant='subtitle2'
+              sx={{ color: "customGreySubTitle.main" }}
+            >
+              {nameChannel}
+            </Typography>
+            <Typography
+              variant='subtitle2'
+              component='span'
+              sx={{ mr: "8px", color: "customGreySubTitle.main" }}
+            >
               {viewVideo}
             </Typography>
-            <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
+            <Typography
+              variant='subtitle2'
+              component='span'
+              sx={{ mr: "8px", color: "customGreySubTitle.main" }}
+            >
               -
             </Typography>
-            <Typography variant='subtitle2' component='span'>
+            <Typography
+              variant='subtitle2'
+              component='span'
+              sx={{ color: "customGreySubTitle.main" }}
+            >
               {dateTimeCreateVideo}
             </Typography>
           </Grid>

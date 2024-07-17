@@ -50,7 +50,11 @@ export default function MyChannel() {
           <Typography variant='h4' sx={{ fontWeight: "700" }}>
             Khánh Trần Phúc
           </Typography>
-          <Grid container spacing={1} sx={{ mt: "0" }}>
+          <Grid
+            container
+            spacing={1}
+            sx={{ mt: "0", color: "customGreySubTitle.main" }}
+          >
             <Grid item>
               <Typography variant='subtitle2'>@khanhtranphuc5193</Typography>
             </Grid>
@@ -69,7 +73,10 @@ export default function MyChannel() {
           </Grid>
           <Grid container spacing={1} sx={{ mt: "0", cursor: "pointer" }}>
             <Grid item>
-              <Typography variant='subtitle2'>
+              <Typography
+                variant='subtitle2'
+                sx={{ color: "customGreySubTitle.main" }}
+              >
                 Đây là kênh của Trần Phúc Khánh
               </Typography>
             </Grid>
@@ -77,9 +84,7 @@ export default function MyChannel() {
               <Typography variant='subtitle2'>...xem thêm</Typography>
             </Grid>
           </Grid>
-          <Box
-            sx={{ display: "flex", borderBottom: "1px solid #fff", mt: "8px" }}
-          >
+          <Box sx={{ display: "flex", mt: "8px" }}>
             <IconButton type='button'>
               <SearchIcon />
             </IconButton>
@@ -102,44 +107,38 @@ export default function MyChannel() {
               <Tab key={item.value} label={item.label} value={item.value} />
             ))}
           </TabList>
-          {tab.map((item) => (
-            <TabPanel
-              key={item.value}
-              value={item.value}
-              sx={{ pl: "0", pr: "0" }}
-            >
-              <Grid container spacing={2}>
-                <Grid item md={4} sm={6} xs={12}>
-                  <MyVideoCard
-                    title='Title 1'
-                    viewVideo='Lượt xem'
-                    dateTimeCreate='Thời gian đăng'
-                  />
-                </Grid>
-                <Grid item md={4} sm={6} xs={12}>
-                  <MyVideoCard
-                    title='Title 2'
-                    viewVideo='Lượt xem'
-                    dateTimeCreate='Thời gian đăng'
-                  />
-                </Grid>
-                <Grid item md={4} sm={6} xs={12}>
-                  <MyVideoCard
-                    title='Title 3'
-                    viewVideo='Lượt xem'
-                    dateTimeCreate='Thời gian đăng'
-                  />
-                </Grid>
-                <Grid item md={4} sm={6} xs={12}>
-                  <MyVideoCard
-                    title='Title 4'
-                    viewVideo='Lượt xem'
-                    dateTimeCreate='Thời gian đăng'
-                  />
-                </Grid>
+          <TabPanel value='1' sx={{ pl: "0", pr: "0" }}>
+            <Grid container spacing={2}>
+              <Grid item md={4} sm={6} xs={12}>
+                <MyVideoCard
+                  title='Title 1'
+                  viewVideo='Lượt xem'
+                  dateTimeCreate='Thời gian đăng'
+                />
               </Grid>
-            </TabPanel>
-          ))}
+              <Grid item md={4} sm={6} xs={12}>
+                <MyVideoCard
+                  title='Title 2'
+                  viewVideo='Lượt xem'
+                  dateTimeCreate='Thời gian đăng'
+                />
+              </Grid>
+              <Grid item md={4} sm={6} xs={12}>
+                <MyVideoCard
+                  title='Title 3'
+                  viewVideo='Lượt xem'
+                  dateTimeCreate='Thời gian đăng'
+                />
+              </Grid>
+              <Grid item md={4} sm={6} xs={12}>
+                <MyVideoCard
+                  title='Title 4'
+                  viewVideo='Lượt xem'
+                  dateTimeCreate='Thời gian đăng'
+                />
+              </Grid>
+            </Grid>
+          </TabPanel>
         </TabContext>
       </Box>
     </>

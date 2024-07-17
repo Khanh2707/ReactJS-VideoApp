@@ -51,7 +51,7 @@ export default function WatchedVideo() {
           flexGrow={1}
           sx={{ display: "flex", alignItems: "start", flexDirection: "column" }}
         >
-          <Box sx={{ display: "flex", borderBottom: "1px solid #fff" }}>
+          <Box sx={{ display: "flex" }}>
             <IconButton type='button'>
               <SearchIcon />
             </IconButton>
@@ -70,7 +70,7 @@ export default function WatchedVideo() {
             icon={<DeleteIcon />}
             sx={{
               mt: "24px",
-              p: "4px",
+              p: "8px",
             }}
             onClick={deleteAllWatchedVideo}
           />

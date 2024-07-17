@@ -66,8 +66,12 @@ export default function ChannelEditing() {
                 />
               </Box>
               <CardContent sx={{ width: "382px" }}>
-                <Typography variant='h6'>Ảnh</Typography>
-                <Typography variant='subtitle2' component='div'>
+                <Typography variant='subtitle1'>Ảnh</Typography>
+                <Typography
+                  variant='subtitle2'
+                  component='div'
+                  sx={{ color: "customGreySubTitle.main" }}
+                >
                   Ảnh hồ sơ sẽ xuất hiện cùng với kênh của bạn trên YouTube tại
                   những vị trí như bên cạnh bình luận và video của bạn
                 </Typography>

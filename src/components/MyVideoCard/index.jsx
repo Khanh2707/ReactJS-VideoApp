@@ -32,7 +32,7 @@ export default function MyVideoCard({ title, viewVideo, dateTimeCreate }) {
         >
           {title}
         </Typography>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} sx={{ color: "customGreySubTitle.main" }}>
           <Grid item>
             <Typography variant='subtitle2'>{viewVideo}</Typography>
           </Grid>

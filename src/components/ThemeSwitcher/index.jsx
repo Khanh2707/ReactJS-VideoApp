@@ -55,21 +55,21 @@ const ThemeSwitcher = () => {
           selected={themeMode === IThemeMode.LIGHT}
         >
           <LightModeIcon />
-          <Typography sx={{ ml: "8px" }}>Light</Typography>
+          <Typography sx={{ ml: "8px" }}>Sáng</Typography>
         </MenuItem>
         <MenuItem
           onClick={handleSwitchTheme(IThemeMode.DARK)}
           selected={themeMode === IThemeMode.DARK}
         >
           <DarkModeIcon />
-          <Typography sx={{ ml: "8px" }}>Dark</Typography>
+          <Typography sx={{ ml: "8px" }}>Tối</Typography>
         </MenuItem>
         <MenuItem
           onClick={handleSwitchTheme(IThemeMode.SYSTEM)}
           selected={themeMode === IThemeMode.SYSTEM}
         >
           <SettingsBrightnessIcon />
-          <Typography sx={{ ml: "8px" }}>System</Typography>
+          <Typography sx={{ ml: "8px" }}>Hệ thống</Typography>
         </MenuItem>
       </Menu>
     </>

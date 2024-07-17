@@ -1,14 +1,17 @@
 import { createTheme } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 export const AppLightTheme = createTheme({
   palette: {
     background: {
-      default: "#fcfcfc",
-      paper: "#fcfcfc",
+      default: "#F1F1F1",
+      paper: "#F1F1F1",
     },
     text: {
-      primary: "#1a1e23",
-      secondary: "#1a1e23",
+      primary: "#0F0F0F",
+    },
+    customGreySubTitle: {
+      main: grey[700],
     },
   },
   components: {
@@ -22,18 +25,58 @@ export const AppLightTheme = createTheme({
     MuiSvgIcon: {
       styleOverrides: {
         root: {
-          color: "#1a1e23",
+          color: "#0F0F0F",
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         outlined: {
-          borderColor: "#1a1e23",
-          color: "#1a1e23",
+          borderColor: "#0F0F0F",
+          color: "#0F0F0F",
           "&:hover": {
-            borderColor: "#1a1e23",
-            backgroundColor: "#fcfcfc",
+            borderColor: "#0F0F0F",
+            backgroundColor: "#F1F1F1",
+          },
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        input: {
+          "&::placeholder": {
+            color: grey[700],
+            opacity: "1",
+          },
+        },
+      },
+    },
+    MuiTabList: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#f5f5f5", // Background color for TabList
+          minHeight: 48, // Min height for TabList
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none", // No uppercase
+          minWidth: 72, // Min width for each Tab
+          fontWeight: "regular", // Font weight for Tab text
+          marginRight: "16px", // Right margin for each Tab
+          color: "#757575", // Default text color for Tabs
+          "&:hover": {
+            color: "#3f50b5", // Text color on hover
+            opacity: 1,
+          },
+          "&.Mui-selected": {
+            color: "#3f50b5", // Text color when selected
+            fontWeight: "medium", // Font weight when selected
+          },
+          "&.Mui-focusVisible": {
+            backgroundColor: "rgba(100, 95, 228, 0.32)", // Background color on focus
           },
         },
       },
@@ -48,8 +91,10 @@ export const AppDarkTheme = createTheme({
       paper: "#0f1214",
     },
     text: {
-      primary: "#fcfcfc",
-      secondary: "fff",
+      primary: "#F1F1F1",
+    },
+    customGreySubTitle: {
+      main: grey[400],
     },
   },
   components: {
@@ -63,19 +108,26 @@ export const AppDarkTheme = createTheme({
     MuiSvgIcon: {
       styleOverrides: {
         root: {
-          color: "#fcfcfc",
+          color: "#F1F1F1",
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         outlined: {
-          borderColor: "#fcfcfc",
-          color: "#fcfcfc",
+          borderColor: "#F1F1F1",
+          color: "#F1F1F1",
           "&:hover": {
-            borderColor: "#fcfcfc",
-            backgroundColor: "#1a1e23",
+            borderColor: "#F1F1F1",
+            backgroundColor: "#0F0F0F",
           },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#272727",
         },
       },
     },

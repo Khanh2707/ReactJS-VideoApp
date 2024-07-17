@@ -13,6 +13,8 @@ export const ThemeContextProvider = ({ children }) => {
     ? IThemeMode.DARK
     : IThemeMode.LIGHT;
 
+  console.log(SYSTEM_THEME);
+
   useEffect(() => {
     const themeModeFromPref = _getThemeModeFromPref();
     setThemeMode(themeModeFromPref);

@@ -43,16 +43,18 @@ export default function WatchedVideoCard({
         >
           {title}
         </Typography>
-        <Typography variant='subtitle2'>{nameChannel}</Typography>
-        <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
-          {viewVideo}
-        </Typography>
-        <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
-          -
-        </Typography>
-        <Typography variant='subtitle2' component='span'>
-          {dateTimeCreateVideo}
-        </Typography>
+        <Box sx={{ color: "customGreySubTitle.main" }}>
+          <Typography variant='subtitle2'>{nameChannel}</Typography>
+          <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
+            {viewVideo}
+          </Typography>
+          <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
+            -
+          </Typography>
+          <Typography variant='subtitle2' component='span'>
+            {dateTimeCreateVideo}
+          </Typography>
+        </Box>
       </CardContent>
     </Card>
   );
