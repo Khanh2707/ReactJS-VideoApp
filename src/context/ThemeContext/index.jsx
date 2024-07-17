@@ -16,7 +16,7 @@ export const ThemeContextProvider = ({ children }) => {
   useEffect(() => {
     const themeModeFromPref = _getThemeModeFromPref();
     setThemeMode(themeModeFromPref);
-  });
+  }, []);
 
   useEffect(() => {
     switch (themeMode) {

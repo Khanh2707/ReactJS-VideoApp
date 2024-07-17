@@ -11,8 +11,11 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
+import { useTheme } from "@emotion/react";
 
 export default function SearchHeader() {
+  const theme = useTheme();
+
   const [valueSearch, setValueSearch] = useState("");
   const [showResultHistorySearch, setShowResultHistorySearch] = useState(false);
   const inputSearchRef = useRef(null);
@@ -50,8 +53,8 @@ export default function SearchHeader() {
         display: "flex",
         alignItems: "center",
         width: "400px",
-        outline: "1px solid #fff",
         position: "relative",
+        border: `1px solid ${theme.palette.text.primary}`
       }}
     >
       <InputBase
@@ -71,19 +74,19 @@ export default function SearchHeader() {
         <SearchIcon />
       </IconButton>
       {showResultHistorySearch && (
-        <Box
+        <Paper
           ref={listHistorySearchRef}
           sx={{
             width: "100%",
             position: "absolute",
-            top: "48px",
+            top: "44px",
             borderRadius: "8px",
           }}
         >
           <List>
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary='Inbox' />
+                <ListItemText primary='InPaper' />
                 <ClearIcon />
               </ListItemButton>
             </ListItem>
@@ -94,7 +97,7 @@ export default function SearchHeader() {
               </ListItemButton>
             </ListItem>
           </List>
-        </Box>
+        </Paper>
       )}
     </Paper>
   );

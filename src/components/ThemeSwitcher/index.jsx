@@ -29,7 +29,7 @@ const ThemeSwitcher = () => {
   return (
     <>
       <Button
-        variant='contained'
+        variant='outlined'
         onClick={handleOpen}
         startIcon={
           themeMode === "dark" ? (
@@ -42,7 +42,7 @@ const ThemeSwitcher = () => {
         }
         ref={buttonRef}
       >
-        <Typography>Giao diện</Typography>
+        Giao diện
       </Button>
       <Menu
         open={openMenuTheme}

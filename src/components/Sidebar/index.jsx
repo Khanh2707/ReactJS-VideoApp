@@ -1,5 +1,4 @@
 import {
-  Drawer,
   List,
   ListItem,
   ListItemButton,
@@ -46,31 +45,22 @@ export default function Sidebar() {
   ];
 
   return (
-    <Drawer
-      variant='permanent'
-      sx={{
-        "& .MuiDrawer-paper": {
-          position: "initial",
-        },
-      }}
-    >
-      <List sx={{ p: "0", position: "fixed", width: "275px" }}>
-        {listContent.map((item, index) => (
-          <ListItem key={item.name} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={item.route}
-              selected={location.pathname === item.route}
-              sx={{
-                borderRadius: "12px",
-              }}
-            >
-              <ListItemIcon sx={{ minWidth: "40px" }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
+    <List sx={{ p: "0", position: "fixed", width: "275px" }}>
+      {listContent.map((item, index) => (
+        <ListItem key={item.name} disablePadding>
+          <ListItemButton
+            component={Link}
+            to={item.route}
+            selected={location.pathname === item.route}
+            sx={{
+              borderRadius: "12px",
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: "40px" }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.name} />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
   );
 }

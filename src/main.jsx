@@ -10,16 +10,19 @@ import { ThemeContextProvider } from "./context/ThemeContext";
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <ThemeContextProvider>
-    <Box
-      sx={{
-        width: "100%",
-        minHeight: "100vh",
-      }}
-    >
-      <Container>
-        <RouterProvider router={routes} />
-      </Container>
-    </Box>
+    <Paper>
+      <Box
+        sx={{
+          width: "100%",
+          minHeight: "100vh",
+          bgcolor: "default",
+        }}
+      >
+        <Container>
+          <RouterProvider router={routes} />
+        </Container>
+      </Box>
+    </Paper>
   </ThemeContextProvider>
   // </React.StrictMode>,
 );
