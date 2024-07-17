@@ -51,10 +51,8 @@ export default function Sidebar() {
       sx={{
         "& .MuiDrawer-paper": {
           boxSizing: "border-box",
-          bgcolor: "#23272f",
           borderRight: "none",
           position: "initial",
-          color: "#fff",
         },
       }}
     >
@@ -66,19 +64,19 @@ export default function Sidebar() {
               to={item.route}
               selected={location.pathname === item.route}
               sx={{
-                "&:hover": {
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                },
-                "&.Mui-selected": {
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  "&:hover": {
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  },
-                },
+                // "&:hover": {
+                //   backgroundColor: "rgba(255, 255, 255, 0.1)",
+                // },
+                // "&.Mui-selected": {
+                //   backgroundColor: "rgba(255, 255, 255, 0.1)",
+                //   "&:hover": {
+                //     backgroundColor: "rgba(255, 255, 255, 0.1)",
+                //   },
+                // },
                 borderRadius: "12px",
               }}
             >
-              <ListItemIcon sx={{ color: "#fff", minWidth: "40px" }}>
+              <ListItemIcon sx={{ minWidth: "40px" }}>
                 {item.icon}
               </ListItemIcon>
               <ListItemText primary={item.name} />

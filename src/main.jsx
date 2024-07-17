@@ -3,25 +3,23 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import routes from "./routes/index.jsx";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Paper } from "@mui/material";
 import "react-multi-carousel/lib/styles.css";
-import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
+import { ThemeContextProvider } from "./context/ThemeContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-  <ThemeProvider theme={theme}>
+  <ThemeContextProvider>
     <Box
       sx={{
         width: "100%",
         minHeight: "100vh",
-        bgcolor: (theme) => theme.palette.primary.main,
       }}
     >
       <Container>
         <RouterProvider router={routes} />
       </Container>
     </Box>
-  </ThemeProvider>
+  </ThemeContextProvider>
   // </React.StrictMode>,
 );

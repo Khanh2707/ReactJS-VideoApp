@@ -18,6 +18,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import ClearIcon from "@mui/icons-material/Clear";
+import ThemeSwitcher from "../ThemeSwitcher";
 
 export default function Header() {
   const [valueSearch, setValueSearch] = useState("");
@@ -76,7 +77,6 @@ export default function Header() {
         p: "8px 0",
         pl: "16px",
         top: "0",
-        bgcolor: "#23272f",
         zIndex: "10000",
       }}
     >
@@ -90,14 +90,13 @@ export default function Header() {
             display: "flex",
             alignItems: "center",
             width: "400px",
-            bgcolor: "#23272f",
             outline: "1px solid #fff",
             boxShadow: "none",
             position: "relative",
           }}
         >
           <InputBase
-            sx={{ flex: 1, ml: "10px", color: "#fff" }}
+            sx={{ flex: 1, ml: "10px" }}
             placeholder='Tìm kiếm...'
             value={valueSearch}
             onChange={handleInputChange}
@@ -107,13 +106,13 @@ export default function Header() {
           {valueSearch && (
             <IconButton
               type='button'
-              sx={{ color: "#fff" }}
+              sx={{  }}
               onClick={clearInput}
             >
               <ClearIcon />
             </IconButton>
           )}
-          <IconButton type='button' sx={{ color: "#fff" }}>
+          <IconButton type='button' sx={{  }}>
             <SearchIcon />
           </IconButton>
           {showResultHistorySearch && (
@@ -121,10 +120,8 @@ export default function Header() {
               ref={listHistorySearchRef}
               sx={{
                 width: "100%",
-                bgcolor: "#393d44",
                 position: "absolute",
                 top: "48px",
-                color: "#fff",
                 borderRadius: "8px",
               }}
             >
@@ -149,14 +146,17 @@ export default function Header() {
       <Grid item>
         <Grid container alignItems='center' spacing={1}>
           <Grid item>
-            <IconButton type='button' sx={{ color: "#fff" }}>
+            <ThemeSwitcher />
+          </Grid>
+          <Grid item>
+            <IconButton type='button' sx={{  }}>
               <VideoCallIcon />
             </IconButton>
           </Grid>
           <Grid item sx={{ position: "relative" }}>
             <IconButton
               type='button'
-              sx={{ color: "#fff" }}
+              sx={{  }}
               onClick={toggleNotifications}
               ref={notificationButtonRef}
             >
@@ -169,18 +169,16 @@ export default function Header() {
                 ref={listNotificationRef}
                 sx={{
                   width: "480px",
-                  bgcolor: "#393d44",
                   position: "absolute",
                   top: "50px",
                   left: "-430px",
-                  color: "#fff",
                   borderRadius: "8px",
                 }}
               >
                 <Typography variant='h6' component='div' sx={{ p: "8px 16px" }}>
                   Thông báo
                 </Typography>
-                <Divider sx={{ bgcolor: "rgba(255, 255, 255, 0.2)" }} />
+                <Divider sx={{  }} />
                 <List disablePadding>
                   <ListItem disablePadding>
                     <ListItemButton sx={{ p: "16px" }}>
@@ -197,7 +195,6 @@ export default function Header() {
                           </Typography>
                           <Typography
                             variant='subtitle2'
-                            color='rgb(170, 170, 170)'
                             sx={{ mt: "8px" }}
                           >
                             Thời gian đăng
@@ -230,7 +227,6 @@ export default function Header() {
                           </Typography>
                           <Typography
                             variant='subtitle2'
-                            color='rgb(170, 170, 170)'
                             sx={{ mt: "8px" }}
                           >
                             Thời gian đăng
@@ -253,7 +249,7 @@ export default function Header() {
             )}
           </Grid>
           <Grid item>
-            <IconButton type='button' sx={{ color: "#fff" }}>
+            <IconButton type='button' sx={{  }}>
               <Avatar alt='' src='' sx={{ width: "32px", height: "32px" }} />
             </IconButton>
           </Grid>

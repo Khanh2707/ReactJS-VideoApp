@@ -6,7 +6,7 @@ export default function Error() {
   const error = useRouteError();
 
   return (
-    <Box sx={{ textAlign: 'center', mt: '32px', '& > *': { marginBottom: '16px' } }}>
+    <Box sx={{ textAlign: 'center', pt: '32px', '& > *': { marginBottom: '16px' } }}>
       <h1>Opps!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
