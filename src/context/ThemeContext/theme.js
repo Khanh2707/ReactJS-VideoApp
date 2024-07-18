@@ -3,22 +3,27 @@ import { grey } from "@mui/material/colors";
 
 export const AppLightTheme = createTheme({
   palette: {
-    background: {
-      default: "#F1F1F1",
-      paper: "#F1F1F1",
-    },
     text: {
-      primary: "#0F0F0F",
+      primary: "#0f0f0f",
     },
     customGreySubTitle: {
       main: grey[700],
     },
   },
   components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#fff",
+        },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
           boxShadow: "none",
+          backgroundColor: "#fff",
+          borderRadius: "0",
         },
       },
     },
@@ -51,32 +56,35 @@ export const AppLightTheme = createTheme({
         },
       },
     },
-    MuiTabList: {
+    MuiTabs: {
       styleOverrides: {
-        root: {
-          backgroundColor: "#f5f5f5", // Background color for TabList
-          minHeight: 48, // Min height for TabList
+        indicator: {
+          backgroundColor: "#0D0D0D",
         },
       },
     },
     MuiTab: {
       styleOverrides: {
         root: {
-          textTransform: "none", // No uppercase
-          minWidth: 72, // Min width for each Tab
-          fontWeight: "regular", // Font weight for Tab text
-          marginRight: "16px", // Right margin for each Tab
-          color: "#757575", // Default text color for Tabs
-          "&:hover": {
-            color: "#3f50b5", // Text color on hover
-            opacity: 1,
-          },
+          fontWeight: "bold",
+          color: "#606060",
           "&.Mui-selected": {
-            color: "#3f50b5", // Text color when selected
-            fontWeight: "medium", // Font weight when selected
+            color: "#0D0D0D",
           },
-          "&.Mui-focusVisible": {
-            backgroundColor: "rgba(100, 95, 228, 0.32)", // Background color on focus
+        },
+      },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#f2f2f2",
+          },
+          "&.Mui-selected:hover": {
+            backgroundColor: "#f2f2f2",
+          },
+          "&:hover": {
+            backgroundColor: "#f2f2f2",
           },
         },
       },
@@ -86,10 +94,6 @@ export const AppLightTheme = createTheme({
 
 export const AppDarkTheme = createTheme({
   palette: {
-    background: {
-      default: "#0f1214",
-      paper: "#0f1214",
-    },
     text: {
       primary: "#F1F1F1",
     },
@@ -98,10 +102,19 @@ export const AppDarkTheme = createTheme({
     },
   },
   components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#0f1214",
+        },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
           boxShadow: "none",
+          backgroundColor: "#0f1214",
+          borderRadius: "0",
         },
       },
     },
@@ -128,6 +141,39 @@ export const AppDarkTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#272727",
+        },
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: "#717171",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          fontWeight: "bold",
+          color: "#aaa",
+          "&.Mui-selected": {
+            color: "#fff",
+          },
+        },
+      },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#272727",
+          },
+          "&.Mui-selected:hover": {
+            backgroundColor: "#272727",
+          },
+          "&:hover": {
+            backgroundColor: "#272727",
+          },
         },
       },
     },

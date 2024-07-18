@@ -1,6 +1,6 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
-  Box,
+  Paper,
   Card,
   CardContent,
   CardMedia,
@@ -35,7 +35,7 @@ export default function ChannelEditing() {
       <Typography variant='h5' sx={{ m: "0 16px" }}>
         Tùy chỉnh kênh
       </Typography>
-      <Box sx={{ width: "100%", typography: "body1" }}>
+      <Paper sx={{ width: "100%", typography: "body1", mt: "24px" }}>
         <TabContext value={value}>
           <TabList onChange={handleChange} aria-label='lab API tabs example'>
             {tab.map((item) => (
@@ -51,7 +51,7 @@ export default function ChannelEditing() {
                 cursor: "pointer",
               }}
             >
-              <Box sx={{ width: "290px" }}>
+              <Paper sx={{ width: "290px" }}>
                 <CardMedia
                   component='img'
                   image='../../public/vite.svg'
@@ -64,7 +64,7 @@ export default function ChannelEditing() {
                   }}
                   alt=''
                 />
-              </Box>
+              </Paper>
               <CardContent sx={{ width: "382px" }}>
                 <Typography variant='subtitle1'>Ảnh</Typography>
                 <Typography
@@ -75,7 +75,7 @@ export default function ChannelEditing() {
                   Ảnh hồ sơ sẽ xuất hiện cùng với kênh của bạn trên YouTube tại
                   những vị trí như bên cạnh bình luận và video của bạn
                 </Typography>
-                <Box sx={{ mt: "8px" }}>
+                <Paper sx={{ mt: "8px" }}>
                   <Chip
                     label='Thay đổi'
                     sx={{
@@ -91,20 +91,20 @@ export default function ChannelEditing() {
                     }}
                     onClick={handleChangeAvatar}
                   />
-                </Box>
+                </Paper>
               </CardContent>
             </Card>
           </TabPanel>
           <TabPanel value='2' sx={{ pl: "0", pr: "0" }}>
-            <Box sx={{ ml: "16px" }}>
+            <Paper sx={{ ml: "16px" }}>
               <Typography variant='subtitle1'>Tên</Typography>
               <Typography variant='subtitle2'>
                 Chọn tên kênh thể hiện cá tính và nội dung của bạn
               </Typography>
-            </Box>
+            </Paper>
           </TabPanel>
         </TabContext>
-      </Box>
+      </Paper>
     </>
   );
 }

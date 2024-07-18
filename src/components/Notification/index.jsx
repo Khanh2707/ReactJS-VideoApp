@@ -1,4 +1,15 @@
-import { Avatar, Badge, Box, Divider, Grid, IconButton, List, ListItem, ListItemButton, Typography } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Paper,
+  Divider,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 
@@ -41,7 +52,7 @@ export default function Notification() {
         </Badge>
       </IconButton>
       {showListNotification && (
-        <Box
+        <Paper
           ref={listNotificationRef}
           sx={{
             width: "480px",
@@ -54,7 +65,7 @@ export default function Notification() {
           <Typography variant='h6' component='div' sx={{ p: "8px 16px" }}>
             Thông báo
           </Typography>
-          <Divider sx={{}} />
+          <Divider />
           <List disablePadding>
             <ListItem disablePadding>
               <ListItemButton sx={{ p: "16px" }}>
@@ -73,13 +84,13 @@ export default function Notification() {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Box sx={{ width: "86px" }}>
+                    <Paper sx={{ width: "86px" }}>
                       <img
                         style={{ width: "100%" }}
                         alt=''
                         src='../../public/vite.svg'
                       />
-                    </Box>
+                    </Paper>
                   </Grid>
                 </Grid>
               </ListItemButton>
@@ -101,19 +112,19 @@ export default function Notification() {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Box sx={{ width: "86px" }}>
+                    <Paper sx={{ width: "86px" }}>
                       <img
                         style={{ width: "100%" }}
                         alt=''
                         src='../../public/vite.svg'
                       />
-                    </Box>
+                    </Paper>
                   </Grid>
                 </Grid>
               </ListItemButton>
             </ListItem>
           </List>
-        </Box>
+        </Paper>
       )}
     </>
   );

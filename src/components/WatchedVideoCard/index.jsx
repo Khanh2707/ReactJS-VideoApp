@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { Paper, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
 
 export default function WatchedVideoCard({
@@ -43,7 +43,7 @@ export default function WatchedVideoCard({
         >
           {title}
         </Typography>
-        <Box sx={{ color: "customGreySubTitle.main" }}>
+        <Paper sx={{ color: "customGreySubTitle.main" }}>
           <Typography variant='subtitle2'>{nameChannel}</Typography>
           <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
             {viewVideo}
@@ -54,7 +54,7 @@ export default function WatchedVideoCard({
           <Typography variant='subtitle2' component='span'>
             {dateTimeCreateVideo}
           </Typography>
-        </Box>
+        </Paper>
       </CardContent>
     </Card>
   );

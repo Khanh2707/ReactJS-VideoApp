@@ -1,5 +1,4 @@
 import {
-  Box,
   IconButton,
   InputBase,
   List,
@@ -54,7 +53,8 @@ export default function SearchHeader() {
         alignItems: "center",
         width: "400px",
         position: "relative",
-        border: `1px solid ${theme.palette.text.primary}`
+        border: `1px solid ${theme.palette.text.primary}`,
+        borderRadius: "4px",
       }}
     >
       <InputBase

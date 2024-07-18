@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Paper, Button } from "@mui/material";
 import React from "react";
 import { Link, useRouteError } from "react-router-dom";
 
@@ -6,7 +6,7 @@ export default function Error() {
   const error = useRouteError();
 
   return (
-    <Box sx={{ textAlign: 'center', pt: '32px', '& > *': { marginBottom: '16px' } }}>
+    <Paper sx={{ textAlign: 'center', pt: '32px', '& > *': { marginBottom: '16px' } }}>
       <h1>Opps!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
@@ -15,6 +15,6 @@ export default function Error() {
       <Button variant="outlined" component={Link} to="/">
         Quay về trang chủ
       </Button>
-    </Box>
+    </Paper>
   );
 }

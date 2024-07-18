@@ -1,5 +1,5 @@
 import {
-  Box,
+  Paper,
   Card,
   CardContent,
   CardMedia,
@@ -84,7 +84,7 @@ export default function MyChannel() {
               <Typography variant='subtitle2'>...xem thêm</Typography>
             </Grid>
           </Grid>
-          <Box sx={{ display: "flex", mt: "8px" }}>
+          <Paper sx={{ display: "flex", mt: "8px" }}>
             <IconButton type='button'>
               <SearchIcon />
             </IconButton>
@@ -97,10 +97,10 @@ export default function MyChannel() {
             <IconButton type='button'>
               <ClearIcon />
             </IconButton>
-          </Box>
+          </Paper>
         </CardContent>
       </Card>
-      <Box sx={{ width: "100%", typography: "body1" }}>
+      <Paper sx={{ width: "100%", typography: "body1" }}>
         <TabContext value={value}>
           <TabList onChange={handleChange} aria-label='lab API tabs example'>
             {tab.map((item) => (
@@ -140,7 +140,7 @@ export default function MyChannel() {
             </Grid>
           </TabPanel>
         </TabContext>
-      </Box>
+      </Paper>
     </>
   );
 }

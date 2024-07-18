@@ -1,5 +1,5 @@
 import {
-  Box,
+  Paper,
   Chip,
   Grid,
   IconButton,
@@ -22,36 +22,32 @@ export default function WatchedVideo() {
       </Typography>
       <Grid container flexWrap='nowrap'>
         <Grid item>
-          <Box>
-            <Typography
-              sx={{ fontWeight: "700", fontSize: "20px", mb: "32px" }}
-            >
-              Hôm qua
-            </Typography>
-            <WatchedVideoCard
-              title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
+          <Typography sx={{ fontWeight: "700", fontSize: "20px", mb: "32px" }}>
+            Hôm qua
+          </Typography>
+          <WatchedVideoCard
+            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
             Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-              nameChannel='Name Channel'
-              viewVideo='View Video'
-              dateTimeCreateVideo='Date time create video'
-            />
-            <WatchedVideoCard
-              title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
+            nameChannel='Name Channel'
+            viewVideo='View Video'
+            dateTimeCreateVideo='Date time create video'
+          />
+          <WatchedVideoCard
+            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
             Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-              nameChannel='Name Channel'
-              viewVideo='View Video'
-              dateTimeCreateVideo='Date time create video'
-            />
-          </Box>
+            nameChannel='Name Channel'
+            viewVideo='View Video'
+            dateTimeCreateVideo='Date time create video'
+          />
         </Grid>
         <Grid
           item
           flexGrow={1}
           sx={{ display: "flex", alignItems: "start", flexDirection: "column" }}
         >
-          <Box sx={{ display: "flex" }}>
+          <Paper sx={{ display: "flex" }}>
             <IconButton type='button'>
               <SearchIcon />
             </IconButton>
@@ -64,7 +60,7 @@ export default function WatchedVideo() {
             <IconButton type='button'>
               <ClearIcon />
             </IconButton>
-          </Box>
+          </Paper>
           <Chip
             label='Xóa tất cả nhật ký xem'
             icon={<DeleteIcon />}
