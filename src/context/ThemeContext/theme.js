@@ -15,6 +15,12 @@ export const AppLightTheme = createTheme({
     customHoverBgcolorListItemButtonNotification: {
       main: "#f2f2f2",
     },
+    customBorderTextField: {
+      main: "#c4c4c4",
+    },
+    customBoxShadowForm: {
+      main: "0 4px 10px rgba(0, 0, 0, 0.2)",
+    },
   },
   components: {
     MuiContainer: {
@@ -118,6 +124,12 @@ export const AppDarkTheme = createTheme({
     },
     customHoverBgcolorListItemButtonNotification: {
       main: "#3e3e3e",
+    },
+    customBgcolorForm: {
+      main: "#161b22",
+    },
+    customBorderTextField: {
+      main: "#30363d",
     },
   },
   components: {
