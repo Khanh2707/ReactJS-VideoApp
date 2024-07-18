@@ -7,7 +7,13 @@ export const AppLightTheme = createTheme({
       primary: "#0f0f0f",
     },
     customGreySubTitle: {
-      main: grey[700],
+      main: "#606060",
+    },
+    customBgcolorNotification: {
+      main: "#f7f7f7",
+    },
+    customHoverBgcolorListItemButtonNotification: {
+      main: "#f2f2f2",
     },
   },
   components: {
@@ -50,7 +56,7 @@ export const AppLightTheme = createTheme({
       styleOverrides: {
         input: {
           "&::placeholder": {
-            color: grey[700],
+            color: "#606060",
             opacity: "1",
           },
         },
@@ -89,6 +95,13 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#e5e5e5",
+        },
+      },
+    },
   },
 });
 
@@ -99,6 +112,12 @@ export const AppDarkTheme = createTheme({
     },
     customGreySubTitle: {
       main: grey[400],
+    },
+    customBgcolorNotification: {
+      main: "#282828",
+    },
+    customHoverBgcolorListItemButtonNotification: {
+      main: "#3e3e3e",
     },
   },
   components: {
@@ -174,6 +193,13 @@ export const AppDarkTheme = createTheme({
           "&:hover": {
             backgroundColor: "#272727",
           },
+        },
+      },
+    },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#535353",
         },
       },
     },

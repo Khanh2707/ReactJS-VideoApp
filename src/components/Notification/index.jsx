@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemButton,
   Typography,
+  Box,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
@@ -52,14 +53,16 @@ export default function Notification() {
         </Badge>
       </IconButton>
       {showListNotification && (
-        <Paper
+        <Box
           ref={listNotificationRef}
           sx={{
             width: "480px",
+            maxHeight: "642px",
             position: "absolute",
             top: "50px",
             left: "-430px",
             borderRadius: "8px",
+            bgcolor: "customBgcolorNotification.main",
           }}
         >
           <Typography variant='h6' component='div' sx={{ p: "8px 16px" }}>
@@ -68,7 +71,15 @@ export default function Notification() {
           <Divider />
           <List disablePadding>
             <ListItem disablePadding>
-              <ListItemButton sx={{ p: "16px" }}>
+              <ListItemButton
+                sx={{
+                  p: "16px",
+                  "&:hover": {
+                    bgcolor:
+                      "customHoverBgcolorListItemButtonNotification.main",
+                  },
+                }}
+              >
                 <Grid container spacing={1} flexWrap='nowrap'>
                   <Grid item>
                     <Avatar alt='' src='../../public/vite.svg' />
@@ -79,24 +90,35 @@ export default function Notification() {
                       Đại Chiến Lục Đạo - Kết Quả 7 Ngày, Review Event Tuần 2
                       Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP Chơi Gì
                     </Typography>
-                    <Typography variant='subtitle2' sx={{ mt: "8px" }}>
+                    <Typography
+                      variant='subtitle2'
+                      sx={{ mt: "8px", color: "customGreySubTitle.main" }}
+                    >
                       Thời gian đăng
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Paper sx={{ width: "86px" }}>
+                    <Box sx={{ width: "86px" }}>
                       <img
                         style={{ width: "100%" }}
                         alt=''
                         src='../../public/vite.svg'
                       />
-                    </Paper>
+                    </Box>
                   </Grid>
                 </Grid>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton sx={{ p: "16px" }}>
+              <ListItemButton
+                sx={{
+                  p: "16px",
+                  "&:hover": {
+                    bgcolor:
+                      "customHoverBgcolorListItemButtonNotification.main",
+                  },
+                }}
+              >
                 <Grid container spacing={1} flexWrap='nowrap'>
                   <Grid item>
                     <Avatar alt='' src='../../public/vite.svg' />
@@ -107,24 +129,27 @@ export default function Notification() {
                       Đại Chiến Lục Đạo - Kết Quả 7 Ngày, Review Event Tuần 2
                       Ninja Mới PAIN THIÊN ĐẠO + NARUTO SP Chơi Gì
                     </Typography>
-                    <Typography variant='subtitle2' sx={{ mt: "8px" }}>
+                    <Typography
+                      variant='subtitle2'
+                      sx={{ mt: "8px", color: "customGreySubTitle.main" }}
+                    >
                       Thời gian đăng
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Paper sx={{ width: "86px" }}>
+                    <Box sx={{ width: "86px" }}>
                       <img
                         style={{ width: "100%" }}
                         alt=''
                         src='../../public/vite.svg'
                       />
-                    </Paper>
+                    </Box>
                   </Grid>
                 </Grid>
               </ListItemButton>
             </ListItem>
           </List>
-        </Paper>
+        </Box>
       )}
     </>
   );
