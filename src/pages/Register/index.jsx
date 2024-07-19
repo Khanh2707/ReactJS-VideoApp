@@ -56,11 +56,20 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setError,
     clearErrors,
     formState: { errors },
   } = useForm();
 
   const handleFormSubmit = (formData) => {
+    if (formData.password !== formData.confirmPassword) {
+      setError("confirmPassword", {
+        type: "manual",
+        message: "Mật khẩu không khớp",
+      });
+      return;
+    }
+
     console.log("Form data is: ", formData);
   };
 
@@ -126,6 +135,10 @@ export default function Register() {
                 helperText={errors.username?.message || ""}
                 {...register("username", {
                   required: "Vui lòng nhập trường này",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Email không hợp lệ",
+                  },
                   onChange: () => clearErrors("username"),
                 })}
                 sx={textFieldStyles}
@@ -147,6 +160,12 @@ export default function Register() {
                 helperText={errors.password?.message || ""}
                 {...register("password", {
                   required: "Vui lòng nhập trường này",
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                    message:
+                      "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+                  },
                   onChange: () => clearErrors("password"),
                 })}
                 sx={textFieldStyles}
