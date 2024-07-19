@@ -131,6 +131,9 @@ export const AppDarkTheme = createTheme({
     customBorderTextField: {
       main: "#30363d",
     },
+    customBoxShadowForm: {
+      main: "none",
+    },
   },
   components: {
     MuiContainer: {

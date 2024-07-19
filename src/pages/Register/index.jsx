@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function Register() {
   const theme = useTheme();
 
   const textFieldStyles = {
@@ -43,9 +43,14 @@ export default function Login() {
   };
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword((show) => !show);
   };
 
   const {
@@ -87,7 +92,7 @@ export default function Login() {
           variant='h6'
           sx={{ fontWeight: "600", mb: "8px", alignSelf: "center" }}
         >
-          Đăng nhập
+          Đăng ký
         </Typography>
         <Typography
           variant='subtitle1'
@@ -160,6 +165,44 @@ export default function Login() {
                 }}
               />
             </Grid>
+            <Grid item xs={12}>
+              <Typography sx={{ fontWeight: "600", mb: "4px" }}>
+                Nhập lại mật khẩu
+              </Typography>
+              <TextField
+                placeholder='Nhập lại mật khẩu'
+                size='small'
+                type={showConfirmPassword ? "text" : "password"}
+                error={!!errors.confirmPassword}
+                autoComplete='confirmPassword'
+                fullWidth
+                id='confirmPassword'
+                name='confirmPassword'
+                helperText={errors.confirmPassword?.message || ""}
+                {...register("confirmPassword", {
+                  required: "Vui lòng nhập trường này",
+                  onChange: () => clearErrors("confirmPassword"),
+                })}
+                sx={textFieldStyles}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        aria-label='toggle password visibility'
+                        onClick={handleClickShowConfirmPassword}
+                        edge='end'
+                      >
+                        {showConfirmPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
           </Grid>
           <Button
             type='submit'
@@ -177,25 +220,21 @@ export default function Login() {
             }}
           >
             <Typography variant='subtitle2' sx={{ fontWeight: "600" }}>
-              Đăng nhập
+              Đăng ký
             </Typography>
           </Button>
           <Box sx={{ mt: "32px", textAlign: "center" }}>
             <Typography component='span' sx={{ mr: "4px" }}>
-              Bạn chưa có tài khoản?
+              Bạn đã có tài khoản?
             </Typography>
-            <Link to='/register' style={{ textDecoration: "none" }}>
+            <Link to='/login' style={{ textDecoration: "none" }}>
               <Typography
                 component='span'
                 sx={{ color: "#1ac7b6", cursor: "pointer" }}
               >
-                Đăng ký
+                Đăng nhập
               </Typography>
             </Link>
-            <Typography>Hoặc</Typography>
-            <Typography sx={{ color: "#1ac7b6", cursor: "pointer" }}>
-              Quên mật khẩu?
-            </Typography>
           </Box>
         </Box>
       </Paper>

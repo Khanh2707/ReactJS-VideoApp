@@ -9,6 +9,7 @@ import AuthProvider from "../context/AuthProvider";
 import DefaultLayout from "../components/DefaultLayout";
 import MyChannel from "../pages/MyChannel";
 import ChannelEditing from "../pages/ChannelEditing";
+import Register from "../pages/Register";
 
 const AuthLayout = () => {
   return (
@@ -26,6 +27,10 @@ export default createBrowserRouter([
       {
         element: <Login />,
         path: "/login",
+      },
+      {
+        element: <Register />,
+        path: "/register",
       },
       {
         element: <ProtectedRoute />,
