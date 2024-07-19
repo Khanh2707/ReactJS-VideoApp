@@ -1,9 +1,10 @@
-import { Avatar, Grid, IconButton, Paper } from "@mui/material";
+import { Grid, IconButton, Paper } from "@mui/material";
 import React from "react";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import ThemeSwitcher from "../ThemeSwitcher";
 import SearchHeader from "../SearchHeader";
 import Notification from "../Notification";
+import MenuAvatarHeader from "../MenuAvatarHeader";
 
 export default function Header() {
   return (
@@ -37,9 +38,7 @@ export default function Header() {
               <Notification />
             </Grid>
             <Grid item>
-              <IconButton type='button'>
-                <Avatar alt='' src='' sx={{ width: "32px", height: "32px" }} />
-              </IconButton>
+              <MenuAvatarHeader />
             </Grid>
           </Grid>
         </Grid>

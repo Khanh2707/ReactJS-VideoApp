@@ -5,6 +5,7 @@ import routes from "./routes/index.jsx";
 import { Container, CssBaseline, Paper } from "@mui/material";
 import "react-multi-carousel/lib/styles.css";
 import { ThemeContextProvider } from "./context/ThemeContext";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>

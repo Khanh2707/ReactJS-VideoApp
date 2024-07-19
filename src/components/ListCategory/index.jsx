@@ -1,15 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Chip, Grid, IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 export default function ListCategory() {
-  const handleClick = () => {};
-
   const carouselRef = useRef(null);
   const [position, setPosition] = useState(0);
+  const [selectedChip, setSelectedChip] = useState(null);
 
   const scrollBy = 200;
+
+  useEffect(() => {
+    if (listCategory.length > 0) {
+      setSelectedChip(listCategory[0].id);
+    }
+  }, []);
 
   const handleNext = () => {
     if (carouselRef.current) {
@@ -35,10 +40,19 @@ export default function ListCategory() {
     }
   };
 
+  const listCategory = Array.from({ length: 21 }, (_, index) => ({
+    id: `${index + 1}`,
+    name: `Danh mục ${index + 1}`,
+  }));
+
+  const handleClick = (id) => () => {
+    setSelectedChip(id);
+  };
+
   return (
     <Grid container alignItems='center' flexWrap='nowrap' sx={{ pb: "16px" }}>
       <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' sx={{}} onClick={handlePrev}>
+        <IconButton type='button' onClick={handlePrev}>
           <ArrowBackIosNewIcon />
         </IconButton>
       </Grid>
@@ -50,17 +64,25 @@ export default function ListCategory() {
           overflow='hidden'
           ref={carouselRef}
         >
-          {["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"].map(
-            (text, index) => (
-              <Grid item key={index}>
-                <Chip label='Category' onClick={handleClick} />
-              </Grid>
-            )
-          )}
+          {listCategory.map((item) => (
+            <Grid item key={item.id}>
+              <Chip
+                label={item.name}
+                onClick={handleClick(item.id)}
+                sx={{
+                  bgcolor: selectedChip === item.id ? "primary.main" : "",
+                  color: selectedChip === item.id ? "common.white" : "",
+                  "&:hover": {
+                    bgcolor: selectedChip === item.id ? "primary.main" : "",
+                  },
+                }}
+              />
+            </Grid>
+          ))}
         </Grid>
       </Grid>
       <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' sx={{}} onClick={handleNext}>
+        <IconButton type='button' onClick={handleNext}>
           <ArrowForwardIosIcon />
         </IconButton>
       </Grid>

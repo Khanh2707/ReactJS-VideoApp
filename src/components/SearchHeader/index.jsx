@@ -66,7 +66,7 @@ export default function SearchHeader() {
         ref={inputSearchRef}
       />
       {valueSearch && (
-        <IconButton type='button' sx={{}} onClick={clearInput}>
+        <IconButton type='button' onClick={clearInput}>
           <ClearIcon />
         </IconButton>
       )}
@@ -81,6 +81,8 @@ export default function SearchHeader() {
             position: "absolute",
             top: "44px",
             borderRadius: "8px",
+            boxShadow: theme.palette.customBoxShadowMenu.main,
+            bgcolor: theme.palette.customBgcolorMenu.main,
           }}
         >
           <List>

@@ -21,6 +21,12 @@ export const AppLightTheme = createTheme({
     customBoxShadowForm: {
       main: "0 4px 10px rgba(0, 0, 0, 0.2)",
     },
+    customBoxShadowMenu: {
+      main: "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+    },
+    customBgcolorMenu: {
+      main: "none",
+    },
   },
   components: {
     MuiContainer: {
@@ -68,6 +74,16 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#f2f2f2",
+          "&:hover": {
+            backgroundColor: "#e5e5e5",
+          },
+        },
+      },
+    },
     MuiTabs: {
       styleOverrides: {
         indicator: {
@@ -90,13 +106,13 @@ export const AppLightTheme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-selected": {
-            backgroundColor: "#f2f2f2",
+            backgroundColor: "#d5d5d5",
           },
           "&.Mui-selected:hover": {
-            backgroundColor: "#f2f2f2",
+            backgroundColor: "#d5d5d5",
           },
           "&:hover": {
-            backgroundColor: "#f2f2f2",
+            backgroundColor: "#d5d5d5",
           },
         },
       },
@@ -105,6 +121,21 @@ export const AppLightTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#e5e5e5",
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#f2f2f2",
+            "&:hover": {
+              backgroundColor: "#f2f2f2",
+            },
+          },
+          "&:hover": {
+            backgroundColor: "#f2f2f2",
+          },
         },
       },
     },
@@ -133,6 +164,12 @@ export const AppDarkTheme = createTheme({
     },
     customBoxShadowForm: {
       main: "none",
+    },
+    customBoxShadowMenu: {
+      main: "none",
+    },
+    customBgcolorMenu: {
+      main: "#212121",
     },
   },
   components: {
@@ -175,6 +212,9 @@ export const AppDarkTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#272727",
+          "&:hover": {
+            backgroundColor: "#373737",
+          },
         },
       },
     },
@@ -200,13 +240,13 @@ export const AppDarkTheme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-selected": {
-            backgroundColor: "#272727",
+            backgroundColor: "#414141",
           },
           "&.Mui-selected:hover": {
-            backgroundColor: "#272727",
+            backgroundColor: "#414141",
           },
           "&:hover": {
-            backgroundColor: "#272727",
+            backgroundColor: "#414141",
           },
         },
       },
@@ -215,6 +255,21 @@ export const AppDarkTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: "#535353",
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#3e3e3e",
+            "&:hover": {
+              backgroundColor: "#3e3e3e",
+            },
+          },
+          "&:hover": {
+            backgroundColor: "#3e3e3e",
+          },
         },
       },
     },
