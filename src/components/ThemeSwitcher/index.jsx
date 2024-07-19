@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import PaletteIcon from "@mui/icons-material/Palette";
 import { ThemeContext } from "../../context/ThemeContext";
 import { IThemeMode } from "../../context/ThemeContext/types";
 import DarkModeIcon from "@mui/icons-material/DarkMode";

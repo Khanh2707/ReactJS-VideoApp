@@ -1,47 +1,82 @@
-import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import { useTheme } from "@emotion/react";
+import {
+  Avatar,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  Paper,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function MenuAvatarHeader() {
+  const theme = useTheme();
+
+  const [showListMenuAvatar, setShowListMenuAvatar] = useState(false);
   const buttonRef = useRef(null);
-  const [openMenu, setOpenMenu] = useState(false);
+  const listMenuAvatarRef = useRef(null);
 
-  const handleOpen = () => {
-    setOpenMenu(true);
+  const handleClickOutside = (event) => {
+    if (
+      listMenuAvatarRef.current &&
+      !listMenuAvatarRef.current.contains(event.target) &&
+      !buttonRef.current.contains(event.target)
+    ) {
+      setShowListMenuAvatar(false);
+    }
   };
 
-  const handleClose = () => {
-    setOpenMenu(false);
+  const toggleMenuAvatar = () => {
+    setShowListMenuAvatar((prev) => !prev);
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
-      <IconButton type='button' onClick={handleOpen} ref={buttonRef}>
-        <Avatar alt='' src='' sx={{ width: "32px", height: "32px" }} />
+      <IconButton type='button' onClick={toggleMenuAvatar} ref={buttonRef}>
+        <Avatar
+          alt=''
+          src=''
+          sx={{ width: "32px", height: "32px", position: "relative" }}
+        />
       </IconButton>
-      <Menu
-        open={openMenu}
-        anchorEl={buttonRef.current}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        sx={{ zIndex: "100000", mt: "8px" }}
-      >
-        <MenuItem onClick={handleClose}>
-          <Typography>Sáng</Typography>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Typography>Tối</Typography>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Typography>Hệ thống</Typography>
-        </MenuItem>
-      </Menu>
+      {showListMenuAvatar && (
+        <Paper
+          ref={listMenuAvatarRef}
+          sx={{
+            position: "absolute",
+            mt: "4px",
+            bgcolor: theme.palette.customBgcolorMenu.main,
+            boxShadow: theme.palette.customBoxShadowMenu.main,
+            right: "10px",
+          }}
+        >
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <Typography sx={{ ml: "8px" }}>Sáng</Typography>
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <Typography sx={{ ml: "8px" }}>Tối</Typography>
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <Typography sx={{ ml: "8px" }}>Hệ thống</Typography>
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Paper>
+      )}
     </>
   );
 }
