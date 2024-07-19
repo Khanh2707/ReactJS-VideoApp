@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet, createBrowserRouter } from "react-router-dom";
+import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import Login from "../pages/Login";
 import ProtectedRoute from "./ProtectedRoute";
 import Home from "../pages/Home";
@@ -10,6 +10,8 @@ import DefaultLayout from "../components/DefaultLayout";
 import MyChannel from "../pages/MyChannel";
 import ChannelEditing from "../pages/ChannelEditing";
 import Register from "../pages/Register";
+import ChannelEditingImages from "../components/ChannelEditingImages";
+import ChannelEditingDetails from "../components/ChannelEditingDetails";
 
 const AuthLayout = () => {
   return (
@@ -66,6 +68,20 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/channel/editing",
+            children: [
+              {
+                path: "",
+                element: <Navigate to='images' replace />,
+              },
+              {
+                element: <ChannelEditingImages />,
+                path: "images",
+              },
+              {
+                element: <ChannelEditingDetails />,
+                path: "details",
+              },
+            ],
           },
         ],
       },

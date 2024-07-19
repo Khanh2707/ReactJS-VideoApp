@@ -1,6 +1,9 @@
 import { useTheme } from "@emotion/react";
 import {
   Avatar,
+  Box,
+  Divider,
+  Grid,
   IconButton,
   List,
   ListItem,
@@ -9,6 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
+import LoginIcon from "@mui/icons-material/Login";
 
 export default function MenuAvatarHeader() {
   const theme = useTheme();
@@ -56,22 +62,35 @@ export default function MenuAvatarHeader() {
             bgcolor: theme.palette.customBgcolorMenu.main,
             boxShadow: theme.palette.customBoxShadowMenu.main,
             right: "10px",
+            width: "300px",
           }}
         >
+          <Box sx={{ width: "100%", display: "flex", p: "16px" }}>
+            <Box sx={{ mr: "16px" }}>
+              <Avatar alt='' src='' />
+            </Box>
+            <Box>
+              <Typography>Khánh Trần Phúc</Typography>
+              <Typography>@khanhtranphuc5193</Typography>
+              <Link to='/abc' style={{ textDecoration: "none" }}>
+                <Typography sx={{ color: "primary.main", mt: "4px" }}>
+                  Xem kênh của bạn
+                </Typography>
+              </Link>
+            </Box>
+          </Box>
+          <Divider />
           <List>
             <ListItem disablePadding>
-              <ListItemButton>
-                <Typography sx={{ ml: "8px" }}>Sáng</Typography>
+              <ListItemButton component={Link} to='/login'>
+                <LoginIcon />
+                <Typography sx={{ ml: "8px" }}>Đăng nhập</Typography>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton>
-                <Typography sx={{ ml: "8px" }}>Tối</Typography>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <Typography sx={{ ml: "8px" }}>Hệ thống</Typography>
+                <LogoutIcon />
+                <Typography sx={{ ml: "8px" }}>Đăng xuất</Typography>
               </ListItemButton>
             </ListItem>
           </List>
