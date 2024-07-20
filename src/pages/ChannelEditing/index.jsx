@@ -55,7 +55,7 @@ export default function ChannelEditing() {
               />
             ))}
           </TabList>
-          <TabPanel value={value} sx={{ pl: "0", pr: "0" }}>
+          <TabPanel value={value} sx={{ pl: "16px", pr: "0" }}>
             <Outlet />
           </TabPanel>
         </TabContext>

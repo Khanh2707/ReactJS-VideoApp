@@ -53,7 +53,6 @@ export default function ChannelEditingDetails() {
       sx={{
         width: "100%",
         maxWidth: "400px",
-        p: "0 16px",
       }}
     >
       <Grid container spacing={2}>
