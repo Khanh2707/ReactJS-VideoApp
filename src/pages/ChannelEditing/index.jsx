@@ -15,6 +15,11 @@ export default function ChannelEditing() {
       label: "Thông tin cơ bản",
       to: "/channel/editing/details",
     },
+    {
+      value: "videos",
+      label: "Video của kênh",
+      to: "/channel/editing/videos",
+    },
   ];
 
   const location = useLocation();

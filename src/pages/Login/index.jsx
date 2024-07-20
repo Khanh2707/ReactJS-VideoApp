@@ -13,6 +13,7 @@ import {
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import iconGoogle from "../../assets/icon-google.png";
 
 export default function Login() {
   const theme = useTheme();
@@ -178,6 +179,31 @@ export default function Login() {
           >
             <Typography variant='subtitle2' sx={{ fontWeight: "600" }}>
               Đăng nhập
+            </Typography>
+          </Button>
+          <Button
+            variant='outlined'
+            fullWidth
+            sx={{
+              mt: "32px",
+              p: "8px",
+              borderColor: "customGreySubTitle.main",
+              "&:hover": {
+                backgroundColor: "customBgcolorForm.main",
+                borderColor: "customGreySubTitle.main",
+              },
+              borderRadius: "8px",
+            }}
+          >
+            <Box sx={{ width: "20px", height: "20px" }}>
+              <img
+                alt=''
+                src={iconGoogle}
+                style={{ width: "100%", height: "100%" }}
+              />
+            </Box>
+            <Typography variant='subtitle2' sx={{ ml: "8px" }}>
+              Đăng nhập với Google
             </Typography>
           </Button>
           <Box sx={{ mt: "32px", textAlign: "center" }}>

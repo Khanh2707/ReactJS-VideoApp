@@ -12,6 +12,7 @@ import ChannelEditing from "../pages/ChannelEditing";
 import Register from "../pages/Register";
 import ChannelEditingImages from "../components/ChannelEditingImages";
 import ChannelEditingDetails from "../components/ChannelEditingDetails";
+import ChannelEditingVideos from "../components/ChannelEditingVideos";
 
 const AuthLayout = () => {
   return (
@@ -80,6 +81,10 @@ export default createBrowserRouter([
               {
                 element: <ChannelEditingDetails />,
                 path: "details",
+              },
+              {
+                element: <ChannelEditingVideos />,
+                path: "videos",
               },
             ],
           },

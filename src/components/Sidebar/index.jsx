@@ -11,7 +11,6 @@ import HomeIcon from "@mui/icons-material/Home";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import RestoreIcon from "@mui/icons-material/Restore";
 import EditIcon from "@mui/icons-material/Edit";
-import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 
 export default function Sidebar() {
   const location = useLocation();
@@ -36,11 +35,6 @@ export default function Sidebar() {
       name: "Tùy chỉnh kênh",
       route: "/channel/editing",
       icon: <EditIcon />,
-    },
-    {
-      name: "Nội dung của kênh",
-      route: "",
-      icon: <VideoLibraryIcon />,
     },
   ];
 
