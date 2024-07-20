@@ -139,6 +139,16 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          borderRadius: "0",
+          "& .MuiDataGrid-container--top [role=row]": {
+            backgroundColor: "#fafbfb",
+          },
+        },
+      },
+    },
   },
 });
 
@@ -269,6 +279,16 @@ export const AppDarkTheme = createTheme({
           },
           "&:hover": {
             backgroundColor: "#3e3e3e",
+          },
+        },
+      },
+    },
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          borderRadius: "0",
+          "& .MuiDataGrid-container--top [role=row]": {
+            backgroundColor: "#121212",
           },
         },
       },
