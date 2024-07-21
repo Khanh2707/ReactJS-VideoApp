@@ -13,6 +13,7 @@ import Register from "../pages/Register";
 import ChannelEditingImages from "../components/ChannelEditingImages";
 import ChannelEditingDetails from "../components/ChannelEditingDetails";
 import ChannelEditingVideos from "../components/ChannelEditingVideos";
+import DetailVideo from "../pages/DetailVideo";
 
 const AuthLayout = () => {
   return (
@@ -45,6 +46,14 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/",
+          },
+          {
+            element: (
+              <DefaultLayout hideSidebar>
+                <DetailVideo />
+              </DefaultLayout>
+            ),
+            path: "/watch/:idVideo",
           },
           {
             element: (

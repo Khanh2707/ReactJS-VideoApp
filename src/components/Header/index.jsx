@@ -5,6 +5,7 @@ import ThemeSwitcher from "../ThemeSwitcher";
 import SearchHeader from "../SearchHeader";
 import Notification from "../Notification";
 import MenuAvatarHeader from "../MenuAvatarHeader";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -19,7 +20,16 @@ export default function Header() {
     >
       <Grid container alignItems='center' justifyContent='space-between'>
         <Grid item>
-          <img src='../../public/vite.svg' alt='' />
+          <Link
+            to='/'
+            style={{
+              textDecoration: "none",
+              display: "flex",
+              textAlign: "center",
+            }}
+          >
+            <img src='../../public/vite.svg' alt='' />
+          </Link>
         </Grid>
         <Grid item>
           <SearchHeader />

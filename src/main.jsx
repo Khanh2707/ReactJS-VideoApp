@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import routes from "./routes/index.jsx";
 import { Container, CssBaseline, Paper } from "@mui/material";
-import "react-multi-carousel/lib/styles.css";
 import { ThemeContextProvider } from "./context/ThemeContext";
 import "./index.css";
 
