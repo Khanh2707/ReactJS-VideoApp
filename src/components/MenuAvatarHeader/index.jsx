@@ -93,6 +93,11 @@ export default function MenuAvatarHeader() {
                 <Typography sx={{ ml: "8px" }}>Đăng xuất</Typography>
               </ListItemButton>
             </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to='/watch/1'>
+                <Typography sx={{ ml: "8px" }}>Video</Typography>
+              </ListItemButton>
+            </ListItem>
           </List>
         </Paper>
       )}
