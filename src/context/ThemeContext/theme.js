@@ -19,13 +19,13 @@ export const AppLightTheme = createTheme({
       main: "#c4c4c4",
     },
     customBoxShadowForm: {
-      main: "0 4px 10px rgba(0, 0, 0, 0.2)",
+      main: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
     },
     customBoxShadowMenu: {
       main: "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
     },
     customBgcolorMenu: {
-      main: "none",
+      main: "#fff",
     },
   },
   components: {
@@ -39,7 +39,7 @@ export const AppLightTheme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          boxShadow: "none",
+          boxShadow: "rgba(0, 0, 0, 0) 0 0 0",
           backgroundColor: "#fff",
           borderRadius: "0",
         },
@@ -173,10 +173,10 @@ export const AppDarkTheme = createTheme({
       main: "#30363d",
     },
     customBoxShadowForm: {
-      main: "none",
+      main: "rgba(0, 0, 0, 0) 0 0 0",
     },
     customBoxShadowMenu: {
-      main: "none",
+      main: "rgba(0, 0, 0, 0) 0 0 0",
     },
     customBgcolorMenu: {
       main: "#212121",
@@ -193,7 +193,7 @@ export const AppDarkTheme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          boxShadow: "none",
+          boxShadow: "rgba(0, 0, 0, 0) 0 0 0",
           backgroundColor: "#0f1214",
           borderRadius: "0",
         },
