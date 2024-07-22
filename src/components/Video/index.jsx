@@ -1,12 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { styled } from "@mui/material/styles";
-import { Box, Grid, IconButton, Slider, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  Slider,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
 import FastForwardIcon from "@mui/icons-material/FastForward";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 
 const PlayerWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -26,36 +34,15 @@ const ControlsWrapper = styled(Box)(({ theme }) => ({
   zIndex: "1",
 }));
 
-// const PrettoSlider = styled(Slider)(({ theme }) => ({
-//   color: "#52af77",
-//   height: "8px",
+function ValueLabelComponent(props) {
+  const { children, value } = props;
 
-//   "& .MuiSlider-thumb": {
-//     width: "24px",
-//     height: "24px",
-//     backgroundColor: "#fff",
-//     border: "2px solid currentColor",
-//     marginTop: "-8px",
-//     marginLeft: "-12px",
-//     "&:focus, &:hover, &$active": {
-//       boxShadow: "inherit",
-//     },
-//   },
-
-//   "& .MuiSlider-valueLabel": {
-//     left: "calc(-50% + 4px)",
-//   },
-
-//   "& .MuiSlider-track": {
-//     height: "8px",
-//     borderRadius: "4px",
-//   },
-
-//   "& .MuiSlider-rail": {
-//     height: "8px",
-//     borderRadius: "4px",
-//   },
-// }));
+  return (
+    <Tooltip enterTouchDelay={0} placement='top' title={value}>
+      {children}
+    </Tooltip>
+  );
+}
 
 export default function Video() {
   const playerWrapperRef = useRef(null);
@@ -134,7 +121,31 @@ export default function Video() {
           sx={{ p: "16px" }}
         >
           <Grid item xs={12}>
-            <Slider />
+            <Slider
+              min={0}
+              max={100}
+              defaultValue={20}
+              ValueLabelComponent={ValueLabelComponent}
+            />
+          </Grid>
+
+          <Grid item>
+            <Grid container alignItems='center' direction='row'>
+              <IconButton>
+                <PlayArrowIcon />
+              </IconButton>
+
+              <IconButton>
+                <VolumeUpIcon />
+              </IconButton>
+
+              <Slider
+                min={0}
+                max={100}
+                defaultValue={100}
+                sx={{ width: "100px" }}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </ControlsWrapper>

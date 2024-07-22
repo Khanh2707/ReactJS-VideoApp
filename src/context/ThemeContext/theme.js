@@ -149,6 +149,19 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiSlider: {
+      styleOverrides: {
+        thumb: {
+          color: "#ff0000",
+        },
+        track: {
+          color: "#ff0000",
+        },
+        rail: {
+          color: "#bfbfbf",
+        },
+      },
+    },
   },
 });
 
@@ -290,6 +303,19 @@ export const AppDarkTheme = createTheme({
           "& .MuiDataGrid-container--top [role=row]": {
             backgroundColor: "#121212",
           },
+        },
+      },
+    },
+    MuiSlider: {
+      styleOverrides: {
+        thumb: {
+          color: "#ff0000",
+        },
+        track: {
+          color: "#ff0000",
+        },
+        rail: {
+          color: "#bfbfbf",
         },
       },
     },
