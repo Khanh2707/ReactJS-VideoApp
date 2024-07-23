@@ -6,6 +6,7 @@ import SearchHeader from "../SearchHeader";
 import Notification from "../Notification";
 import MenuAvatarHeader from "../MenuAvatarHeader";
 import { Link } from "react-router-dom";
+import iconReact from "../../assets/react.svg";
 
 export default function Header() {
   return (
@@ -28,7 +29,7 @@ export default function Header() {
               textAlign: "center",
             }}
           >
-            <img src='../../public/vite.svg' alt='' />
+            <img src={iconReact} alt='' />
           </Link>
         </Grid>
         <Grid item>
