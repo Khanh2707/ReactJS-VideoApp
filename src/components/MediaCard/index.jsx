@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import iconReact from "../../assets/react.svg";
 
 export default function MediaCard({
   title,
@@ -19,13 +20,13 @@ export default function MediaCard({
       <CardMedia
         component='img'
         height='200px'
-        image='../../public/vite.svg'
+        image={iconReact}
         sx={{ objectFit: "contain" }}
       />
       <CardContent sx={{ "&:last-child": { pb: "8px" } }}>
         <Grid container flexWrap='nowrap' spacing={2}>
           <Grid item>
-            <Avatar alt='' src='../../public/vite.svg' />
+            <Avatar alt='' src='' />
           </Grid>
           <Grid item>
             <Typography

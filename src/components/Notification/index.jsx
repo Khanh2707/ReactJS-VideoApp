@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import iconReact from "../../assets/react.svg";
 
 export default function Notification() {
   const [showListNotification, setShowListNotification] = useState(false);
@@ -82,7 +83,7 @@ export default function Notification() {
               >
                 <Grid container spacing={1} flexWrap='nowrap'>
                   <Grid item>
-                    <Avatar alt='' src='../../public/vite.svg' />
+                    <Avatar alt='' src='' />
                   </Grid>
                   <Grid item>
                     <Typography variant='subtitle2'>
@@ -99,11 +100,7 @@ export default function Notification() {
                   </Grid>
                   <Grid item>
                     <Box sx={{ width: "86px" }}>
-                      <img
-                        style={{ width: "100%" }}
-                        alt=''
-                        src='../../public/vite.svg'
-                      />
+                      <img style={{ width: "100%" }} alt='' src={iconReact} />
                     </Box>
                   </Grid>
                 </Grid>
@@ -121,7 +118,7 @@ export default function Notification() {
               >
                 <Grid container spacing={1} flexWrap='nowrap'>
                   <Grid item>
-                    <Avatar alt='' src='../../public/vite.svg' />
+                    <Avatar alt='' src='' />
                   </Grid>
                   <Grid item>
                     <Typography variant='subtitle2'>
@@ -138,11 +135,7 @@ export default function Notification() {
                   </Grid>
                   <Grid item>
                     <Box sx={{ width: "86px" }}>
-                      <img
-                        style={{ width: "100%" }}
-                        alt=''
-                        src='../../public/vite.svg'
-                      />
+                      <img style={{ width: "100%" }} alt='' src={iconReact} />
                     </Box>
                   </Grid>
                 </Grid>

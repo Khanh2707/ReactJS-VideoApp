@@ -14,6 +14,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import MyVideoCard from "../../components/MyVideoCard";
+import iconReact from "../../assets/react.svg";
 
 export default function MyChannel() {
   const [value, setValue] = useState("1");
@@ -38,7 +39,7 @@ export default function MyChannel() {
       >
         <CardMedia
           component='img'
-          image='../../public/vite.svg'
+          image={iconReact}
           sx={{
             width: "160px",
             height: "160px",

@@ -1,5 +1,6 @@
 import { Paper, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
+import iconReact from "../../assets/react.svg";
 
 export default function WatchedVideoCard({
   title,
@@ -20,7 +21,7 @@ export default function WatchedVideoCard({
     >
       <CardMedia
         component='img'
-        image='../../public/vite.svg'
+        image={iconReact}
         sx={{
           width: "246px",
           height: "138px",

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import React from "react";
+import iconReact from "../../assets/react.svg";
 
 export default function MyVideoCard({ title, viewVideo, dateTimeCreate }) {
   return (
@@ -11,7 +12,7 @@ export default function MyVideoCard({ title, viewVideo, dateTimeCreate }) {
     >
       <CardMedia
         component='img'
-        image='../../public/vite.svg'
+        image={iconReact}
         sx={{
           width: "100%",
           height: "140px",

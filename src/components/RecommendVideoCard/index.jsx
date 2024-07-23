@@ -1,5 +1,6 @@
 import { Paper, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
+import iconReact from "../../assets/react.svg";
 
 export default function RecommendVideoCard({
   title,
@@ -18,7 +19,7 @@ export default function RecommendVideoCard({
     >
       <CardMedia
         component='img'
-        image='../../public/vite.svg'
+        image={iconReact}
         sx={{
           width: "168px",
           height: "94px",
