@@ -16,6 +16,7 @@ import FastForwardIcon from "@mui/icons-material/FastForward";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
 
 const ControlsWrapper = styled(Box)(({ theme }) => ({
@@ -41,7 +42,20 @@ function ValueLabelComponent(props) {
   );
 }
 
-export default function PlayerControls() {
+export default function PlayerControls({
+  onPlayPause,
+  playing,
+  onRewind,
+  onFastForward,
+  muted,
+  onMute,
+  volume,
+  onVolumeChange,
+  onVolumeSeekDown,
+  playbackRate,
+  onPlaybackRateChange,
+  onToggleFullScreen,
+}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -85,13 +99,13 @@ export default function PlayerControls() {
         alignItems='center'
         justifyContent='center'
       >
-        <IconButton>
+        <IconButton onClick={onRewind}>
           <FastRewindIcon />
         </IconButton>
-        <IconButton>
-          <PlayArrowIcon />
+        <IconButton onClick={onPlayPause}>
+          {playing ? <PauseIcon /> : <PlayArrowIcon />}
         </IconButton>
-        <IconButton>
+        <IconButton onClick={onFastForward}>
           <FastForwardIcon />
         </IconButton>
       </Grid>
@@ -114,19 +128,21 @@ export default function PlayerControls() {
 
         <Grid item>
           <Grid container alignItems='center' direction='row'>
-            <IconButton>
-              <PlayArrowIcon />
+            <IconButton onClick={onPlayPause}>
+              {playing ? <PauseIcon /> : <PlayArrowIcon />}
             </IconButton>
 
-            <IconButton>
-              <VolumeUpIcon />
+            <IconButton onClick={onMute}>
+              {muted ? <VolumeOffIcon /> : <VolumeUpIcon />}
             </IconButton>
 
             <Slider
               min={0}
               max={100}
-              defaultValue={100}
+              value={volume * 100}
               sx={{ width: "100px" }}
+              onChange={onVolumeChange}
+              onChangeCommitted={onVolumeSeekDown}
             />
 
             <Button variant='text' sx={{ color: "#fff", ml: "16px" }}>
@@ -136,7 +152,9 @@ export default function PlayerControls() {
         </Grid>
         <Grid item>
           <Button variant='text' sx={{ color: "#fff" }} onClick={handleClick}>
-            <Typography>1x</Typography>
+            <Typography sx={{ textTransform: "none" }}>
+              {playbackRate === 1.0 ? "Chuẩn" : `${playbackRate}x`}
+            </Typography>
           </Button>
           <Popover
             id={id}
@@ -152,15 +170,34 @@ export default function PlayerControls() {
               horizontal: "center",
             }}
           >
-            <Grid container direction='column-reverse'>
+            <Grid
+              container
+              direction='column-reverse'
+              sx={{ bgcolor: "rgba(28, 28, 28, 0.9)" }}
+            >
               {[0.5, 1, 1.5, 2].map((rate) => (
-                <Button variant='text' sx={{ color: "#fff" }}>
-                  <Typography>{rate}</Typography>
+                <Button
+                  variant='text'
+                  sx={{
+                    color: "#fff",
+                    bgcolor:
+                      rate === playbackRate ? "rgba(255, 255, 255, 0.1)" : "",
+                    "&:hover": {
+                      bgcolor: "rgba(255, 255, 255, 0.1)",
+                    },
+                    borderRadius: "0",
+                    p: "8px 16px",
+                  }}
+                  onClick={() => onPlaybackRateChange(rate)}
+                >
+                  <Typography sx={{ textTransform: "none" }}>
+                    {rate === 1.0 ? "Chuẩn" : rate}
+                  </Typography>
                 </Button>
               ))}
             </Grid>
           </Popover>
-          <IconButton>
+          <IconButton onClick={onToggleFullScreen}>
             <FullscreenIcon />
           </IconButton>
         </Grid>
