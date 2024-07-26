@@ -162,7 +162,7 @@ export default function Video() {
         ref={playerRef}
         width='100%'
         height={width / 1.777777777777778}
-        url='https://www.youtube.com/watch?v=4tYuIU7pLmI'
+        url='https://photos.google.com/photo/AF1QipPeqFBEIFqqXk9Jjqv8kErPXUVr6MXuGQdYEGkY'
         style={{ backgroundColor: "#000" }}
         playing={playing}
         muted={muted}

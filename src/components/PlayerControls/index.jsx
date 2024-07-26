@@ -7,10 +7,8 @@ import {
   IconButton,
   Popover,
   Slider,
-  Tooltip,
   Typography,
 } from "@mui/material";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
 import FastRewindIcon from "@mui/icons-material/FastRewind";
 import FastForwardIcon from "@mui/icons-material/FastForward";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -32,37 +30,30 @@ const ControlsWrapper = styled(Box)(({ theme }) => ({
   zIndex: "1",
 }));
 
-function ValueLabelComponent(props) {
-  const { children, open, value } = props;
-
-  return (
-    <Tooltip open={open} enterTouchDelay={0} placement='top' title={value}>
-      {children}
-    </Tooltip>
-  );
-}
-
-export default forwardRef(function PlayerControls({
-  onPlayPause,
-  playing,
-  onRewind,
-  onFastForward,
-  muted,
-  onMute,
-  volume,
-  onVolumeChange,
-  onVolumeSeekUp,
-  playbackRate,
-  onPlaybackRateChange,
-  onToggleFullScreen,
-  played,
-  onSeek,
-  onSeekMouseDown,
-  onSeekMouseUp,
-  elapsedTime,
-  totalDuration,
-  onChangeDisplayFormat,
-}, ref) {
+export default forwardRef(function PlayerControls(
+  {
+    onPlayPause,
+    playing,
+    onRewind,
+    onFastForward,
+    muted,
+    onMute,
+    volume,
+    onVolumeChange,
+    onVolumeSeekUp,
+    playbackRate,
+    onPlaybackRateChange,
+    onToggleFullScreen,
+    played,
+    onSeek,
+    onSeekMouseDown,
+    onSeekMouseUp,
+    elapsedTime,
+    totalDuration,
+    onChangeDisplayFormat,
+  },
+  ref
+) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -99,13 +90,17 @@ export default forwardRef(function PlayerControls({
         justifyContent='center'
       >
         <IconButton onClick={onRewind}>
-          <FastRewindIcon />
+          <FastRewindIcon sx={{ color: "#fff" }} />
         </IconButton>
         <IconButton onClick={onPlayPause}>
-          {playing ? <PauseIcon /> : <PlayArrowIcon />}
+          {playing ? (
+            <PauseIcon sx={{ color: "#fff" }} />
+          ) : (
+            <PlayArrowIcon sx={{ color: "#fff" }} />
+          )}
         </IconButton>
         <IconButton onClick={onFastForward}>
-          <FastForwardIcon />
+          <FastForwardIcon sx={{ color: "#fff" }} />
         </IconButton>
       </Grid>
 
@@ -121,9 +116,6 @@ export default forwardRef(function PlayerControls({
             min={0}
             max={100}
             value={played * 100}
-            ValueLabelComponent={(props) => (
-              <ValueLabelComponent {...props} value={elapsedTime} />
-            )}
             onChange={onSeek}
             onMouseDown={onSeekMouseDown}
             onChangeCommitted={onSeekMouseUp}
@@ -133,11 +125,19 @@ export default forwardRef(function PlayerControls({
         <Grid item>
           <Grid container alignItems='center' direction='row'>
             <IconButton onClick={onPlayPause}>
-              {playing ? <PauseIcon /> : <PlayArrowIcon />}
+              {playing ? (
+                <PauseIcon sx={{ color: "#fff" }} />
+              ) : (
+                <PlayArrowIcon sx={{ color: "#fff" }} />
+              )}
             </IconButton>
 
             <IconButton onClick={onMute}>
-              {muted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+              {muted ? (
+                <VolumeOffIcon sx={{ color: "#fff" }} />
+              ) : (
+                <VolumeUpIcon sx={{ color: "#fff" }} />
+              )}
             </IconButton>
 
             <Slider
@@ -208,7 +208,7 @@ export default forwardRef(function PlayerControls({
             </Grid>
           </Popover>
           <IconButton onClick={onToggleFullScreen}>
-            <FullscreenIcon />
+            <FullscreenIcon sx={{ color: "#fff" }} />
           </IconButton>
         </Grid>
       </Grid>
