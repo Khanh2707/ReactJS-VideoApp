@@ -27,8 +27,9 @@ const format = (seconds) => {
   return `${mm}:${ss}`;
 };
 
+let count = 0;
+
 export default function Video() {
-  const playerWrapperRef = useRef(null);
   const [width, setWidth] = useState(0);
   const [state, setState] = useState({
     playing: true,
@@ -39,9 +40,13 @@ export default function Video() {
     seeking: false,
   });
 
+  const [timeDisplayFormat, setTimeDisplayFormat] = useState("normal");
+
   const { playing, muted, volume, playbackRate, played, seeking } = state;
 
+  const playerWrapperRef = useRef(null);
   const playerRef = useRef(null);
+  const controlsRef = useRef(null);
 
   const handlePlayPause = () => {
     setState({ ...state, playing: !state.playing });
@@ -84,6 +89,15 @@ export default function Video() {
   };
 
   const handleProgress = (changeState) => {
+    if (count > 3) {
+      controlsRef.current.style.visibility = "hidden";
+      count = 0;
+    }
+
+    if (controlsRef.current.style.visibility == "visible") {
+      count += 1;
+    }
+
     if (!seeking) {
       setState({ ...state, ...changeState });
     }
@@ -102,6 +116,17 @@ export default function Video() {
     playerRef.current.seekTo(newValue / 100);
   };
 
+  const handleChangeDisplayFormat = () => {
+    setTimeDisplayFormat(
+      timeDisplayFormat === "normal" ? "remaining" : "normal"
+    );
+  };
+
+  const handleMouseMove = () => {
+    controlsRef.current.style.visibility = "visible";
+    count = 0;
+  };
+
   const currentTime = playerRef.current
     ? playerRef.current.getCurrentTime()
     : "00:00";
@@ -110,7 +135,10 @@ export default function Video() {
     ? playerRef.current.getDuration()
     : "00:00";
 
-  const elapsedTime = format(currentTime);
+  const elapsedTime =
+    timeDisplayFormat === "normal"
+      ? format(currentTime)
+      : `-${format(duration - currentTime)}`;
   const totalDuration = format(duration);
 
   useEffect(() => {
@@ -129,7 +157,7 @@ export default function Video() {
   }, []);
 
   return (
-    <PlayerWrapper ref={playerWrapperRef}>
+    <PlayerWrapper ref={playerWrapperRef} onMouseMove={handleMouseMove}>
       <ReactPlayer
         ref={playerRef}
         width='100%'
@@ -144,6 +172,7 @@ export default function Video() {
       />
 
       <PlayerControls
+        ref={controlsRef}
         onPlayPause={handlePlayPause}
         playing={playing}
         onRewind={handleRewind}
@@ -162,6 +191,7 @@ export default function Video() {
         onSeekMouseUp={handleSeekMouseUp}
         elapsedTime={elapsedTime}
         totalDuration={totalDuration}
+        onChangeDisplayFormat={handleChangeDisplayFormat}
       />
     </PlayerWrapper>
   );

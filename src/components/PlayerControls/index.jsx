@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -33,16 +33,16 @@ const ControlsWrapper = styled(Box)(({ theme }) => ({
 }));
 
 function ValueLabelComponent(props) {
-  const { children, value } = props;
+  const { children, open, value } = props;
 
   return (
-    <Tooltip enterTouchDelay={0} placement='top' title={value}>
+    <Tooltip open={open} enterTouchDelay={0} placement='top' title={value}>
       {children}
     </Tooltip>
   );
 }
 
-export default function PlayerControls({
+export default forwardRef(function PlayerControls({
   onPlayPause,
   playing,
   onRewind,
@@ -61,8 +61,9 @@ export default function PlayerControls({
   onSeekMouseUp,
   elapsedTime,
   totalDuration,
-}) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  onChangeDisplayFormat,
+}, ref) {
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -76,7 +77,7 @@ export default function PlayerControls({
   const id = open ? "playbackrate-popover" : undefined;
 
   return (
-    <ControlsWrapper>
+    <ControlsWrapper ref={ref}>
       <Grid
         container
         direction='row'
@@ -88,14 +89,6 @@ export default function PlayerControls({
           <Typography variant='h5' sx={{ color: "#fff" }}>
             Video Title
           </Typography>
-        </Grid>
-        <Grid item>
-          <Box
-            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          >
-            <BookmarkIcon sx={{ color: "#fff" }} />
-            <Typography sx={{ color: "#fff" }}>Bookmark</Typography>
-          </Box>
         </Grid>
       </Grid>
 
@@ -156,7 +149,11 @@ export default function PlayerControls({
               onChangeCommitted={onVolumeSeekUp}
             />
 
-            <Button variant='text' sx={{ color: "#fff", ml: "16px" }}>
+            <Button
+              variant='text'
+              sx={{ color: "#fff", ml: "16px" }}
+              onClick={onChangeDisplayFormat}
+            >
               <Typography>
                 {elapsedTime}/{totalDuration}
               </Typography>
@@ -217,4 +214,4 @@ export default function PlayerControls({
       </Grid>
     </ControlsWrapper>
   );
-}
+});
