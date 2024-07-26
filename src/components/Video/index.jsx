@@ -33,16 +33,17 @@ export default function Video() {
   const [width, setWidth] = useState(0);
   const [state, setState] = useState({
     playing: true,
-    muted: true,
+    muted: false,
     volume: 0.5,
     playbackRate: 1.0,
     played: 0,
     seeking: false,
+    loop: true,
   });
 
   const [timeDisplayFormat, setTimeDisplayFormat] = useState("normal");
 
-  const { playing, muted, volume, playbackRate, played, seeking } = state;
+  const { playing, muted, volume, playbackRate, played, seeking, loop } = state;
 
   const playerWrapperRef = useRef(null);
   const playerRef = useRef(null);
@@ -162,13 +163,14 @@ export default function Video() {
         ref={playerRef}
         width='100%'
         height={width / 1.777777777777778}
-        url='https://photos.google.com/photo/AF1QipPeqFBEIFqqXk9Jjqv8kErPXUVr6MXuGQdYEGkY'
+        url='https://vimeo.com/990636852'
         style={{ backgroundColor: "#000" }}
         playing={playing}
         muted={muted}
         volume={volume}
         playbackRate={playbackRate}
         onProgress={handleProgress}
+        loop={loop}
       />
 
       <PlayerControls
