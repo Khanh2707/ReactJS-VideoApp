@@ -51,10 +51,16 @@ export default function PlayerControls({
   onMute,
   volume,
   onVolumeChange,
-  onVolumeSeekDown,
+  onVolumeSeekUp,
   playbackRate,
   onPlaybackRateChange,
   onToggleFullScreen,
+  played,
+  onSeek,
+  onSeekMouseDown,
+  onSeekMouseUp,
+  elapsedTime,
+  totalDuration,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -121,8 +127,13 @@ export default function PlayerControls({
           <Slider
             min={0}
             max={100}
-            defaultValue={20}
-            ValueLabelComponent={ValueLabelComponent}
+            value={played * 100}
+            ValueLabelComponent={(props) => (
+              <ValueLabelComponent {...props} value={elapsedTime} />
+            )}
+            onChange={onSeek}
+            onMouseDown={onSeekMouseDown}
+            onChangeCommitted={onSeekMouseUp}
           />
         </Grid>
 
@@ -142,11 +153,13 @@ export default function PlayerControls({
               value={volume * 100}
               sx={{ width: "100px" }}
               onChange={onVolumeChange}
-              onChangeCommitted={onVolumeSeekDown}
+              onChangeCommitted={onVolumeSeekUp}
             />
 
             <Button variant='text' sx={{ color: "#fff", ml: "16px" }}>
-              <Typography>27:07</Typography>
+              <Typography>
+                {elapsedTime}/{totalDuration}
+              </Typography>
             </Button>
           </Grid>
         </Grid>
