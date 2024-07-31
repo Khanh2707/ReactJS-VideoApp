@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   List,
   ListItem,
@@ -50,7 +51,7 @@ const ThemeSwitcher = () => {
   };
 
   return (
-    <>
+    <Box sx={{ position: "relative" }}>
       <Button
         variant='outlined'
         startIcon={
@@ -64,7 +65,6 @@ const ThemeSwitcher = () => {
         }
         onClick={toggleMenu}
         ref={buttonRef}
-        sx={{ position: "relative" }}
       >
         Giao diện
       </Button>
@@ -73,7 +73,10 @@ const ThemeSwitcher = () => {
           ref={listThemeRef}
           sx={{
             position: "absolute",
+            minWidth: "135px",
             mt: "4px",
+            left: "50%",
+            transform: "translateX(-50%)",
             bgcolor: theme.palette.customBgcolorMenu.main,
             boxShadow: theme.palette.customBoxShadowMenu.main,
           }}
@@ -109,7 +112,7 @@ const ThemeSwitcher = () => {
           </List>
         </Paper>
       )}
-    </>
+    </Box>
   );
 };
 

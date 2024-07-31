@@ -45,7 +45,7 @@ export default function Header() {
                 <VideoCallIcon />
               </IconButton>
             </Grid>
-            <Grid item sx={{ position: "relative" }}>
+            <Grid item>
               <Notification />
             </Grid>
             <Grid item>

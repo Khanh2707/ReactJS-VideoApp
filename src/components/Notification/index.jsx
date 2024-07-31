@@ -42,10 +42,9 @@ export default function Notification() {
   }, []);
 
   return (
-    <>
+    <Box sx={{ position: "relative" }}>
       <IconButton
         type='button'
-        sx={{}}
         onClick={toggleNotifications}
         ref={notificationButtonRef}
       >
@@ -61,7 +60,7 @@ export default function Notification() {
             maxHeight: "642px",
             position: "absolute",
             top: "50px",
-            left: "-430px",
+            right: "0",
             borderRadius: "8px",
             bgcolor: "customBgcolorNotification.main",
           }}
@@ -144,6 +143,6 @@ export default function Notification() {
           </List>
         </Box>
       )}
-    </>
+    </Box>
   );
 }

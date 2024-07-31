@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 import {
   Box,
@@ -54,18 +54,30 @@ export default forwardRef(function PlayerControls(
   },
   ref
 ) {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [showPlaybackRate, setShowPlaybackRate] = useState(false);
+  const listPlaybackRateRef = useRef(null);
+  const playbackRateButtonRef = useRef(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClickOutside = (event) => {
+    if (
+      listPlaybackRateRef.current &&
+      !listPlaybackRateRef.current.contains(event.target) &&
+      !playbackRateButtonRef.current.contains(event.target)
+    ) {
+      setShowPlaybackRate(false);
+    }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const toggleListPlaybackRate = () => {
+    setShowPlaybackRate((prev) => !prev);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? "playbackrate-popover" : undefined;
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <ControlsWrapper ref={ref}>
@@ -160,53 +172,55 @@ export default forwardRef(function PlayerControls(
             </Button>
           </Grid>
         </Grid>
-        <Grid item>
-          <Button variant='text' sx={{ color: "#fff" }} onClick={handleClick}>
-            <Typography sx={{ textTransform: "none" }}>
-              {playbackRate === 1.0 ? "Chuẩn" : `${playbackRate}x`}
-            </Typography>
-          </Button>
-          <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "center",
-            }}
-            transformOrigin={{
-              vertical: "bottom",
-              horizontal: "center",
-            }}
-          >
-            <Grid
-              container
-              direction='column-reverse'
-              sx={{ bgcolor: "rgba(28, 28, 28, 0.9)" }}
+        <Grid item sx={{ display: "flex" }}>
+          <Box sx={{ position: "relative" }}>
+            <Button
+              variant='text'
+              sx={{ color: "#fff" }}
+              onClick={toggleListPlaybackRate}
+              ref={playbackRateButtonRef}
             >
-              {[0.5, 1, 1.5, 2].map((rate) => (
-                <Button
-                  variant='text'
-                  sx={{
-                    color: "#fff",
-                    bgcolor:
-                      rate === playbackRate ? "rgba(255, 255, 255, 0.1)" : "",
-                    "&:hover": {
-                      bgcolor: "rgba(255, 255, 255, 0.1)",
-                    },
-                    borderRadius: "0",
-                    p: "8px 16px",
-                  }}
-                  onClick={() => onPlaybackRateChange(rate)}
-                >
-                  <Typography sx={{ textTransform: "none" }}>
-                    {rate === 1.0 ? "Chuẩn" : rate}
-                  </Typography>
-                </Button>
-              ))}
-            </Grid>
-          </Popover>
+              <Typography sx={{ textTransform: "none" }}>
+                {playbackRate === 1.0 ? "Chuẩn" : `${playbackRate}x`}
+              </Typography>
+            </Button>
+            {showPlaybackRate && (
+              <Grid
+                container
+                direction='column-reverse'
+                sx={{
+                  minWidth: "100px",
+                  bgcolor: "rgba(28, 28, 28, 0.9)",
+                  position: "absolute",
+                  bottom: "40px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+                ref={listPlaybackRateRef}
+              >
+                {[0.5, 1, 1.5, 2].map((rate) => (
+                  <Button
+                    variant='text'
+                    sx={{
+                      color: "#fff",
+                      bgcolor:
+                        rate === playbackRate ? "rgba(255, 255, 255, 0.1)" : "",
+                      "&:hover": {
+                        bgcolor: "rgba(255, 255, 255, 0.1)",
+                      },
+                      borderRadius: "0",
+                      p: "8px 16px",
+                    }}
+                    onClick={() => onPlaybackRateChange(rate)}
+                  >
+                    <Typography sx={{ textTransform: "none" }}>
+                      {rate === 1.0 ? "Chuẩn" : rate}
+                    </Typography>
+                  </Button>
+                ))}
+              </Grid>
+            )}
+          </Box>
           <IconButton onClick={onToggleFullScreen}>
             <FullscreenIcon sx={{ color: "#fff" }} />
           </IconButton>

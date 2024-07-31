@@ -21,7 +21,8 @@
     "react-hook-form": "^7.52.1",
     "react-player": "^2.16.0",
     "react-router-dom": "^6.24.1",
-    "screenfull": "^6.0.2"
+    "screenfull": "^6.0.2",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
