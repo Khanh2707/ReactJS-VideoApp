@@ -3,6 +3,12 @@ import { grey } from "@mui/material/colors";
 
 export const AppLightTheme = createTheme({
   palette: {
+    primary: {
+      main: "#fff",
+    },
+    secondary: {
+      main: "#f1f1f1",
+    },
     text: {
       primary: "#0f0f0f",
     },
@@ -26,6 +32,9 @@ export const AppLightTheme = createTheme({
     },
     customBgcolorMenu: {
       main: "#fff",
+    },
+    customBorderBottomColorTextFieldStandard: {
+      main: "#606060",
     },
   },
   components: {
@@ -167,8 +176,14 @@ export const AppLightTheme = createTheme({
 
 export const AppDarkTheme = createTheme({
   palette: {
+    primary: {
+      main: "#0f1214",
+    },
+    secondary: {
+      main: "#0f0f0f",
+    },
     text: {
-      primary: "#F1F1F1",
+      primary: "#f1f1f1",
     },
     customGreySubTitle: {
       main: grey[400],
@@ -193,6 +208,9 @@ export const AppDarkTheme = createTheme({
     },
     customBgcolorMenu: {
       main: "#212121",
+    },
+    customBorderBottomColorTextFieldStandard: {
+      main: "#717171",
     },
   },
   components: {

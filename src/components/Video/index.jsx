@@ -7,7 +7,8 @@ import screenfull from "screenfull";
 
 const PlayerWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
-  width: "100%",
+  borderRadius: "8px",
+  overflow: "hidden",
 }));
 
 const format = (seconds) => {
@@ -32,7 +33,7 @@ let count = 0;
 export default function Video() {
   const [width, setWidth] = useState(0);
   const [state, setState] = useState({
-    playing: true,
+    playing: false,
     muted: false,
     volume: 0.5,
     playbackRate: 1.0,

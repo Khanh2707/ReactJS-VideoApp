@@ -79,6 +79,7 @@ const ThemeSwitcher = () => {
             transform: "translateX(-50%)",
             bgcolor: theme.palette.customBgcolorMenu.main,
             boxShadow: theme.palette.customBoxShadowMenu.main,
+            borderRadius: "8px",
           }}
         >
           <List>

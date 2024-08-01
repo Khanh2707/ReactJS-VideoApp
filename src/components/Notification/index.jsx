@@ -62,6 +62,7 @@ export default function Notification() {
             top: "50px",
             right: "0",
             borderRadius: "8px",
+            overflow: "hidden",
             bgcolor: "customBgcolorNotification.main",
           }}
         >
