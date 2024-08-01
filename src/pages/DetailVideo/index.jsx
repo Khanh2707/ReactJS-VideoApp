@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Chip, TextField, Typography } from "@mui/material";
 import Video from "../../components/Video";
 import RecommendVideoCard from "../../components/RecommendVideoCard";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import SortIcon from "@mui/icons-material/Sort";
+import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
+import EmojiPicker from "emoji-picker-react";
 
 export default function DetailVideo() {
   const [liked, setLiked] = useState(false);
+  const [emoji, setEmoji] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const textFieldStyles = {
     "& .MuiInput-underline:before": {
@@ -29,8 +26,12 @@ export default function DetailVideo() {
     },
   };
 
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", pb: "450px" }}>
       <Box sx={{ width: "100%" }}>
         <Video />
         <Typography
@@ -137,32 +138,57 @@ export default function DetailVideo() {
               placeholder='Viết bình luận...'
               sx={{ ml: "12px", mb: "12px", ...textFieldStyles }}
             />
-            <Box sx={{ alignSelf: "flex-end" }}>
-              <Chip
-                label='Hủy'
-                sx={{
-                  p: "4px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  userSelect: "none",
-                  bgcolor: "primary.main",
-                  cursor: "pointer",
-                  mr: "8px",
-                }}
-              />
-              <Chip
-                label='Bình luận'
-                sx={{
-                  p: "4px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  userSelect: "none",
-                  cursor: "pointer",
-                  // bgcolor: "#3da2f9",
-                  // color: "#0f0f0f",
-                }}
-                disabled
-              />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ position: "relative", ml: "12px" }}>
+                <InsertEmoticonIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={toggleEmojiPicker}
+                />
+                {showEmojiPicker && (
+                  <EmojiPicker
+                    theme='dark'
+                    lazyLoadEmojis={true}
+                    onEmojiClick={(e) => {
+                      setEmoji(e.emoji);
+                    }}
+                    style={{ position: "absolute" }}
+                  />
+                )}
+              </Box>
+              <Box>
+                <Chip
+                  label='Hủy'
+                  sx={{
+                    p: "4px",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    userSelect: "none",
+                    bgcolor: "primary.main",
+                    cursor: "pointer",
+                    mr: "8px",
+                  }}
+                />
+                <Chip
+                  label='Bình luận'
+                  sx={{
+                    p: "4px",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    userSelect: "none",
+                    cursor: "pointer",
+                    // bgcolor: "#3da2f9",
+                    // color: "#0f0f0f",
+                  }}
+                  disabled
+                />
+              </Box>
             </Box>
           </Box>
         </Box>

@@ -34,7 +34,7 @@ export const AppLightTheme = createTheme({
       main: "#fff",
     },
     customBorderBottomColorTextFieldStandard: {
-      main: "#606060",
+      main: "#909090",
     },
   },
   components: {
