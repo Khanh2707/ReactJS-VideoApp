@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Avatar, Box, Chip, TextField, Typography } from "@mui/material";
 import Video from "../../components/Video";
 import RecommendVideoCard from "../../components/RecommendVideoCard";
@@ -8,11 +8,14 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import SortIcon from "@mui/icons-material/Sort";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import EmojiPicker from "emoji-picker-react";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export default function DetailVideo() {
   const [liked, setLiked] = useState(false);
   const [emoji, setEmoji] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const { themeMode } = useContext(ThemeContext);
 
   const textFieldStyles = {
     "& .MuiInput-underline:before": {
@@ -153,7 +156,7 @@ export default function DetailVideo() {
                 />
                 {showEmojiPicker && (
                   <EmojiPicker
-                    theme='dark'
+                    theme={themeMode}
                     lazyLoadEmojis={true}
                     onEmojiClick={(e) => {
                       setEmoji(e.emoji);
