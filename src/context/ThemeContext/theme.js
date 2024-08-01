@@ -36,6 +36,9 @@ export const AppLightTheme = createTheme({
     customBorderBottomColorTextFieldStandard: {
       main: "#909090",
     },
+    customBgcolorSecondary: {
+      main: "#f2f2f2",
+    },
   },
   components: {
     MuiContainer: {
@@ -211,6 +214,9 @@ export const AppDarkTheme = createTheme({
     },
     customBorderBottomColorTextFieldStandard: {
       main: "#717171",
+    },
+    customBgcolorSecondary: {
+      main: "#272727",
     },
   },
   components: {

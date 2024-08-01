@@ -73,7 +73,7 @@ export default function MenuAvatarHeader() {
               <Typography>Khánh Trần Phúc</Typography>
               <Typography>@khanhtranphuc5193</Typography>
               <Link to='/abc' style={{ textDecoration: "none" }}>
-                <Typography sx={{ color: "primary.main", mt: "4px" }}>
+                <Typography sx={{ color: "#3ea6ff", mt: "4px" }}>
                   Xem kênh của bạn
                 </Typography>
               </Link>
