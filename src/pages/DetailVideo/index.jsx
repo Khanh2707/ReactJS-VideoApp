@@ -27,6 +27,7 @@ import CommentVideo from "../../components/CommentVideo";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
+import ListCommentComment from "../../components/ListCommentComment";
 
 export default function DetailVideo() {
   const [liked, setLiked] = useState(false);
@@ -407,7 +408,7 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
                         emojiStyle='native'
                         lazyLoadEmojis={true}
                         onEmojiClick={handleEmojiClick}
-                        style={{ position: "absolute" }}
+                        style={{ position: "absolute", zIndex: "1000" }}
                       />
                     )}
                   </Box>
@@ -456,13 +457,7 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
               comment='hay quá 😃'
               type='comment-video'
             />
-            <CommentVideo
-              avatar=''
-              nameUser='@khanhtranphuc5193'
-              dateTimeComment='1 giờ trước'
-              comment='hay quá 😃'
-              type='comment-comment'
-            />
+            <ListCommentComment />
             <CommentVideo
               avatar=''
               nameUser='@khanhtranphuc5193'
