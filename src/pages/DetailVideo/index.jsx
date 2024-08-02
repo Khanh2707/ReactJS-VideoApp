@@ -1,5 +1,15 @@
-import React, { useContext, useState } from "react";
-import { Avatar, Box, Chip, TextField, Typography } from "@mui/material";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Chip,
+  List,
+  ListItem,
+  ListItemButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Video from "../../components/Video";
 import RecommendVideoCard from "../../components/RecommendVideoCard";
 import VerticalAlignBottomIcon from "@mui/icons-material/VerticalAlignBottom";
@@ -10,11 +20,18 @@ import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import EmojiPicker from "emoji-picker-react";
 import { ThemeContext } from "../../context/ThemeContext";
 import ShowMoreText from "react-show-more-text";
+import { useTheme } from "@emotion/react";
 
 export default function DetailVideo() {
   const [liked, setLiked] = useState(false);
-  const [emoji, setEmoji] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showListSortComment, setShowListSortComment] = useState(false);
+  const sortCommentButtonRef = useRef(null);
+  const listSorCommenttRef = useRef(null);
+  const [showActionComment, setShowActionComment] = useState(false);
+  const [valueComment, setValueComment] = useState("");
+
+  const theme = useTheme();
 
   const { themeMode } = useContext(ThemeContext);
 
@@ -72,6 +89,46 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
 
   const toggleEmojiPicker = () => {
     setShowEmojiPicker((prev) => !prev);
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      listSorCommenttRef.current &&
+      !listSorCommenttRef.current.contains(event.target) &&
+      !sortCommentButtonRef.current.contains(event.target)
+    ) {
+      setShowListSortComment(false);
+    }
+  };
+
+  const toggleListSortComment = () => {
+    setShowListSortComment((prev) => !prev);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleComment = (e) => {
+    setValueComment(e.target.value);
+  };
+
+  const handleCancelComment = () => {
+    setValueComment("");
+    setShowActionComment(false);
+    setShowEmojiPicker(false);
+  };
+
+  const handlePostComment = () => {
+    console.log("Bình luận đã gửi:", valueComment);
+    handleCancelComment();
+  };
+
+  const handleEmojiClick = (e) => {
+    setValueComment((prev) => prev + e.emoji);
   };
 
   return (
@@ -165,40 +222,73 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
             cursor: "pointer",
           }}
         >
-          <Typography variant='body1'>
-            <ShowMoreText
-              more={
-                <Typography variant='span' sx={{ fontWeight: "600" }}>
-                  thêm
-                </Typography>
-              }
-              less={
-                <Typography sx={{ fontWeight: "600", mt: "16px" }}>
-                  Ẩn bớt
-                </Typography>
-              }
-              keepNewLines={true}
-            >
-              {longText}
-            </ShowMoreText>
-          </Typography>
+          <ShowMoreText
+            more={
+              <Typography variant='span' sx={{ fontWeight: "600" }}>
+                thêm
+              </Typography>
+            }
+            less={
+              <Typography sx={{ fontWeight: "600", mt: "16px" }}>
+                Ẩn bớt
+              </Typography>
+            }
+            keepNewLines={true}
+            lines={4}
+          >
+            {longText}
+          </ShowMoreText>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mt: "24px" }}>
           <Typography variant='h6' fontWeight='600'>
             85 bình luận
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              ml: "32px",
-              cursor: "pointer",
-            }}
-          >
-            <SortIcon />
-            <Typography sx={{ ml: "8px" }} variant='subtitle2' fontWeight='600'>
-              Sắp xếp theo
-            </Typography>
+          <Box sx={{ position: "relative", ml: "32px" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+              onClick={toggleListSortComment}
+            >
+              <SortIcon />
+              <Typography
+                ref={sortCommentButtonRef}
+                sx={{ ml: "8px", userSelect: "none" }}
+                variant='subtitle2'
+                fontWeight='600'
+              >
+                Sắp xếp theo
+              </Typography>
+            </Box>
+            {showListSortComment && (
+              <Paper
+                ref={listSorCommenttRef}
+                sx={{
+                  position: "absolute",
+                  zIndex: "10",
+                  minWidth: "180px",
+                  borderRadius: "8px",
+                  mt: "12px",
+                  bgcolor: theme.palette.customBgcolorMenu.main,
+                  boxShadow: theme.palette.customBoxShadowMenu.main,
+                }}
+              >
+                <List>
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <Typography>Bình luận hàng đầu</Typography>
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <Typography>Mới nhất xếp trước</Typography>
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </Paper>
+            )}
           </Box>
         </Box>
         <Box sx={{ display: "flex", mt: "24px", width: "100%" }}>
@@ -208,59 +298,69 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
               variant='standard'
               placeholder='Viết bình luận...'
               sx={{ ml: "12px", mb: "12px", ...textFieldStyles }}
+              onClick={() => setShowActionComment(true)}
+              value={valueComment}
+              onChange={handleComment}
             />
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                width: "100%",
-                justifyContent: "space-between",
-              }}
-            >
-              <Box sx={{ position: "relative", ml: "12px" }}>
-                <InsertEmoticonIcon
-                  sx={{ cursor: "pointer" }}
-                  onClick={toggleEmojiPicker}
-                />
-                {showEmojiPicker && (
-                  <EmojiPicker
-                    theme={themeMode}
-                    lazyLoadEmojis={true}
-                    onEmojiClick={(e) => {
-                      setEmoji(e.emoji);
-                    }}
-                    style={{ position: "absolute" }}
+            {showActionComment && (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box sx={{ position: "relative", ml: "12px" }}>
+                  <InsertEmoticonIcon
+                    sx={{ cursor: "pointer" }}
+                    onClick={toggleEmojiPicker}
                   />
-                )}
+                  {showEmojiPicker && (
+                    <EmojiPicker
+                      theme={themeMode}
+                      emojiStyle='native'
+                      lazyLoadEmojis={true}
+                      onEmojiClick={handleEmojiClick}
+                      style={{ position: "absolute" }}
+                    />
+                  )}
+                </Box>
+                <Box>
+                  <Chip
+                    label='Hủy'
+                    sx={{
+                      p: "4px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      userSelect: "none",
+                      bgcolor: "primary.main",
+                      cursor: "pointer",
+                      mr: "8px",
+                    }}
+                    onClick={handleCancelComment}
+                  />
+                  <Chip
+                    label='Bình luận'
+                    sx={{
+                      p: "4px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      userSelect: "none",
+                      cursor: "pointer",
+                      bgcolor: valueComment ? "#3da2f9" : "",
+                      color: valueComment ? "secondary.main" : "",
+                      "&:hover": {
+                        bgcolor: "#3da2f9",
+                        opacity: "0.9",
+                      },
+                    }}
+                    disabled={valueComment === ""}
+                    onClick={handlePostComment}
+                  />
+                </Box>
               </Box>
-              <Box>
-                <Chip
-                  label='Hủy'
-                  sx={{
-                    p: "4px",
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    userSelect: "none",
-                    bgcolor: "primary.main",
-                    cursor: "pointer",
-                    mr: "8px",
-                  }}
-                />
-                <Chip
-                  label='Bình luận'
-                  sx={{
-                    p: "4px",
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    userSelect: "none",
-                    cursor: "pointer",
-                    // bgcolor: "#3da2f9",
-                    // color: "#0f0f0f",
-                  }}
-                  disabled
-                />
-              </Box>
-            </Box>
+            )}
           </Box>
         </Box>
       </Box>
