@@ -454,12 +454,21 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
               nameUser='@khanhtranphuc5193'
               dateTimeComment='1 giờ trước'
               comment='hay quá 😃'
+              type='comment-video'
             />
             <CommentVideo
               avatar=''
-              nameUser='@AntenLofiChill-w8p'
-              dateTimeComment='2 tuần trước'
-              comment='Khi còn nhỏ thì ao ước trở thành người lớn. Giờ lớn lên rùi thì lại ước được trở về tuổi thơ. Mặc dù khi xưa còn thiếu thốn mọi thứ rất khó khăn. Nhưng bù lại lúc nào cũng vui vẻ, chơi những trò chơi dân gian...mà có lẻ bọn trẻ bây giờ ko thể nào biết được là nó vui vẻ như thế nào. Nếu có một điều ước tui chỉ ước đc trở về thời ấu thơ. Đó là những kỷ niệm đẹp nhất trong cuộc đời tôi.'
+              nameUser='@khanhtranphuc5193'
+              dateTimeComment='1 giờ trước'
+              comment='hay quá 😃'
+              type='comment-comment'
+            />
+            <CommentVideo
+              avatar=''
+              nameUser='@khanhtranphuc5193'
+              dateTimeComment='1 giờ trước'
+              comment='hay quá 😃'
+              type='comment-video'
             />
             <Backdrop
               sx={{
