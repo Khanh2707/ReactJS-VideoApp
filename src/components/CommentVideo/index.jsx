@@ -14,6 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTheme } from "@emotion/react";
 import ConfirmDeleteCommentVideo from "../dialog/ConfirmDeleteCommentVideo";
+import CommentInComment from "../CommentInComment";
 
 export default function CommentVideo({
   avatar,
@@ -83,12 +84,12 @@ export default function CommentVideo({
           </Box>
           <Typography variant='subtitle2'>{comment}</Typography>
           <Typography
-            variant='span'
-            sx={{ fontSize: "13px", lineHeight: "3", cursor: "pointer" }}
+            sx={{ fontSize: "13px", mt: "8px", cursor: "pointer" }}
             fontWeight={600}
           >
             Phản hồi
           </Typography>
+          <CommentInComment />
         </Box>
         <Box sx={{ position: "relative" }}>
           <IconButton

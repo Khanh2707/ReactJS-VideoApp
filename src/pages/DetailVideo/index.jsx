@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Avatar,
+  Backdrop,
   Box,
   Chip,
+  CircularProgress,
   List,
   ListItem,
   ListItemButton,
@@ -39,6 +41,7 @@ export default function DetailVideo() {
   const [valueComment, setValueComment] = useState("");
   const [openDialogListRadioReportVideo, setOpenDialogListRadioReportVideo] =
     useState(false);
+  const [openBackdrop, setOpenBackdrop] = useState(true);
 
   const theme = useTheme();
 
@@ -152,6 +155,13 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleCloseBackdrop = () => {
+    setOpenBackdrop(false);
+  };
+  const handleOpenBackdrop = () => {
+    setOpenBackdrop(true);
+  };
 
   return (
     <>
@@ -438,7 +448,7 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
               )}
             </Box>
           </Box>
-          <Box sx={{ mt: "24px" }}>
+          <Box sx={{ mt: "24px", position: "relative" }}>
             <CommentVideo
               avatar=''
               nameUser='@khanhtranphuc5193'
@@ -451,6 +461,26 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
               dateTimeComment='2 tuần trước'
               comment='Khi còn nhỏ thì ao ước trở thành người lớn. Giờ lớn lên rùi thì lại ước được trở về tuổi thơ. Mặc dù khi xưa còn thiếu thốn mọi thứ rất khó khăn. Nhưng bù lại lúc nào cũng vui vẻ, chơi những trò chơi dân gian...mà có lẻ bọn trẻ bây giờ ko thể nào biết được là nó vui vẻ như thế nào. Nếu có một điều ước tui chỉ ước đc trở về thời ấu thơ. Đó là những kỷ niệm đẹp nhất trong cuộc đời tôi.'
             />
+            <Backdrop
+              sx={{
+                zIndex: 100,
+                position: "absolute",
+                backgroundColor:
+                  themeMode === "light"
+                    ? "rgba(255, 255, 255, 0.4)"
+                    : "rgba(15, 18, 20, 0.4)",
+              }}
+              open={openBackdrop}
+              onClick={handleCloseBackdrop}
+            >
+              <CircularProgress
+                color='inherit'
+                sx={{
+                  position: "absolute",
+                  top: "70px",
+                }}
+              />
+            </Backdrop>
           </Box>
         </Box>
         <Box sx={{ ml: "24px" }}>

@@ -22,6 +22,8 @@ const ThemeSwitcher = () => {
   const buttonRef = useRef(null);
   const listThemeRef = useRef(null);
 
+  const { themeMode, switchThemeMode } = useContext(ThemeContext);
+
   const handleClickOutside = (event) => {
     if (
       listThemeRef.current &&
@@ -42,8 +44,6 @@ const ThemeSwitcher = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  const { themeMode, switchThemeMode } = useContext(ThemeContext);
 
   const handleSwitchTheme = (mode) => () => {
     switchThemeMode(mode);
