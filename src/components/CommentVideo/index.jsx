@@ -1,0 +1,139 @@
+import {
+  Avatar,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  Paper,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useTheme } from "@emotion/react";
+import ConfirmDeleteCommentVideo from "../dialog/ConfirmDeleteCommentVideo";
+
+export default function CommentVideo({
+  avatar,
+  nameUser,
+  dateTimeComment,
+  comment,
+}) {
+  const [showActionEditCommented, setShowActionEditCommented] = useState(false);
+  const editCommentedButtonRef = useRef(null);
+  const listEditCommentedRef = useRef(null);
+  const [openDialogConfirmDeleteComment, setOpenDialogConfirmDeleteComment] =
+    useState(false);
+
+  const theme = useTheme();
+
+  const toggleEditCommented = () => {
+    setShowActionEditCommented((prev) => !prev);
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      listEditCommentedRef.current &&
+      !listEditCommentedRef.current.contains(event.target) &&
+      !editCommentedButtonRef.current.contains(event.target)
+    ) {
+      setShowActionEditCommented(false);
+    }
+  };
+
+  const handleClickOpenDialogConfirmDeleteComment = () => {
+    setOpenDialogConfirmDeleteComment(true);
+    setShowActionEditCommented(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <>
+      <Box sx={{ display: "flex", mb: "12px" }}>
+        <Avatar alt='' src={avatar} sx={{ cursor: "pointer" }} />
+        <Box sx={{ ml: "12px", flexGrow: "1" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            <Typography
+              variant='subtitle2'
+              sx={{ mr: "4px", fontSize: "13px" }}
+              fontWeight={600}
+            >
+              {nameUser}
+            </Typography>
+            <Typography
+              variant='caption'
+              sx={{ color: "customGreySubTitle.main" }}
+            >
+              {dateTimeComment}
+            </Typography>
+          </Box>
+          <Typography variant='subtitle2'>{comment}</Typography>
+          <Typography
+            variant='span'
+            sx={{ fontSize: "13px", lineHeight: "3", cursor: "pointer" }}
+            fontWeight={600}
+          >
+            Phản hồi
+          </Typography>
+        </Box>
+        <Box sx={{ position: "relative" }}>
+          <IconButton
+            ref={editCommentedButtonRef}
+            onClick={toggleEditCommented}
+          >
+            <MoreVertIcon sx={{ cursor: "pointer" }} />
+          </IconButton>
+          {showActionEditCommented && (
+            <Paper
+              ref={listEditCommentedRef}
+              sx={{
+                position: "absolute",
+                zIndex: "10",
+                minWidth: "150px",
+                borderRadius: "8px",
+                bgcolor: theme.palette.customBgcolorMenu.main,
+                boxShadow: theme.palette.customBoxShadowMenu.main,
+              }}
+            >
+              <List>
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <EditIcon />
+                    <Typography sx={{ ml: "12px" }}>Chỉnh sửa</Typography>
+                  </ListItemButton>
+                </ListItem>
+                <ListItem
+                  disablePadding
+                  onClick={handleClickOpenDialogConfirmDeleteComment}
+                >
+                  <ListItemButton>
+                    <DeleteIcon />
+                    <Typography sx={{ ml: "12px" }}>Xóa</Typography>
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Paper>
+          )}
+        </Box>
+      </Box>
+      <ConfirmDeleteCommentVideo
+        openDialogConfirmDeleteComment={openDialogConfirmDeleteComment}
+        setOpenDialogConfirmDeleteComment={setOpenDialogConfirmDeleteComment}
+      />
+    </>
+  );
+}

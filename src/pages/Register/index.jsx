@@ -89,7 +89,6 @@ export default function Register() {
           width: "360px",
           minHeight: "100px",
           padding: "32px 24px",
-          borderRadius: "2px",
           margin: "24px",
           alignSelf: "center",
           boxShadow: theme.palette.customBoxShadowForm.main,

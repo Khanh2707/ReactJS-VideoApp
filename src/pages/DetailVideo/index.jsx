@@ -21,15 +21,24 @@ import EmojiPicker from "emoji-picker-react";
 import { ThemeContext } from "../../context/ThemeContext";
 import ShowMoreText from "react-show-more-text";
 import { useTheme } from "@emotion/react";
+import CommentVideo from "../../components/CommentVideo";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
+import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
 
 export default function DetailVideo() {
   const [liked, setLiked] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showListActionVideo, setShowListActionVideo] = useState(false);
+  const actionVideoButtonRef = useRef(null);
+  const listActionVideoRef = useRef(null);
   const [showListSortComment, setShowListSortComment] = useState(false);
   const sortCommentButtonRef = useRef(null);
-  const listSorCommenttRef = useRef(null);
+  const listSorCommentRef = useRef(null);
   const [showActionComment, setShowActionComment] = useState(false);
   const [valueComment, setValueComment] = useState("");
+  const [openDialogListRadioReportVideo, setOpenDialogListRadioReportVideo] =
+    useState(false);
 
   const theme = useTheme();
 
@@ -87,17 +96,17 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
     },
   };
 
-  const toggleEmojiPicker = () => {
-    setShowEmojiPicker((prev) => !prev);
-  };
-
   const handleClickOutside = (event) => {
     if (
-      listSorCommenttRef.current &&
-      !listSorCommenttRef.current.contains(event.target) &&
-      !sortCommentButtonRef.current.contains(event.target)
+      (listSorCommentRef.current &&
+        !listSorCommentRef.current.contains(event.target) &&
+        !sortCommentButtonRef.current.contains(event.target)) ||
+      (listActionVideoRef.current &&
+        !listActionVideoRef.current.contains(event.target) &&
+        !actionVideoButtonRef.current.contains(event.target))
     ) {
       setShowListSortComment(false);
+      setShowListActionVideo(false);
     }
   };
 
@@ -105,12 +114,14 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
     setShowListSortComment((prev) => !prev);
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  const togglelistActionVideo = () => {
+    setShowListActionVideo((prev) => !prev);
+  };
+
+  const handleClickOpenDialogListRadioReportVideo = () => {
+    setOpenDialogListRadioReportVideo(true);
+    setShowListActionVideo(false);
+  };
 
   const handleComment = (e) => {
     setValueComment(e.target.value);
@@ -127,261 +138,344 @@ Tags:Music,khiem,soobin hoàng sơn,soobin,nhạc chill 2024,pii music,suýt n�
     handleCancelComment();
   };
 
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => !prev);
+  };
+
   const handleEmojiClick = (e) => {
     setValueComment((prev) => prev + e.emoji);
   };
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <Box sx={{ display: "flex", pb: "450px" }}>
-      <Box sx={{ width: "100%" }}>
-        <Video />
-        <Typography
-          variant='h6'
-          fontWeight='700'
-          sx={{ mt: "12px", lineHeight: "1.4" }}
-        >
-          Khác biệt chính ORACLE và SQL SERVER - từ 11 năm làm dự án của tôi |
-          Trần Quốc Huy - Wecommit
-        </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            cursor: "pointer",
-            mt: "12px",
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Avatar alt='' src='' />
-            <Box sx={{ ml: "12px", lineHeight: "1" }}>
-              <Typography
-                variant='subtitle1'
-                sx={{ lineHeight: "1.3" }}
-                fontWeight='600'
-              >
-                ICM Entertainment
-              </Typography>
-              <Typography
-                variant='caption'
-                sx={{ color: "customGreySubTitle.main" }}
-              >
-                4,9 Tr người đăng ký
-              </Typography>
-            </Box>
-            <Chip
-              label='Đăng ký'
-              sx={{
-                p: "4px",
-                ml: "24px",
-                bgcolor: "text.primary",
-                color: "secondary.main",
-                "&:hover": {
-                  bgcolor: "text.primary",
-                  opacity: "0.9",
-                },
-                fontSize: "14px",
-                fontWeight: "600",
-              }}
-            />
-          </Box>
-          <Box>
-            <Chip
-              icon={liked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
-              label='11N'
-              sx={{
-                p: "4px",
-                mr: "8px",
-                fontSize: "14px",
-                fontWeight: "600",
-                "& .MuiChip-icon": {
-                  color: "text.primary",
-                },
-              }}
-            />
-            <Chip
-              icon={<VerticalAlignBottomIcon />}
-              label='Tải xuống'
-              sx={{
-                p: "4px",
-                fontSize: "14px",
-                fontWeight: "600",
-                "& .MuiChip-icon": {
-                  color: "text.primary",
-                },
-              }}
-            />
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            bgcolor: "customBgcolorSecondary.main",
-            borderRadius: "12px",
-            p: "12px",
-            mt: "16px",
-            cursor: "pointer",
-          }}
-        >
-          <ShowMoreText
-            more={
-              <Typography variant='span' sx={{ fontWeight: "600" }}>
-                thêm
-              </Typography>
-            }
-            less={
-              <Typography sx={{ fontWeight: "600", mt: "16px" }}>
-                Ẩn bớt
-              </Typography>
-            }
-            keepNewLines={true}
-            lines={4}
+    <>
+      <Box sx={{ display: "flex", pb: "450px" }}>
+        <Box sx={{ width: "100%" }}>
+          <Video />
+          <Typography
+            variant='h6'
+            fontWeight='700'
+            sx={{ mt: "12px", lineHeight: "1.4" }}
           >
-            {longText}
-          </ShowMoreText>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "center", mt: "24px" }}>
-          <Typography variant='h6' fontWeight='600'>
-            85 bình luận
+            Khác biệt chính ORACLE và SQL SERVER - từ 11 năm làm dự án của tôi |
+            Trần Quốc Huy - Wecommit
           </Typography>
-          <Box sx={{ position: "relative", ml: "32px" }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={toggleListSortComment}
-            >
-              <SortIcon />
-              <Typography
-                ref={sortCommentButtonRef}
-                sx={{ ml: "8px", userSelect: "none" }}
-                variant='subtitle2'
-                fontWeight='600'
-              >
-                Sắp xếp theo
-              </Typography>
-            </Box>
-            {showListSortComment && (
-              <Paper
-                ref={listSorCommenttRef}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              cursor: "pointer",
+              mt: "12px",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar alt='' src='' />
+              <Box sx={{ ml: "12px", lineHeight: "1" }}>
+                <Typography
+                  variant='subtitle1'
+                  sx={{ lineHeight: "1.3" }}
+                  fontWeight='600'
+                >
+                  ICM Entertainment
+                </Typography>
+                <Typography
+                  variant='caption'
+                  sx={{ color: "customGreySubTitle.main" }}
+                >
+                  4,9 Tr người đăng ký
+                </Typography>
+              </Box>
+              <Chip
+                label='Đăng ký'
                 sx={{
-                  position: "absolute",
-                  zIndex: "10",
-                  minWidth: "180px",
-                  borderRadius: "8px",
-                  mt: "12px",
-                  bgcolor: theme.palette.customBgcolorMenu.main,
-                  boxShadow: theme.palette.customBoxShadowMenu.main,
+                  p: "4px",
+                  ml: "24px",
+                  bgcolor: "text.primary",
+                  color: "secondary.main",
+                  "&:hover": {
+                    bgcolor: "text.primary",
+                    opacity: "0.9",
+                  },
+                  fontSize: "14px",
+                  fontWeight: "600",
                 }}
-              >
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <Typography>Bình luận hàng đầu</Typography>
-                    </ListItemButton>
-                  </ListItem>
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <Typography>Mới nhất xếp trước</Typography>
-                    </ListItemButton>
-                  </ListItem>
-                </List>
-              </Paper>
-            )}
+              />
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Chip
+                icon={liked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
+                label='11N'
+                sx={{
+                  p: "4px",
+                  mr: "8px",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  "& .MuiChip-icon": {
+                    color: "text.primary",
+                  },
+                }}
+              />
+              <Chip
+                icon={<VerticalAlignBottomIcon />}
+                label='Tải xuống'
+                sx={{
+                  p: "4px",
+                  mr: "8px",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  "& .MuiChip-icon": {
+                    color: "text.primary",
+                  },
+                }}
+              />
+              <Box sx={{ position: "relative" }}>
+                <Chip
+                  ref={actionVideoButtonRef}
+                  icon={<MoreHorizIcon />}
+                  sx={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: "50%",
+                    padding: 0,
+                    "& .MuiChip-label": {
+                      display: "none",
+                    },
+                    "& .MuiChip-icon": {
+                      color: "text.primary",
+                      m: "0",
+                    },
+                  }}
+                  onClick={togglelistActionVideo}
+                />
+                {showListActionVideo && (
+                  <Paper
+                    ref={listActionVideoRef}
+                    sx={{
+                      position: "absolute",
+                      zIndex: "10",
+                      minWidth: "160px",
+                      borderRadius: "8px",
+                      top: "0",
+                      left: "34px",
+                      bgcolor: theme.palette.customBgcolorMenu.main,
+                      boxShadow: theme.palette.customBoxShadowMenu.main,
+                    }}
+                  >
+                    <List>
+                      <ListItem
+                        disablePadding
+                        onClick={handleClickOpenDialogListRadioReportVideo}
+                      >
+                        <ListItemButton>
+                          <EmojiFlagsIcon />
+                          <Typography sx={{ ml: "12px" }}>
+                            Báo vi phạm
+                          </Typography>
+                        </ListItemButton>
+                      </ListItem>
+                    </List>
+                  </Paper>
+                )}
+              </Box>
+            </Box>
           </Box>
-        </Box>
-        <Box sx={{ display: "flex", mt: "24px", width: "100%" }}>
-          <Avatar alt='' src='' sx={{ cursor: "pointer" }} />
-          <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
-            <TextField
-              variant='standard'
-              placeholder='Viết bình luận...'
-              sx={{ ml: "12px", mb: "12px", ...textFieldStyles }}
-              onClick={() => setShowActionComment(true)}
-              value={valueComment}
-              onChange={handleComment}
-            />
-            {showActionComment && (
+          <Box
+            sx={{
+              bgcolor: "customBgcolorSecondary.main",
+              borderRadius: "12px",
+              p: "12px",
+              mt: "16px",
+              cursor: "pointer",
+            }}
+          >
+            <ShowMoreText
+              more={
+                <Typography variant='span' sx={{ fontWeight: "600" }}>
+                  thêm
+                </Typography>
+              }
+              less={
+                <Typography sx={{ fontWeight: "600", mt: "16px" }}>
+                  Ẩn bớt
+                </Typography>
+              }
+              keepNewLines={true}
+              lines={4}
+            >
+              {longText}
+            </ShowMoreText>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", mt: "24px" }}>
+            <Typography variant='h6' fontWeight='600'>
+              85 bình luận
+            </Typography>
+            <Box sx={{ position: "relative", ml: "32px" }}>
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  width: "100%",
-                  justifyContent: "space-between",
+                  cursor: "pointer",
                 }}
+                onClick={toggleListSortComment}
               >
-                <Box sx={{ position: "relative", ml: "12px" }}>
-                  <InsertEmoticonIcon
-                    sx={{ cursor: "pointer" }}
-                    onClick={toggleEmojiPicker}
-                  />
-                  {showEmojiPicker && (
-                    <EmojiPicker
-                      theme={themeMode}
-                      emojiStyle='native'
-                      lazyLoadEmojis={true}
-                      onEmojiClick={handleEmojiClick}
-                      style={{ position: "absolute" }}
-                    />
-                  )}
-                </Box>
-                <Box>
-                  <Chip
-                    label='Hủy'
-                    sx={{
-                      p: "4px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      userSelect: "none",
-                      bgcolor: "primary.main",
-                      cursor: "pointer",
-                      mr: "8px",
-                    }}
-                    onClick={handleCancelComment}
-                  />
-                  <Chip
-                    label='Bình luận'
-                    sx={{
-                      p: "4px",
-                      fontSize: "14px",
-                      fontWeight: "600",
-                      userSelect: "none",
-                      cursor: "pointer",
-                      bgcolor: valueComment ? "#3da2f9" : "",
-                      color: valueComment ? "secondary.main" : "",
-                      "&:hover": {
-                        bgcolor: "#3da2f9",
-                        opacity: "0.9",
-                      },
-                    }}
-                    disabled={valueComment === ""}
-                    onClick={handlePostComment}
-                  />
-                </Box>
+                <SortIcon />
+                <Typography
+                  ref={sortCommentButtonRef}
+                  sx={{ ml: "8px", userSelect: "none" }}
+                  variant='subtitle2'
+                  fontWeight='600'
+                >
+                  Sắp xếp theo
+                </Typography>
               </Box>
-            )}
+              {showListSortComment && (
+                <Paper
+                  ref={listSorCommentRef}
+                  sx={{
+                    position: "absolute",
+                    zIndex: "10",
+                    minWidth: "173px",
+                    borderRadius: "8px",
+                    mt: "12px",
+                    bgcolor: theme.palette.customBgcolorMenu.main,
+                    boxShadow: theme.palette.customBoxShadowMenu.main,
+                  }}
+                >
+                  <List>
+                    <ListItem disablePadding>
+                      <ListItemButton selected={true}>
+                        <Typography>Bình luận hàng đầu</Typography>
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemButton>
+                        <Typography>Mới nhất xếp trước</Typography>
+                      </ListItemButton>
+                    </ListItem>
+                  </List>
+                </Paper>
+              )}
+            </Box>
+          </Box>
+          <Box sx={{ display: "flex", mt: "24px", width: "100%" }}>
+            <Avatar alt='' src='' />
+            <Box
+              sx={{ width: "100%", display: "flex", flexDirection: "column" }}
+            >
+              <TextField
+                variant='standard'
+                placeholder='Viết bình luận...'
+                sx={{ ml: "12px", mb: "12px", ...textFieldStyles }}
+                onClick={() => setShowActionComment(true)}
+                value={valueComment}
+                onChange={handleComment}
+              />
+              {showActionComment && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ position: "relative", ml: "12px" }}>
+                    <InsertEmoticonIcon
+                      sx={{ cursor: "pointer" }}
+                      onClick={toggleEmojiPicker}
+                    />
+                    {showEmojiPicker && (
+                      <EmojiPicker
+                        theme={themeMode}
+                        emojiStyle='native'
+                        lazyLoadEmojis={true}
+                        onEmojiClick={handleEmojiClick}
+                        style={{ position: "absolute" }}
+                      />
+                    )}
+                  </Box>
+                  <Box>
+                    <Chip
+                      label='Hủy'
+                      sx={{
+                        p: "4px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        userSelect: "none",
+                        bgcolor: "primary.main",
+                        cursor: "pointer",
+                        mr: "8px",
+                      }}
+                      onClick={handleCancelComment}
+                    />
+                    <Chip
+                      label='Bình luận'
+                      sx={{
+                        p: "4px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        userSelect: "none",
+                        cursor: "pointer",
+                        bgcolor: valueComment ? "#3da2f9" : "",
+                        color: valueComment ? "secondary.main" : "",
+                        "&:hover": {
+                          bgcolor: "#3da2f9",
+                          opacity: "0.9",
+                        },
+                      }}
+                      disabled={valueComment === ""}
+                      onClick={handlePostComment}
+                    />
+                  </Box>
+                </Box>
+              )}
+            </Box>
+          </Box>
+          <Box sx={{ mt: "24px" }}>
+            <CommentVideo
+              avatar=''
+              nameUser='@khanhtranphuc5193'
+              dateTimeComment='1 giờ trước'
+              comment='hay quá 😃'
+            />
+            <CommentVideo
+              avatar=''
+              nameUser='@AntenLofiChill-w8p'
+              dateTimeComment='2 tuần trước'
+              comment='Khi còn nhỏ thì ao ước trở thành người lớn. Giờ lớn lên rùi thì lại ước được trở về tuổi thơ. Mặc dù khi xưa còn thiếu thốn mọi thứ rất khó khăn. Nhưng bù lại lúc nào cũng vui vẻ, chơi những trò chơi dân gian...mà có lẻ bọn trẻ bây giờ ko thể nào biết được là nó vui vẻ như thế nào. Nếu có một điều ước tui chỉ ước đc trở về thời ấu thơ. Đó là những kỷ niệm đẹp nhất trong cuộc đời tôi.'
+            />
           </Box>
         </Box>
-      </Box>
-      <Box sx={{ ml: "24px" }}>
-        <RecommendVideoCard
-          title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
+        <Box sx={{ ml: "24px" }}>
+          <RecommendVideoCard
+            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
             Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-          nameChannel='Name Channel'
-          viewVideo='View Video'
-          dateTimeCreateVideo='Date time create'
-        />
-        <RecommendVideoCard
-          title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
+            nameChannel='Name Channel'
+            viewVideo='View Video'
+            dateTimeCreateVideo='Date time create'
+          />
+          <RecommendVideoCard
+            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
             nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
             Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-          nameChannel='Name Channel'
-          viewVideo='View Video'
-          dateTimeCreateVideo='Date time create'
-        />
+            nameChannel='Name Channel'
+            viewVideo='View Video'
+            dateTimeCreateVideo='Date time create'
+          />
+        </Box>
       </Box>
-    </Box>
+      <ListRadioReportVideo
+        openDialogListRadioReportVideo={openDialogListRadioReportVideo}
+        setOpenDialogListRadioReportVideo={setOpenDialogListRadioReportVideo}
+      />
+    </>
   );
 }

@@ -66,6 +66,11 @@ export const AppLightTheme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
+        root: {
+          "&.Mui-disabled": {
+            color: "#909090",
+          },
+        },
         outlined: {
           borderColor: "#0F0F0F",
           color: "#0F0F0F",
@@ -174,6 +179,27 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#f2f2f2",
+        },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#f2f2f2",
+        },
+      },
+    },
+    MuiDialogContentText: {
+      styleOverrides: {
+        root: {
+          color: "#606060",
+        },
+      },
+    },
   },
 });
 
@@ -245,6 +271,11 @@ export const AppDarkTheme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
+        root: {
+          "&.Mui-disabled": {
+            color: "#717171",
+          },
+        },
         outlined: {
           borderColor: "#F1F1F1",
           color: "#F1F1F1",
@@ -340,6 +371,27 @@ export const AppDarkTheme = createTheme({
         },
         rail: {
           color: "#bfbfbf",
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#272727",
+        },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#272727",
+        },
+      },
+    },
+    MuiDialogContentText: {
+      styleOverrides: {
+        root: {
+          color: grey[400],
         },
       },
     },

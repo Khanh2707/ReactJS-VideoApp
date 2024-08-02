@@ -16,7 +16,7 @@ export default function Header() {
         width: "1152px",
         p: "8px 0",
         pl: "16px",
-        zIndex: "10000",
+        zIndex: "1000",
       }}
     >
       <Grid container alignItems='center' justifyContent='space-between'>
