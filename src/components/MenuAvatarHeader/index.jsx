@@ -45,13 +45,9 @@ export default function MenuAvatarHeader() {
   }, []);
 
   return (
-    <>
+    <Box sx={{ position: "relative" }}>
       <IconButton type='button' onClick={toggleMenuAvatar} ref={buttonRef}>
-        <Avatar
-          alt=''
-          src=''
-          sx={{ width: "32px", height: "32px", position: "relative" }}
-        />
+        <Avatar alt='' src='' sx={{ width: "32px", height: "32px" }} />
       </IconButton>
       {showListMenuAvatar && (
         <Paper
@@ -61,8 +57,10 @@ export default function MenuAvatarHeader() {
             mt: "4px",
             bgcolor: theme.palette.customBgcolorMenu.main,
             boxShadow: theme.palette.customBoxShadowMenu.main,
-            right: "10px",
-            width: "300px",
+            right: "0",
+            minWidth: "300px",
+            borderRadius: "12px",
+            zIndex: "1",
           }}
         >
           <Box sx={{ width: "100%", display: "flex", p: "16px" }}>
@@ -101,6 +99,6 @@ export default function MenuAvatarHeader() {
           </List>
         </Paper>
       )}
-    </>
+    </Box>
   );
 }

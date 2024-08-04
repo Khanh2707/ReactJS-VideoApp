@@ -16,9 +16,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         minHeight: "100vh",
       }}
     >
-      <Container>
-        <RouterProvider router={routes} />
-      </Container>
+      <RouterProvider router={routes} />
     </Paper>
   </ThemeContextProvider>
   // </React.StrictMode>,
