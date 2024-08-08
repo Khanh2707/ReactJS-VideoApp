@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Sidebar.module.css";
 import iconReact from "../../../assets/icon-react.png";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 
 export default function Sidebar() {
   const [selected, setSelected] = useState(0);
-  const [expanded, setExpaned] = useState(true);
+  const [expanded, setExpanded] = useState(true);
 
   const navigate = useNavigate();
 
@@ -33,12 +33,30 @@ export default function Sidebar() {
     },
   ];
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setExpanded(false);
+      } else {
+        setExpanded(true);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
       <div
         className={styles.bars}
         style={expanded ? { left: "60%" } : { left: "5%" }}
-        onClick={() => setExpaned(!expanded)}
+        onClick={() => setExpanded(!expanded)}
       >
         <MenuIcon />
       </div>

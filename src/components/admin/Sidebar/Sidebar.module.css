@@ -103,9 +103,9 @@
     display: flex;
     position: fixed;
     top: 2rem;
-    left:60%;
-    background:#ffe0e0;
-    padding:10px;
+    left: 60%;
+    background: #ffe0e0;
+    padding: 10px;
     border-radius: 10px;
     z-index: 9;
   }
