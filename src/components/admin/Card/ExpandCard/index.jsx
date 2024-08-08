@@ -8,50 +8,59 @@ export default function ExpandCard({ param, setExpanded }) {
   const data = {
     options: {
       chart: {
-        type: "area",
+        type: "bar",
         height: "auto",
       },
-
-      dropShadow: {
-        enabled: false,
-        enabledOnSeries: undefined,
-        top: 0,
-        left: 0,
-        blur: 3,
-        color: "#000",
-        opacity: 0.35,
-      },
-
-      fill: {
-        colors: ["#fff"],
-        type: "gradient",
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: "55%",
+          endingShape: "rounded",
+        },
       },
       dataLabels: {
         enabled: false,
       },
       stroke: {
-        curve: "smooth",
-        colors: ["white"],
-      },
-      tooltip: {
-        x: {
-          format: "dd/MM/yy HH:mm",
-        },
-      },
-      grid: {
         show: true,
+        width: 2,
+        colors: ["transparent"],
       },
       xaxis: {
-        type: "datetime",
         categories: [
-          "2018-09-19T00:00:00.000Z",
-          "2018-09-19T01:30:00.000Z",
-          "2018-09-19T02:30:00.000Z",
-          "2018-09-19T03:30:00.000Z",
-          "2018-09-19T04:30:00.000Z",
-          "2018-09-19T05:30:00.000Z",
-          "2018-09-19T06:30:00.000Z",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
         ],
+      },
+      fill: {
+        type: "gradient",
+        gradient: {
+          shade: "light",
+          type: "vertical",
+          shadeIntensity: 0.25,
+          gradientToColors: ["#FEB019"],
+          inverseColors: false,
+          opacityFrom: 0.85,
+          opacityTo: 0.85,
+          stops: [0, 100],
+        },
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val + " người mới";
+          },
+        },
       },
     },
   };
@@ -61,7 +70,6 @@ export default function ExpandCard({ param, setExpanded }) {
       className={styles.ExpandedCard}
       style={{
         background: param.color.backGround,
-        boxShadow: param.color.boxShadow,
       }}
       layoutId={`expandableCard-${param.id}`}
     >
@@ -70,9 +78,8 @@ export default function ExpandCard({ param, setExpanded }) {
       </div>
       <span>{param.title}</span>
       <div className={styles.chartContainer}>
-        <Chart options={data.options} series={param.series} type='area' />
+        <Chart options={data.options} series={param.series} type='bar' />
       </div>
-      <span>Last 24 hours</span>
     </motion.div>
   );
 }

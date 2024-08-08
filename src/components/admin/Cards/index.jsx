@@ -18,7 +18,7 @@ export default function Cards() {
       series: [
         {
           name: "Sales",
-          data: [31, 40, 28, 51, 42, 109, 100],
+          data: [10, 150, 30, 40, 50, 60, 70, 80, 90, 100, 110, 20],
         },
       ],
     },
@@ -35,7 +35,7 @@ export default function Cards() {
       series: [
         {
           name: "Revenue",
-          data: [10, 100, 50, 70, 80, 30, 40],
+          data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
         },
       ],
     },
@@ -53,7 +53,7 @@ export default function Cards() {
       series: [
         {
           name: "Expenses",
-          data: [10, 25, 15, 30, 12, 15, 20],
+          data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
         },
       ],
     },

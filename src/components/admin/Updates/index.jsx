@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Updates.module.css";
 import iconReact from "../../../assets/icon-react.png";
+import { Box, Typography } from "@mui/material";
 
 export default function Updates() {
   const updatesData = [
@@ -25,21 +26,24 @@ export default function Updates() {
   ];
 
   return (
-    <div className={styles.Updates}>
+    <Box
+      sx={{ bgcolor: "customBgcolorSecondary.main" }}
+      className={styles.Updates}
+    >
       {updatesData.map((update, index) => {
         return (
           <div key={index} className={styles.update}>
             <img src={update.img} alt='profile' />
             <div className={styles.noti}>
               <div style={{ marginBottom: "0.5rem" }}>
-                <span>{update.name}</span>
-                <span> {update.noti}</span>
+                <Typography variant='subtitle2'>{update.name}</Typography>
+                <Typography variant='subtitle2'>{update.noti}</Typography>
               </div>
-              <span>{update.time}</span>
+              <Typography variant='subtitle2'>{update.time}</Typography>
             </div>
           </div>
         );
       })}
-    </div>
+    </Box>
   );
 }

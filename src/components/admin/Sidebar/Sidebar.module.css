@@ -35,16 +35,16 @@
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 .menuItem {
   display: flex;
   align-items: center;
   gap: 8px;
   height: 2.5rem;
-  margin-left: 16px;
+  padding-left: 16px;
   position: relative;
-  border-radius: 0.7rem;
+  border-radius: 0 12px 12px 0;
   font-size: 14px;
 }
 
@@ -59,14 +59,13 @@
 }
 
 .active {
-  background: var(--activeItem);
-  margin-left: 0;
+  padding-left: 0;
 }
 .active::before {
   content: "";
   width: 8px;
   height: 100%;
-  background: var(--pink);
+  background: #2b98f8;
 }
 
 

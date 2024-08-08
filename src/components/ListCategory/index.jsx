@@ -70,10 +70,10 @@ export default function ListCategory() {
                 label={item.name}
                 onClick={handleClick(item.id)}
                 sx={{
-                  bgcolor: selectedChip === item.id ? "primary.main" : "",
+                  bgcolor: selectedChip === item.id ? "#3ea6ff" : "",
                   color: selectedChip === item.id ? "common.white" : "",
                   "&:hover": {
-                    bgcolor: selectedChip === item.id ? "primary.main" : "",
+                    bgcolor: selectedChip === item.id ? "#3ea6ff" : "",
                   },
                 }}
               />

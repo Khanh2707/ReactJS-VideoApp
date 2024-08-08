@@ -6,6 +6,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
+import { Box, Typography } from "@mui/material";
 
 export default function Sidebar() {
   const [selected, setSelected] = useState(0);
@@ -16,11 +17,11 @@ export default function Sidebar() {
 
   const menuItemSidebar = [
     {
-      icon: <DashboardIcon sx={{ color: "var(--black)" }} />,
+      icon: <DashboardIcon />,
       heading: "Trang quản trị",
     },
     {
-      icon: <DashboardIcon sx={{ color: "var(--black)" }} />,
+      icon: <DashboardIcon />,
       heading: "Thống kê số liệu",
     },
   ];
@@ -30,14 +31,15 @@ export default function Sidebar() {
       {/* logo */}
       <div className={styles.logo}>
         <img src={iconReact} alt='' />
-        <span></span>
+        <Typography></Typography>
       </div>
 
       {/* menu */}
-      <div className={styles.menu}>
+      <Box className={styles.menu}>
         {menuItemSidebar.map((item, index) => {
           return (
-            <div
+            <Box
+              sx={{ bgcolor: "customBgcolorSecondary.main" }}
               key={index}
               className={`${styles.menuItem} ${
                 selected === index ? styles.active : ""
@@ -45,18 +47,19 @@ export default function Sidebar() {
               onClick={() => setSelected(index)}
             >
               {item.icon}
-              <span>{item.heading}</span>
-            </div>
+              <Typography>{item.heading}</Typography>
+            </Box>
           );
         })}
-        <div
-          className={`${styles.menuItem} ${styles.active}`}
+        <Box
+          sx={{ bgcolor: "customBgcolorSecondary.main" }}
+          className={`${styles.menuItem}`}
           onClick={() => navigate("/")}
         >
-          <LogoutIcon sx={{ color: "var(--black)" }} />
-          <span>Quay về trang chủ</span>
-        </div>
-      </div>
+          <LogoutIcon />
+          <Typography>Về trang chủ</Typography>
+        </Box>
+      </Box>
     </>
   );
 

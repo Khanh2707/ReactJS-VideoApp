@@ -3,7 +3,6 @@ import {
   Avatar,
   Box,
   Divider,
-  Grid,
   IconButton,
   List,
   ListItem,
@@ -15,6 +14,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 export default function MenuAvatarHeader() {
   const theme = useTheme();
@@ -98,7 +98,8 @@ export default function MenuAvatarHeader() {
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton component={Link} to='/dashboard'>
-                <Typography sx={{ ml: "8px" }}>Dashboard</Typography>
+                <DashboardIcon />
+                <Typography sx={{ ml: "8px" }}>Trang quản trị</Typography>
               </ListItemButton>
             </ListItem>
           </List>
