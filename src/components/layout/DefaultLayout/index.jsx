@@ -1,7 +1,7 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import React from "react";
-import Header from "../Header";
-import Sidebar from "../Sidebar";
+import Header from "../../Header";
+import Sidebar from "../../Sidebar";
 
 export default function DefaultLayout({ children, hideSidebar }) {
   return (

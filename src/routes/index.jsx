@@ -6,7 +6,7 @@ import Home from "../pages/Home";
 import Error from "../pages/Error";
 import WatchedVideo from "../pages/WatchedVideo";
 import AuthProvider from "../context/AuthProvider";
-import DefaultLayout from "../components/DefaultLayout";
+import DefaultLayout from "../components/layout/DefaultLayout";
 import MyChannel from "../pages/MyChannel";
 import ChannelEditing from "../pages/ChannelEditing";
 import Register from "../pages/Register";
@@ -14,6 +14,7 @@ import ChannelEditingImages from "../components/ChannelEditingImages";
 import ChannelEditingDetails from "../components/ChannelEditingDetails";
 import ChannelEditingVideos from "../components/ChannelEditingVideos";
 import DetailVideo from "../pages/DetailVideo";
+import AdminLayout from "../components/layout/AdminLayout";
 
 const AuthLayout = () => {
   return (
@@ -96,6 +97,10 @@ export default createBrowserRouter([
                 path: "videos",
               },
             ],
+          },
+          {
+            element: <AdminLayout />,
+            path: "dashboard",
           },
         ],
       },
