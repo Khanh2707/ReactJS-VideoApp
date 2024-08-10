@@ -10,12 +10,26 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import iconGoogle from "../../assets/icon-google.png";
+import authAPI from "../../api/authAPI";
+import { AppContext } from "../../context/AppContext";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const { getMyAccount } = useContext(AppContext);
+
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
+
   const theme = useTheme();
 
   const textFieldStyles = {
@@ -43,21 +57,23 @@ export default function Login() {
     },
   };
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
   };
 
-  const {
-    register,
-    handleSubmit,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
-
+  // API
   const handleFormSubmit = (formData) => {
-    console.log("Form data is: ", formData);
+    authAPI
+      .authenticate(formData)
+      .then((response) => {
+        localStorage.setItem("accessToken", response.result.token);
+        getMyAccount();
+        navigate("/");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -176,7 +192,10 @@ export default function Login() {
               borderRadius: "8px",
             }}
           >
-            <Typography variant='subtitle2' sx={{ fontWeight: "600" }}>
+            <Typography
+              variant='subtitle2'
+              sx={{ fontWeight: "600", color: "#fff" }}
+            >
               Đăng nhập
             </Typography>
           </Button>

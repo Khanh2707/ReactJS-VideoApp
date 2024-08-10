@@ -10,14 +10,18 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import authAPI from "../../api/authAPI";
+import { AppContext } from "../../context/AppContext";
 
 export default function MenuAvatarHeader() {
   const theme = useTheme();
+
+  const { setMyAccount } = useContext(AppContext);
 
   const [showListMenuAvatar, setShowListMenuAvatar] = useState(false);
   const buttonRef = useRef(null);
@@ -35,6 +39,23 @@ export default function MenuAvatarHeader() {
 
   const toggleMenuAvatar = () => {
     setShowListMenuAvatar((prev) => !prev);
+  };
+
+  // API
+  const handleLogout = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken !== null) {
+      authAPI
+        .logout({ token: accessToken })
+        .then((response) => {
+          localStorage.removeItem("accessToken");
+          setMyAccount(null);
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -88,7 +109,9 @@ export default function MenuAvatarHeader() {
             <ListItem disablePadding>
               <ListItemButton>
                 <LogoutIcon />
-                <Typography sx={{ ml: "8px" }}>Đăng xuất</Typography>
+                <Typography sx={{ ml: "8px" }} onClick={handleLogout}>
+                  Đăng xuất
+                </Typography>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
