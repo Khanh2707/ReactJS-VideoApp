@@ -22,6 +22,7 @@ export default function ConfirmDeleteCommentVideo({
       onClose={handleCloseDialogConfirmDeleteComment}
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
+      disableScrollLock
     >
       <DialogTitle id='alert-dialog-title'>Xóa bình luận</DialogTitle>
       <DialogContent>

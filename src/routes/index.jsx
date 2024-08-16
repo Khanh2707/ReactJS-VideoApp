@@ -15,6 +15,7 @@ import ChannelEditingDetails from "../components/ChannelEditingDetails";
 import ChannelEditingVideos from "../components/ChannelEditingVideos";
 import DetailVideo from "../pages/DetailVideo";
 import AdminLayout from "../components/layout/AdminLayout";
+import AuthGoogle from "../pages/auth/AuthGoogle";
 
 const AuthLayout = () => {
   return (
@@ -29,6 +30,10 @@ export default createBrowserRouter([
     element: <AuthLayout />,
     errorElement: <Error />,
     children: [
+      {
+        element: <AuthGoogle />,
+        path: "/auth/google",
+      },
       {
         element: <Login />,
         path: "/login",

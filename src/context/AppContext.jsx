@@ -19,6 +19,10 @@ export const AppProvider = ({ children }) => {
       });
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) getMyAccount();
+  }, []);
+
   return (
     <AppContext.Provider value={{ getMyAccount, myAccount, setMyAccount }}>
       {children}

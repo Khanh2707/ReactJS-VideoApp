@@ -51,7 +51,7 @@ const ThemeSwitcher = () => {
   };
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative", mr: "10px" }}>
       <Button
         variant='outlined'
         startIcon={

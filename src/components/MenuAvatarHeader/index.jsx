@@ -21,7 +21,7 @@ import { AppContext } from "../../context/AppContext";
 export default function MenuAvatarHeader() {
   const theme = useTheme();
 
-  const { setMyAccount } = useContext(AppContext);
+  const { myAccount, setMyAccount } = useContext(AppContext);
 
   const [showListMenuAvatar, setShowListMenuAvatar] = useState(false);
   const buttonRef = useRef(null);
@@ -68,7 +68,11 @@ export default function MenuAvatarHeader() {
   return (
     <Box sx={{ position: "relative" }}>
       <IconButton type='button' onClick={toggleMenuAvatar} ref={buttonRef}>
-        <Avatar alt='' src='' sx={{ width: "32px", height: "32px" }} />
+        <Avatar
+          alt=''
+          src={myAccount.channel.avatar}
+          sx={{ width: "32px", height: "32px" }}
+        />
       </IconButton>
       {showListMenuAvatar && (
         <Paper
@@ -86,11 +90,11 @@ export default function MenuAvatarHeader() {
         >
           <Box sx={{ width: "100%", display: "flex", p: "16px" }}>
             <Box sx={{ mr: "16px" }}>
-              <Avatar alt='' src='' />
+              <Avatar alt='' src={myAccount.channel.avatar} />
             </Box>
             <Box>
-              <Typography>Khánh Trần Phúc</Typography>
-              <Typography>@khanhtranphuc5193</Typography>
+              <Typography>{myAccount.channel.name}</Typography>
+              <Typography>@{myAccount.channel.nameUnique}</Typography>
               <Link to='/abc' style={{ textDecoration: "none" }}>
                 <Typography sx={{ color: "#3ea6ff", mt: "4px" }}>
                   Xem kênh của bạn
@@ -100,12 +104,6 @@ export default function MenuAvatarHeader() {
           </Box>
           <Divider />
           <List>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to='/login'>
-                <LoginIcon />
-                <Typography sx={{ ml: "8px" }}>Đăng nhập</Typography>
-              </ListItemButton>
-            </ListItem>
             <ListItem disablePadding>
               <ListItemButton>
                 <LogoutIcon />

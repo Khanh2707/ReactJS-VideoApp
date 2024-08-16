@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import iconGoogle from "../../assets/icon-google.png";
 import authAPI from "../../api/authAPI";
 import { AppContext } from "../../context/AppContext";
+import { OAuthConfig } from "../../configurations/configurations";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -74,6 +75,20 @@ export default function Login() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleContinueWithGoogle = () => {
+    const callbackUrl = OAuthConfig.redirectUri;
+    const authUrl = OAuthConfig.authUri;
+    const googleClientId = OAuthConfig.clientId;
+
+    const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
+      callbackUrl
+    )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`;
+
+    console.log(targetUrl);
+
+    window.location.href = targetUrl;
   };
 
   return (
@@ -212,6 +227,7 @@ export default function Login() {
               },
               borderRadius: "8px",
             }}
+            onClick={handleContinueWithGoogle}
           >
             <Box sx={{ width: "20px", height: "20px" }}>
               <img

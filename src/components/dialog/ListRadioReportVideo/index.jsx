@@ -36,6 +36,7 @@ export default function ListRadioReportVideo({
       onClose={handleCloseDialogListRadioReportVideo}
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
+      disableScrollLock
     >
       <DialogTitle id='alert-dialog-title'>
         <FormControl>
