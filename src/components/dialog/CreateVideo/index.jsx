@@ -11,6 +11,9 @@ import {
   DialogActions,
   Button,
   DialogContentText,
+  Stepper,
+  Step,
+  StepLabel,
 } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -36,6 +39,7 @@ export default function CreateVideo({
   const handleCloseDialogCreateVideo = () => {
     setIsDisplayTabContext(false);
     setIsDisplayDialogConfirmCancel(true);
+    setError("");
   };
 
   const handleCancelCreateVideo = () => {
@@ -43,6 +47,7 @@ export default function CreateVideo({
     setError("");
     setFileVideo(null);
     setTabContext("1");
+    setActiveStep(0);
 
     if (fileVideo) {
       URL.revokeObjectURL(fileVideo.preview);
@@ -79,6 +84,10 @@ export default function CreateVideo({
     setOpenBackdrop(false);
   };
 
+  const handleChangeTabContext = (event, newValue) => {
+    setTabContext(newValue);
+  };
+
   useEffect(() => {
     if (fileVideo) {
       console.log("Video đã được chọn:", fileVideo);
@@ -89,8 +98,20 @@ export default function CreateVideo({
     };
   }, [fileVideo]);
 
-  const handleChange = (event, newValue) => {
-    setTabContext(newValue);
+  const steps = ["Chi tiết", "Chế độ hiển thị"];
+
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
   };
 
   return (
@@ -108,13 +129,20 @@ export default function CreateVideo({
     >
       {isDisplayDialogConfirmCancel && (
         <>
-          <DialogTitle id='alert-dialog-title'>{"Hủy đăng video?"}</DialogTitle>
+          <DialogTitle>{"Hủy đăng video?"}</DialogTitle>
           <DialogContent sx={{ width: "300px" }}>
             <DialogContentText id='alert-dialog-description'>
               Nếu hùy đăng video, mọi tùy chọn với video sẽ bị mất?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
+            <Button
+              sx={{ color: "#3ea6ff", fontWeight: "600" }}
+              onClick={handleCancelCreateVideo}
+              autoFocus
+            >
+              Hủy
+            </Button>
             <Button
               sx={{ color: "#3ea6ff", fontWeight: "600" }}
               onClick={() => {
@@ -124,13 +152,6 @@ export default function CreateVideo({
             >
               Tiếp tục
             </Button>
-            <Button
-              sx={{ color: "#3ea6ff", fontWeight: "600" }}
-              onClick={handleCancelCreateVideo}
-              autoFocus
-            >
-              Hủy
-            </Button>
           </DialogActions>
         </>
       )}
@@ -139,7 +160,7 @@ export default function CreateVideo({
           <TabContext value={tabContext}>
             <TabPanel value='1' sx={{ p: "0" }}>
               <Box sx={{ width: "400px" }}>
-                <DialogTitle id='alert-dialog-title' sx={{ fontWeight: "700" }}>
+                <DialogTitle sx={{ fontWeight: "700" }}>
                   {"Tải video lên"}
                 </DialogTitle>
                 <Divider />
@@ -206,6 +227,25 @@ export default function CreateVideo({
                 </DialogContent>
               </Box>
             </TabPanel>
+            {tabContext !== "1" && (
+              <>
+                <DialogTitle sx={{ fontWeight: "700" }}>
+                  {"Tiêu đề video"}
+                </DialogTitle>
+                <Divider />
+                <DialogContent>
+                  <Stepper activeStep={activeStep} sx={{ minWidth: "340px" }}>
+                    {steps.map((label, index) => {
+                      return (
+                        <Step key={label}>
+                          <StepLabel>{label}</StepLabel>
+                        </Step>
+                      );
+                    })}
+                  </Stepper>
+                </DialogContent>
+              </>
+            )}
             <TabPanel value='2'>
               {fileVideo && (
                 <video
@@ -217,10 +257,13 @@ export default function CreateVideo({
                 </video>
               )}
             </TabPanel>
+            <TabPanel value='3'>
+              <Typography>Chế độ hiển thị</Typography>
+            </TabPanel>
             {tabContext !== "1" && (
               <DialogActions>
                 <TabList
-                  onChange={handleChange}
+                  onChange={handleChangeTabContext}
                   aria-label='lab API tabs example'
                   TabIndicatorProps={{
                     sx: {
@@ -228,16 +271,40 @@ export default function CreateVideo({
                     },
                   }}
                 >
-                  <Tab
-                    label='Tiếp'
-                    value={tabContext}
-                    onClick={() => {
-                      const nextTab = (parseInt(tabContext) + 1).toString();
-                      if (nextTab <= "2") {
-                        setTabContext(nextTab);
-                      }
-                    }}
-                  />
+                  {activeStep >= 1 && (
+                    <Tab
+                      label='Quay lại'
+                      value={tabContext}
+                      disabled={activeStep === 0}
+                      onClick={() => {
+                        const prevTab = (parseInt(tabContext) - 1).toString();
+                        setTabContext(prevTab);
+                        handleBack();
+                      }}
+                    />
+                  )}
+                  {activeStep !== steps.length && (
+                    <Tab
+                      label='Tiếp'
+                      value={tabContext}
+                      onClick={() => {
+                        const nextTab = (parseInt(tabContext) + 1).toString();
+                        if (nextTab <= "3") {
+                          setTabContext(nextTab);
+                        }
+                        handleNext();
+                      }}
+                    />
+                  )}
+                  {activeStep === steps.length && (
+                    <Tab
+                      label='Reset'
+                      value={tabContext}
+                      onClick={() => {
+                        handleReset();
+                      }}
+                    />
+                  )}
                 </TabList>
               </DialogActions>
             )}

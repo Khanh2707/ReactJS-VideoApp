@@ -200,6 +200,32 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiStepLabel: {
+      styleOverrides: {
+        label: {
+          "&.Mui-completed": {
+            color: "#0f0f0f", // Màu khi Step đã hoàn thành
+          },
+          "&.Mui-active": {
+            color: "#0f0f0f", // Màu khi Step đang active
+          },
+          "&.Mui-disabled": {
+            color: "#717171", // Màu khi Step bị disable
+          },
+        },
+        iconContainer: {
+          "& .MuiStepIcon-root": {
+            color: "#717171", // Màu mặc định của icon
+            "&.Mui-active": {
+              color: "#1976d2", // Màu khi icon đang active
+            },
+            "&.Mui-completed": {
+              color: "#0f0f0f", // Màu khi icon đã hoàn thành
+            },
+          },
+        },
+      },
+    },
   },
 });
 
@@ -392,6 +418,33 @@ export const AppDarkTheme = createTheme({
       styleOverrides: {
         root: {
           color: grey[400],
+        },
+      },
+    },
+    MuiStepLabel: {
+      styleOverrides: {
+        label: {
+          "&.Mui-completed": {
+            color: "#f1f1f1", // Màu khi Step đã hoàn thành
+          },
+          "&.Mui-active": {
+            color: "#f1f1f1", // Màu khi Step đang active
+          },
+          "&.Mui-disabled": {
+            color: "#717171", // Màu khi Step bị disable
+          },
+        },
+        iconContainer: {
+          // Tùy chỉnh màu của icon
+          "& .MuiStepIcon-root": {
+            color: "#717171", // Màu mặc định của icon
+            "&.Mui-active": {
+              color: "#1976d2", // Màu khi icon đang active
+            },
+            "&.Mui-completed": {
+              color: "#f1f1f1", // Màu khi icon đã hoàn thành
+            },
+          },
         },
       },
     },
