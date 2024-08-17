@@ -9,8 +9,22 @@ const axiosClient = axios.create({
   paramsSerializer: (params) => queryString.stringify(params),
 });
 
+let isRefreshing = false;
+let refreshSubscribers = []; // Enhanced subscriber management
+
+const processQueue = (error, token = null) => {
+  refreshSubscribers.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  refreshSubscribers = []; // Clear the queue
+};
+
 axiosClient.interceptors.request.use(
-  function (config) {
+  (config) => {
     const token = localStorage.getItem("accessToken");
 
     if (token) {
@@ -19,16 +33,61 @@ axiosClient.interceptors.request.use(
 
     return config;
   },
-  function (error) {
+  (error) => {
     return Promise.reject(error);
   }
 );
 
 axiosClient.interceptors.response.use(
-  function (response) {
+  (response) => {
     return response.data;
   },
-  function (error) {
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          refreshSubscribers.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return axiosClient(originalRequest);
+          })
+          .catch((err) => {
+            return Promise.reject(err);
+          });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refreshToken = localStorage.getItem("accessToken");
+      localStorage.removeItem("accessToken");
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${import.meta.env.VITE_APP_API_URL}/auth/refreshToken`, {
+            token: refreshToken,
+          })
+          .then(({ data }) => {
+            const newToken = data.result.token;
+            localStorage.setItem("accessToken", newToken);
+            axiosClient.defaults.headers.Authorization = `Bearer ${newToken}`;
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            processQueue(null, newToken);
+            resolve(axiosClient(originalRequest));
+          })
+          .catch((err) => {
+            processQueue(err, null);
+            reject(err);
+          })
+          .finally(() => {
+            isRefreshing = false;
+          });
+      });
+    }
+
     return Promise.reject(error);
   }
 );
