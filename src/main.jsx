@@ -9,8 +9,8 @@ import { AppProvider } from "./context/AppContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-  <AppProvider>
-    <ThemeContextProvider>
+  <ThemeContextProvider>
+    <AppProvider>
       <CssBaseline />
       <Paper
         sx={{
@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       >
         <RouterProvider router={routes} />
       </Paper>
-    </ThemeContextProvider>
-  </AppProvider>
+    </AppProvider>
+  </ThemeContextProvider>
   // </React.StrictMode>,
 );

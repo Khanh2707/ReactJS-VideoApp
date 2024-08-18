@@ -68,9 +68,14 @@ export default function CreateVideo({
   const videoControlsRef = useRef(null);
 
   const handleCloseDialogCreateVideo = () => {
-    setIsDisplayTabContext(false);
-    setIsDisplayDialogConfirmCancel(true);
-    setError("");
+    if (tabContext !== "1") {
+      setIsDisplayTabContext(false);
+      setIsDisplayDialogConfirmCancel(true);
+      setError("");
+    } else {
+      setOpenDialogCreateVideo(false);
+      setError("");
+    }
   };
 
   const handleCancelCreateVideo = () => {
