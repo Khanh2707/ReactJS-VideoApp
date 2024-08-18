@@ -1,33 +1,40 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-export default function ChannelEditingDetails() {
-  const textFieldStyles = {
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "customBorderTextField.main",
-      },
-      "&:hover fieldset": {
-        borderColor: "customBorderTextField.main",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "customBorderTextField.main",
-      },
+const textFieldStyles = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "customBorderTextField.main",
     },
-    "& .Mui-error": {
-      "& .MuiOutlinedInput-notchedOutline": {
-        borderColor: "red",
-      },
-      "&:hover .MuiOutlinedInput-notchedOutline": {
-        borderColor: "red",
-      },
-      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: "red",
-      },
+    "&:hover fieldset": {
+      borderColor: "customBorderTextField.main",
     },
-  };
+    "&.Mui-focused fieldset": {
+      borderColor: "customBorderTextField.main",
+    },
+  },
+  "& .Mui-error": {
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red",
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red",
+    },
+  },
+};
 
+export default function ChannelEditingDetails() {
   const [descriptionLength, setDescriptionLength] = useState(0);
 
   const handleDescriptionChange = (event) => {
@@ -128,26 +135,50 @@ export default function ChannelEditingDetails() {
                 handleDescriptionChange(e);
               },
             })}
-            sx={textFieldStyles}
             multiline
-            rows={4}
-            // inputProps={{ maxLength: 255 }}
+            minRows={4}
+            maxRows={Infinity}
+            sx={{
+              ...textFieldStyles,
+              "& .MuiInputBase-input": {
+                paddingBottom: "25px",
+              },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position='end'
+                  sx={{
+                    position: "absolute",
+                    bottom: "25px",
+                    right: "0px",
+                    transform: "translateY(100%)",
+                    marginBottom: "8px",
+                    paddingRight: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    height: "100%",
+                  }}
+                >
+                  <Typography>{`${descriptionLength}/100`}</Typography>
+                </InputAdornment>
+              ),
+            }}
           />
-          <Typography
-            variant='caption'
-            sx={{ display: "block", textAlign: "right", mt: 1 }}
-          >
-            {descriptionLength}/255
-          </Typography>
         </Grid>
       </Grid>
       <Button
         variant='contained'
         fullWidth
+        type='submit'
         sx={{
           mt: "32px",
           p: "8px",
           borderRadius: "8px",
+          bgcolor: "#2e7d32",
+          "&:hover": {
+            bgcolor: "#2e7d32",
+          },
         }}
       >
         <Typography variant='subtitle2' sx={{ fontWeight: "600" }}>

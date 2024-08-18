@@ -38,6 +38,7 @@ export default function ChannelEditingVideos() {
     <DataGrid
       rows={rows}
       columns={columns}
+      autoHeight={true}
       initialState={{
         pagination: {
           paginationModel: { page: 0, pageSize: 5 },

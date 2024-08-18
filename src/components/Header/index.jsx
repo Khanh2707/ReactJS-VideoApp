@@ -5,7 +5,7 @@ import ThemeSwitcher from "../ThemeSwitcher";
 import SearchHeader from "../SearchHeader";
 import Notification from "../Notification";
 import MenuAvatarHeader from "../MenuAvatarHeader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import iconReact from "../../assets/react.svg";
 import { AppContext } from "../../context/AppContext";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -16,7 +16,10 @@ export default function Header() {
 
   const { myAccount } = useContext(AppContext);
 
+  const navigate = useNavigate();
+
   const handleClickOpenDialogCreateVideo = () => {
+    navigate("/channel/editing/videos");
     setOpenDialogCreateVideo(true);
   };
 
@@ -55,7 +58,10 @@ export default function Header() {
                 {myAccount ? (
                   <>
                     <Grid item>
-                      <IconButton type='button' onClick={handleClickOpenDialogCreateVideo}>
+                      <IconButton
+                        type='button'
+                        onClick={handleClickOpenDialogCreateVideo}
+                      >
                         <VideoCallIcon />
                       </IconButton>
                     </Grid>

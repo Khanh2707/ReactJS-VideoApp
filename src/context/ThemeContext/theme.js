@@ -226,6 +226,13 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: {
+          color: "#606060",
+        },
+      },
+    },
   },
 });
 
@@ -445,6 +452,13 @@ export const AppDarkTheme = createTheme({
               color: "#f1f1f1", // Màu khi icon đã hoàn thành
             },
           },
+        },
+      },
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: {
+          color: grey[400],
         },
       },
     },

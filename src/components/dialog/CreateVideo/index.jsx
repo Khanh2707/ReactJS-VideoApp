@@ -14,11 +14,41 @@ import {
   Stepper,
   Step,
   StepLabel,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { useForm } from "react-hook-form";
+
+const textFieldStyles = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "customBorderTextField.main",
+    },
+    "&:hover fieldset": {
+      borderColor: "customBorderTextField.main",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "customBorderTextField.main",
+    },
+  },
+  "& .Mui-error": {
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red",
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "red",
+    },
+  },
+};
+
+const steps = ["Chi tiết", "Chế độ hiển thị"];
 
 export default function CreateVideo({
   openDialogCreateVideo,
@@ -31,6 +61,7 @@ export default function CreateVideo({
   const [isDisplayTabContext, setIsDisplayTabContext] = useState(true);
   const [isDisplayDialogConfirmCancel, setIsDisplayDialogConfirmCancel] =
     useState(false);
+  const [activeStep, setActiveStep] = useState(0);
 
   const { themeMode } = useContext(ThemeContext);
   const buttonSelectFileVideoRef = useRef(null);
@@ -88,6 +119,14 @@ export default function CreateVideo({
     setTabContext(newValue);
   };
 
+  const handleBackStepUploadVideo = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleNextStepUploadVideo = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
   useEffect(() => {
     if (fileVideo) {
       console.log("Video đã được chọn:", fileVideo);
@@ -98,20 +137,21 @@ export default function CreateVideo({
     };
   }, [fileVideo]);
 
-  const steps = ["Chi tiết", "Chế độ hiển thị"];
+  const [titleChannelLength, setTitleChannelLength] = useState(0);
 
-  const [activeStep, setActiveStep] = useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleTitleChannelChange = (event) => {
+    setTitleChannelLength(event.target.value.length);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
 
-  const handleReset = () => {
-    setActiveStep(0);
+  const handleFormSubmit = (formData) => {
+    console.log("Form data is: ", formData);
   };
 
   return (
@@ -121,11 +161,15 @@ export default function CreateVideo({
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
       disableScrollLock
+      maxWidth={false}
       PaperProps={{
         sx: {
           borderRadius: "20px",
         },
       }}
+      component='form'
+      onSubmit={handleSubmit(handleFormSubmit)}
+      noValidate
     >
       {isDisplayDialogConfirmCancel && (
         <>
@@ -247,15 +291,75 @@ export default function CreateVideo({
               </>
             )}
             <TabPanel value='2'>
-              {fileVideo && (
-                <video
-                  controls
-                  ref={videoControlsRef}
-                  style={{ width: "320px", height: "180px" }}
-                >
-                  <source src={fileVideo.preview} type='video/mp4' />
-                </video>
-              )}
+              <Box sx={{ display: "flex", gap: "24px" }}>
+                <Box>
+                  <Typography sx={{ fontWeight: "600", mb: "4px" }}>
+                    Tiêu đề (bắt buộc)
+                  </Typography>
+                  <TextField
+                    placeholder='VD: Video đầu tiên của tôi!'
+                    size='small'
+                    error={!!errors.titleVideo}
+                    autoComplete='titleVideo'
+                    fullWidth
+                    id='titleVideo'
+                    name='titleVideo'
+                    helperText={errors.titleVideo?.message || ""}
+                    {...register("titleVideo", {
+                      required: "Vui lòng nhập trường này",
+                      maxLength: {
+                        value: 100,
+                        message: "Tiêu đề không được quá 100 ký tự",
+                      },
+                      onChange: (e) => {
+                        clearErrors("titleVideo");
+                        handleTitleChannelChange(e);
+                      },
+                    })}
+                    sx={{
+                      width: "500px",
+                      ...textFieldStyles,
+                      "& .MuiInputBase-input": {
+                        paddingBottom: "25px",
+                      },
+                    }}
+                    multiline
+                    minRows={2}
+                    maxRows={Infinity}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment
+                          position='end'
+                          sx={{
+                            position: "absolute",
+                            bottom: "25px",
+                            right: "0px",
+                            transform: "translateY(100%)",
+                            marginBottom: "8px",
+                            paddingRight: "8px",
+                            display: "flex",
+                            alignItems: "center",
+                            height: "100%",
+                          }}
+                        >
+                          <Typography>{`${titleChannelLength}/100`}</Typography>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Box>
+                <Box>
+                  {fileVideo && (
+                    <video
+                      controls
+                      ref={videoControlsRef}
+                      style={{ width: "320px", height: "180px" }}
+                    >
+                      <source src={fileVideo.preview} type='video/mp4' />
+                    </video>
+                  )}
+                </Box>
+              </Box>
             </TabPanel>
             <TabPanel value='3'>
               <Typography>Chế độ hiển thị</Typography>
@@ -279,30 +383,22 @@ export default function CreateVideo({
                       onClick={() => {
                         const prevTab = (parseInt(tabContext) - 1).toString();
                         setTabContext(prevTab);
-                        handleBack();
+                        handleBackStepUploadVideo();
                       }}
                     />
                   )}
                   {activeStep !== steps.length && (
                     <Tab
+                      type='submit'
                       label='Tiếp'
                       value={tabContext}
-                      onClick={() => {
-                        const nextTab = (parseInt(tabContext) + 1).toString();
-                        if (nextTab <= "3") {
-                          setTabContext(nextTab);
-                        }
-                        handleNext();
-                      }}
-                    />
-                  )}
-                  {activeStep === steps.length && (
-                    <Tab
-                      label='Reset'
-                      value={tabContext}
-                      onClick={() => {
-                        handleReset();
-                      }}
+                      // onClick={() => {
+                      //   const nextTab = (parseInt(tabContext) + 1).toString();
+                      //   if (nextTab <= "3") {
+                      //     setTabContext(nextTab);
+                      //   }
+                      //   handleNextStepUploadVideo();
+                      // }}
                     />
                   )}
                 </TabList>
