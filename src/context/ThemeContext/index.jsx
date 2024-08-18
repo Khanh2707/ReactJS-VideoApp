@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { IThemeMode } from "./types";
 import { AppDarkTheme, AppLightTheme } from "./theme";
 import { ThemeProvider, useMediaQuery } from "@mui/material";
@@ -6,31 +6,39 @@ import { ThemeProvider, useMediaQuery } from "@mui/material";
 export const ThemeContext = createContext();
 
 export const ThemeContextProvider = ({ children }) => {
+  const [themeMode, setThemeMode] = useState(IThemeMode.LIGHT);
+  const [theme, setTheme] = useState(AppLightTheme);
+
   const SYSTEM_THEME = useMediaQuery("(prefers-color-scheme: dark)")
     ? IThemeMode.DARK
     : IThemeMode.LIGHT;
 
-  const [themeMode, setThemeMode] = useState(IThemeMode.LIGHT);
-
   useEffect(() => {
     const themeModeFromPref = _getThemeModeFromPref();
-    if (themeModeFromPref === IThemeMode.SYSTEM) {
-      setThemeMode(SYSTEM_THEME);
-    } else {
-      setThemeMode(themeModeFromPref);
-    }
-  }, [SYSTEM_THEME]);
+    setThemeMode(themeModeFromPref);
+  }, []);
 
-  const theme = useMemo(() => {
+  useEffect(() => {
     switch (themeMode) {
       case IThemeMode.DARK:
-        return AppDarkTheme;
+        setTheme(AppDarkTheme);
+        break;
       case IThemeMode.LIGHT:
-        return AppLightTheme;
+        setTheme(AppLightTheme);
+        break;
       case IThemeMode.SYSTEM:
-        return SYSTEM_THEME === IThemeMode.DARK ? AppDarkTheme : AppLightTheme;
+        switch (SYSTEM_THEME) {
+          case IThemeMode.DARK:
+            setTheme(AppDarkTheme);
+            break;
+          case IThemeMode.LIGHT:
+            setTheme(AppLightTheme);
+            break;
+        }
+        break;
       default:
-        return AppLightTheme;
+        setTheme(AppLightTheme);
+        break;
     }
   }, [themeMode, SYSTEM_THEME]);
 
