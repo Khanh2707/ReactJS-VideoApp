@@ -22,31 +22,7 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useForm } from "react-hook-form";
-
-const textFieldStyles = {
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "customBorderTextField.main",
-    },
-    "&:hover fieldset": {
-      borderColor: "customBorderTextField.main",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "customBorderTextField.main",
-    },
-  },
-  "& .Mui-error": {
-    "& .MuiOutlinedInput-notchedOutline": {
-      borderColor: "red",
-    },
-    "&:hover .MuiOutlinedInput-notchedOutline": {
-      borderColor: "red",
-    },
-    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-      borderColor: "red",
-    },
-  },
-};
+import InputInfoCreateVideo from "../../InputInfoCreateVideo";
 
 const steps = ["Chi tiết", "Chế độ hiển thị"];
 
@@ -66,6 +42,13 @@ export default function CreateVideo({
   const { themeMode } = useContext(ThemeContext);
   const buttonSelectFileVideoRef = useRef(null);
   const videoControlsRef = useRef(null);
+
+  const {
+    handleSubmit,
+    register,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
 
   const handleCloseDialogCreateVideo = () => {
     setIsDisplayTabContext(false);
@@ -127,6 +110,10 @@ export default function CreateVideo({
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
+  const handleFormSubmit = (formData) => {
+    console.log("Form data is: ", formData);
+  };
+
   useEffect(() => {
     if (fileVideo) {
       console.log("Video đã được chọn:", fileVideo);
@@ -136,23 +123,6 @@ export default function CreateVideo({
       fileVideo && URL.revokeObjectURL(fileVideo.preview);
     };
   }, [fileVideo]);
-
-  const [titleChannelLength, setTitleChannelLength] = useState(0);
-
-  const handleTitleChannelChange = (event) => {
-    setTitleChannelLength(event.target.value.length);
-  };
-
-  const {
-    register,
-    handleSubmit,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
-
-  const handleFormSubmit = (formData) => {
-    console.log("Form data is: ", formData);
-  };
 
   return (
     <Dialog
@@ -274,7 +244,7 @@ export default function CreateVideo({
             {tabContext !== "1" && (
               <>
                 <DialogTitle sx={{ fontWeight: "700" }}>
-                  {"Tiêu đề video"}
+                  {fileVideo.name.slice(0, fileVideo.name.lastIndexOf("."))}
                 </DialogTitle>
                 <Divider />
                 <DialogContent>
@@ -292,62 +262,12 @@ export default function CreateVideo({
             )}
             <TabPanel value='2'>
               <Box sx={{ display: "flex", gap: "24px" }}>
-                <Box>
-                  <Typography sx={{ fontWeight: "600", mb: "4px" }}>
-                    Tiêu đề (bắt buộc)
-                  </Typography>
-                  <TextField
-                    placeholder='VD: Video đầu tiên của tôi!'
-                    size='small'
-                    error={!!errors.titleVideo}
-                    autoComplete='titleVideo'
-                    fullWidth
-                    id='titleVideo'
-                    name='titleVideo'
-                    helperText={errors.titleVideo?.message || ""}
-                    {...register("titleVideo", {
-                      required: "Vui lòng nhập trường này",
-                      maxLength: {
-                        value: 100,
-                        message: "Tiêu đề không được quá 100 ký tự",
-                      },
-                      onChange: (e) => {
-                        clearErrors("titleVideo");
-                        handleTitleChannelChange(e);
-                      },
-                    })}
-                    sx={{
-                      width: "500px",
-                      ...textFieldStyles,
-                      "& .MuiInputBase-input": {
-                        paddingBottom: "25px",
-                      },
-                    }}
-                    multiline
-                    minRows={2}
-                    maxRows={Infinity}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment
-                          position='end'
-                          sx={{
-                            position: "absolute",
-                            bottom: "25px",
-                            right: "0px",
-                            transform: "translateY(100%)",
-                            marginBottom: "8px",
-                            paddingRight: "8px",
-                            display: "flex",
-                            alignItems: "center",
-                            height: "100%",
-                          }}
-                        >
-                          <Typography>{`${titleChannelLength}/100`}</Typography>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Box>
+                <InputInfoCreateVideo
+                  register={register}
+                  clearErrors={clearErrors}
+                  errors={errors}
+                  fileVideo={fileVideo}
+                />
                 <Box>
                   {fileVideo && (
                     <video

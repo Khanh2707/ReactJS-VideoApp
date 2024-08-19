@@ -50,7 +50,7 @@ export default function InputInfoCreateVideo({
           Tiêu đề (bắt buộc)
         </Typography>
         <TextField
-          value={fileVideo.name.slice(0, fileVideo.name.lastIndexOf("."))}
+          // value={fileVideo.name.slice(0, fileVideo.name.lastIndexOf("."))}
           placeholder='Thêm tiêu đề để mô tả video của bạn!'
           size='small'
           error={!!errors.titleVideo}
