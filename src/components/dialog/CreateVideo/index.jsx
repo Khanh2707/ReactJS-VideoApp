@@ -17,6 +17,10 @@ import {
   TextField,
   InputAdornment,
   Chip,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -24,14 +28,27 @@ import { ThemeContext } from "../../../context/ThemeContext";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useForm } from "react-hook-form";
 import InputInfoCreateVideo from "../../InputInfoCreateVideo";
+import { useTheme } from "@emotion/react";
 
 const steps = ["Chi tiết", "Chế độ hiển thị"];
+
+const displayModes = [
+  {
+    value: "1",
+    label: "Riêng tư",
+  },
+  {
+    value: "2",
+    label: "Công khai",
+  },
+];
 
 export default function CreateVideo({
   openDialogCreateVideo,
   setOpenDialogCreateVideo,
 }) {
   const [fileVideo, setFileVideo] = useState();
+  const [fileImagePreview, setFileImagePreview] = useState();
   const [error, setError] = useState("");
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [tabContext, setTabContext] = useState("1");
@@ -39,10 +56,14 @@ export default function CreateVideo({
   const [isDisplayDialogConfirmCancel, setIsDisplayDialogConfirmCancel] =
     useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const [displayMode, setDisplayMode] = useState("");
+  const [isSelectDisplayMode, setIsSelectDisplayMode] = useState("");
 
   const { themeMode } = useContext(ThemeContext);
   const buttonSelectFileVideoRef = useRef(null);
   const videoControlsRef = useRef(null);
+
+  const theme = useTheme();
 
   const {
     handleSubmit,
@@ -67,11 +88,13 @@ export default function CreateVideo({
     setOpenDialogCreateVideo(false);
     setError("");
     setFileVideo(null);
+    setFileImagePreview(null);
     setTabContext("1");
     setActiveStep(0);
 
-    if (fileVideo) {
+    if (fileVideo && fileImagePreview) {
       URL.revokeObjectURL(fileVideo.preview);
+      URL.revokeObjectURL(fileImagePreview.preview);
     }
 
     setIsDisplayDialogConfirmCancel(false);
@@ -118,15 +141,29 @@ export default function CreateVideo({
   };
 
   const handleFormSubmit = (formData) => {
-    console.log(formData);
-
-    if (formData) {
+    if (formData && activeStep !== steps.length - 1) {
       const nextTab = (parseInt(tabContext) + 1).toString();
       if (nextTab <= "3") {
         setTabContext(nextTab);
       }
       handleNextStepUploadVideo();
+      setDisplayMode("");
+      setIsSelectDisplayMode("");
+    } else {
+      if (displayMode === "") {
+        setIsSelectDisplayMode("Vui lòng chọn chế độ hiển thị");
+      } else {
+        setIsSelectDisplayMode("");
+        console.log(formData);
+        console.log(fileVideo);
+        console.log(fileImagePreview);
+      }
     }
+  };
+
+  const handleDisplayModeChange = (event) => {
+    setDisplayMode(event.target.value);
+    setIsSelectDisplayMode("");
   };
 
   useEffect(() => {
@@ -136,8 +173,9 @@ export default function CreateVideo({
 
     return () => {
       fileVideo && URL.revokeObjectURL(fileVideo.preview);
+      fileImagePreview && URL.revokeObjectURL(fileImagePreview.preview);
     };
-  }, [fileVideo]);
+  }, [fileVideo, fileImagePreview]);
 
   return (
     <Dialog
@@ -262,8 +300,10 @@ export default function CreateVideo({
                   {fileVideo.name.slice(0, fileVideo.name.lastIndexOf("."))}
                 </DialogTitle>
                 <Divider />
-                <DialogContent>
-                  <Stepper activeStep={activeStep} sx={{ minWidth: "340px" }}>
+                <DialogContent
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Stepper activeStep={activeStep} sx={{ width: "500px" }}>
                     {steps.map((label, index) => {
                       return (
                         <Step key={label}>
@@ -293,13 +333,19 @@ export default function CreateVideo({
                       errors={errors}
                       setValue={setValue}
                       fileVideo={fileVideo}
+                      fileImagePreview={fileImagePreview}
+                      setFileImagePreview={setFileImagePreview}
                     />
                     <Box>
                       {fileVideo && (
                         <video
                           controls
                           ref={videoControlsRef}
-                          style={{ width: "320px" }}
+                          style={{
+                            width: "320px",
+                            height: "180px",
+                            objectFit: "contain",
+                          }}
                         >
                           <source src={fileVideo.preview} type='video/mp4' />
                         </video>
@@ -317,7 +363,75 @@ export default function CreateVideo({
                   </Box>
                 </TabPanel>
                 <TabPanel value='3'>
-                  <Typography>Chế độ hiển thị</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: "16px",
+                    }}
+                  >
+                    <DialogContent
+                      sx={{
+                        width: "500px",
+                        borderRadius: "8px",
+                        border: `1px solid ${theme.palette.text.primary}`,
+                      }}
+                    >
+                      <FormControl>
+                        <Typography>Xuất bản</Typography>
+                        <Typography
+                          variant='subtitle2'
+                          sx={{ color: "customGreySubTitle.main" }}
+                        >
+                          Đặt video của bạn ở chế độ công khai hoặc riêng tư
+                        </Typography>
+                        <RadioGroup
+                          aria-labelledby='demo-radio-buttons-group-label'
+                          name='radio-buttons-group'
+                          sx={{ p: "8px 30px" }}
+                          value={displayMode}
+                          onChange={handleDisplayModeChange}
+                        >
+                          {displayModes.map((item, index) => {
+                            return (
+                              <FormControlLabel
+                                key={item.value}
+                                value={item.value}
+                                label={item.label}
+                                control={<Radio />}
+                              />
+                            );
+                          })}
+                        </RadioGroup>
+                      </FormControl>
+                      <Typography color='error'>
+                        {isSelectDisplayMode}
+                      </Typography>
+                    </DialogContent>
+                    <Box>
+                      {fileVideo && (
+                        <video
+                          controls
+                          ref={videoControlsRef}
+                          style={{
+                            width: "320px",
+                            height: "180px",
+                            objectFit: "contain",
+                          }}
+                        >
+                          <source src={fileVideo.preview} type='video/mp4' />
+                        </video>
+                      )}
+                      <Box sx={{ mt: "8px" }}>
+                        <Typography
+                          variant='subtitle2'
+                          sx={{ color: "customGreySubTitle.main" }}
+                        >
+                          Tên tệp
+                        </Typography>
+                        <Typography>{fileVideo && fileVideo.name}</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
                 </TabPanel>
               </Box>
             )}
@@ -344,15 +458,16 @@ export default function CreateVideo({
                       }}
                     />
                   )}
-                  {activeStep !== steps.length && (
+                  {activeStep <= steps.length - 1 && (
                     <Tab
                       type='submit'
                       label={
                         <Chip
-                          label='Tiếp'
+                          label={
+                            activeStep === steps.length - 1 ? "Lưu" : "Tiếp"
+                          }
                           sx={{
                             p: "4px",
-                            ml: "12px",
                             bgcolor: "text.primary",
                             color: "secondary.main",
                             "&:hover": {

@@ -40,11 +40,12 @@ export default function InputInfoCreateVideo({
   errors,
   setValue,
   fileVideo,
+  fileImagePreview,
+  setFileImagePreview,
 }) {
   const [titleVideo, setTitleVideo] = useState("");
   const [descriptionVideo, setDescriptionVideo] = useState("");
   const [error, setError] = useState("");
-  const [fileImagePreview, setFileImagePreview] = useState("");
 
   const theme = useTheme();
 
@@ -91,14 +92,15 @@ export default function InputInfoCreateVideo({
     }
   }, [fileVideo, setValue, clearErrors]);
 
-  useEffect(() => {
-    return () => {
-      fileImagePreview && URL.revokeObjectURL(fileImagePreview.preview);
-    };
-  }, [fileImagePreview]);
-
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+        width: "400px",
+      }}
+    >
       <Box>
         <Typography sx={{ fontWeight: "600", mb: "4px" }}>
           Tiêu đề (bắt buộc)
@@ -176,7 +178,6 @@ export default function InputInfoCreateVideo({
             },
           })}
           sx={{
-            width: "400px",
             ...textFieldStyles,
             "& .MuiInputBase-input": {
               paddingBottom: "25px",
@@ -231,15 +232,15 @@ export default function InputInfoCreateVideo({
               Tải tệp lên
             </Typography>
           </Box>
-          <input
-            type='file'
-            ref={imagePreviewRef}
-            onChange={handleSelectFileImagePreview}
-            style={{ display: "none" }}
-            // accept="video/mp4"
-          />
         </Box>
       )}
+      <input
+        type='file'
+        ref={imagePreviewRef}
+        onChange={handleSelectFileImagePreview}
+        style={{ display: "none" }}
+        // accept="video/mp4"
+      />
       {error && (
         <Typography color='error' variant='subtitle2' sx={{ mt: "-16px" }}>
           {error}
@@ -247,11 +248,11 @@ export default function InputInfoCreateVideo({
       )}
       {fileImagePreview && (
         <Box sx={{ display: "flex" }}>
-          <Box sx={{ width: "320px" }}>
+          <Box sx={{ width: "320px", height: "180px", bgcolor: "#000" }}>
             <img
               src={fileImagePreview.preview}
               alt=''
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
             />
           </Box>
           <Chip
@@ -268,7 +269,7 @@ export default function InputInfoCreateVideo({
               fontSize: "14px",
               fontWeight: "600",
             }}
-            onClick={handleSelectFileImagePreview}
+            onClick={handleClickImagePreview}
           />
         </Box>
       )}

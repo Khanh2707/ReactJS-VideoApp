@@ -11,6 +11,53 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
+const listRadioReport = [
+  {
+    value: "1",
+    label: "Nội dung khiêu dâm",
+  },
+  {
+    value: "2",
+    label: "Nội dung bạo lực hoặc phản cảm",
+  },
+  {
+    value: "3",
+    label: "Nội dung lăng mạ hoặc kích động thù hận",
+  },
+  {
+    value: "4",
+    label: "Nội dung quấy rối hoặc bắt nạt",
+  },
+  {
+    value: "5",
+    label: "Hành động gây hại hoặc nguy hiểm",
+  },
+  {
+    value: "6",
+    label: "Thông tin sai lệch",
+  },
+  {
+    value: "7",
+    label: "Nội dung liên quan đến việc ngược đãi trẻ em",
+  },
+  {
+    value: "8",
+    label: "Nội dung quảng bá chủ nghĩa khủng bố",
+  },
+  {
+    value: "9",
+    label: "Nội dung gian lận/vi phạm hoặc gây hiểu lầm",
+  },
+  {
+    value: "10",
+    label: "Vấn đề pháp lý",
+  },
+  {
+    value: "11",
+    label: "Phụ đề có vấn đề",
+  },
+];
+
 export default function ListRadioReportVideo({
   openDialogListRadioReportVideo,
   setOpenDialogListRadioReportVideo,
@@ -49,61 +96,16 @@ export default function ListRadioReportVideo({
             value={valueReportVideo}
             onChange={handleRadioChange}
           >
-            <FormControlLabel
-              value='1'
-              control={<Radio />}
-              label='Nội dung khiêu dâm'
-            />
-            <FormControlLabel
-              value='2'
-              control={<Radio />}
-              label='Nội dung bạo lực hoặc phản cảm'
-            />
-            <FormControlLabel
-              value='3'
-              control={<Radio />}
-              label='Nội dung lăng mạ hoặc kích động thù hận'
-            />
-            <FormControlLabel
-              value='4'
-              control={<Radio />}
-              label='Nội dung quấy rối hoặc bắt nạt'
-            />
-            <FormControlLabel
-              value='5'
-              control={<Radio />}
-              label='Hành động gây hại hoặc nguy hiểm'
-            />
-            <FormControlLabel
-              value='6'
-              control={<Radio />}
-              label='Thông tin sai lệch'
-            />
-            <FormControlLabel
-              value='7'
-              control={<Radio />}
-              label='Nội dung liên quan đến việc ngược đãi trẻ em'
-            />
-            <FormControlLabel
-              value='8'
-              control={<Radio />}
-              label='Nội dung quảng bá chủ nghĩa khủng bố'
-            />
-            <FormControlLabel
-              value='9'
-              control={<Radio />}
-              label='Nội dung gian lận/vi phạm hoặc gây hiểu lầm'
-            />
-            <FormControlLabel
-              value='10'
-              control={<Radio />}
-              label='Vấn đề pháp lý'
-            />
-            <FormControlLabel
-              value='11'
-              control={<Radio />}
-              label='Phụ đề có vấn đề'
-            />
+            {listRadioReport.map((item, index) => {
+              return (
+                <FormControlLabel
+                  key={item.value}
+                  value={item.value}
+                  label={item.label}
+                  control={<Radio />}
+                />
+              );
+            })}
           </RadioGroup>
         </FormControl>
       </DialogTitle>
