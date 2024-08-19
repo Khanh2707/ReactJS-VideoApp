@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 import Login from "../pages/Login";
 import ProtectedRoute from "./ProtectedRoute";
@@ -16,10 +16,21 @@ import ChannelEditingVideos from "../components/ChannelEditingVideos";
 import DetailVideo from "../pages/DetailVideo";
 import AdminLayout from "../components/layout/AdminLayout";
 import AuthGoogle from "../pages/auth/AuthGoogle";
+import { ThemeContext } from "../context/ThemeContext";
 
 const AuthLayout = () => {
+  const { themeMode } = useContext(ThemeContext);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--theme-color-scheme",
+      themeMode === "dark" ? "dark" : "light"
+    );
+  }, [themeMode]);
+
   return (
     <AuthProvider>
+      <style>{`:root { color-scheme: var(--theme-color-scheme); }`}</style>
       <Outlet />
     </AuthProvider>
   );

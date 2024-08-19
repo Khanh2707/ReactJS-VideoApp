@@ -16,6 +16,7 @@ import {
   StepLabel,
   TextField,
   InputAdornment,
+  Chip,
 } from "@mui/material";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -47,6 +48,7 @@ export default function CreateVideo({
     handleSubmit,
     register,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -116,7 +118,15 @@ export default function CreateVideo({
   };
 
   const handleFormSubmit = (formData) => {
-    console.log("Form data is: ", formData);
+    console.log(formData);
+
+    if (formData) {
+      const nextTab = (parseInt(tabContext) + 1).toString();
+      if (nextTab <= "3") {
+        setTabContext(nextTab);
+      }
+      handleNextStepUploadVideo();
+    }
   };
 
   useEffect(() => {
@@ -265,30 +275,52 @@ export default function CreateVideo({
                 </DialogContent>
               </>
             )}
-            <TabPanel value='2'>
-              <Box sx={{ display: "flex", gap: "24px" }}>
-                <InputInfoCreateVideo
-                  register={register}
-                  clearErrors={clearErrors}
-                  errors={errors}
-                  fileVideo={fileVideo}
-                />
-                <Box>
-                  {fileVideo && (
-                    <video
-                      controls
-                      ref={videoControlsRef}
-                      style={{ width: "320px", height: "180px" }}
-                    >
-                      <source src={fileVideo.preview} type='video/mp4' />
-                    </video>
-                  )}
-                </Box>
+            {tabContext !== "1" && (
+              <Box
+                sx={{
+                  ...(tabContext === "2" && {
+                    height: "420px",
+                    overflowY: "auto",
+                    paddingRight: "16px",
+                  }),
+                }}
+              >
+                <TabPanel value='2'>
+                  <Box sx={{ display: "flex", gap: "24px" }}>
+                    <InputInfoCreateVideo
+                      register={register}
+                      clearErrors={clearErrors}
+                      errors={errors}
+                      setValue={setValue}
+                      fileVideo={fileVideo}
+                    />
+                    <Box>
+                      {fileVideo && (
+                        <video
+                          controls
+                          ref={videoControlsRef}
+                          style={{ width: "320px" }}
+                        >
+                          <source src={fileVideo.preview} type='video/mp4' />
+                        </video>
+                      )}
+                      <Box sx={{ mt: "8px" }}>
+                        <Typography
+                          variant='subtitle2'
+                          sx={{ color: "customGreySubTitle.main" }}
+                        >
+                          Tên tệp
+                        </Typography>
+                        <Typography>{fileVideo && fileVideo.name}</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </TabPanel>
+                <TabPanel value='3'>
+                  <Typography>Chế độ hiển thị</Typography>
+                </TabPanel>
               </Box>
-            </TabPanel>
-            <TabPanel value='3'>
-              <Typography>Chế độ hiển thị</Typography>
-            </TabPanel>
+            )}
             {tabContext !== "1" && (
               <DialogActions>
                 <TabList
@@ -315,15 +347,24 @@ export default function CreateVideo({
                   {activeStep !== steps.length && (
                     <Tab
                       type='submit'
-                      label='Tiếp'
+                      label={
+                        <Chip
+                          label='Tiếp'
+                          sx={{
+                            p: "4px",
+                            ml: "12px",
+                            bgcolor: "text.primary",
+                            color: "secondary.main",
+                            "&:hover": {
+                              bgcolor: "text.primary",
+                              opacity: "0.9",
+                            },
+                            fontSize: "14px",
+                            fontWeight: "600",
+                          }}
+                        />
+                      }
                       value={tabContext}
-                      // onClick={() => {
-                      //   const nextTab = (parseInt(tabContext) + 1).toString();
-                      //   if (nextTab <= "3") {
-                      //     setTabContext(nextTab);
-                      //   }
-                      //   handleNextStepUploadVideo();
-                      // }}
                     />
                   )}
                 </TabList>
