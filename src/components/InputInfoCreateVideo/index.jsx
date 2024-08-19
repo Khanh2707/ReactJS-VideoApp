@@ -1,5 +1,5 @@
 import { Box, InputAdornment, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const textFieldStyles = {
   "& .MuiOutlinedInput-root": {
@@ -32,16 +32,22 @@ export default function InputInfoCreateVideo({
   errors,
   fileVideo,
 }) {
-  const [titleVideo, setTitleVideo] = useState(0);
-  const [descriptionVideo, setdescriptionVideo] = useState(0);
+  const [titleVideo, setTitleVideo] = useState("");
+  const [descriptionVideo, setDescriptionVideo] = useState("");
 
   const handleTitleVideoChange = (event) => {
-    setTitleVideo(event.target.value.length);
+    setTitleVideo(event.target.value);
   };
 
   const handleDescriptionVideoChange = (event) => {
-    setdescriptionVideo(event.target.value.length);
+    setDescriptionVideo(event.target.value);
   };
+
+  useEffect(() => {
+    if (fileVideo && fileVideo.name) {
+      setTitleVideo(fileVideo.name.slice(0, fileVideo.name.lastIndexOf(".")));
+    }
+  }, [fileVideo]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -50,7 +56,7 @@ export default function InputInfoCreateVideo({
           Tiêu đề (bắt buộc)
         </Typography>
         <TextField
-          // value={fileVideo.name.slice(0, fileVideo.name.lastIndexOf("."))}
+          value={titleVideo}
           placeholder='Thêm tiêu đề để mô tả video của bạn!'
           size='small'
           error={!!errors.titleVideo}
@@ -96,7 +102,7 @@ export default function InputInfoCreateVideo({
                   height: "100%",
                 }}
               >
-                <Typography>{`${titleVideo}/100`}</Typography>
+                <Typography>{`${titleVideo.length}/100`}</Typography>
               </InputAdornment>
             ),
           }}
@@ -149,7 +155,7 @@ export default function InputInfoCreateVideo({
                   height: "100%",
                 }}
               >
-                <Typography>{`${descriptionVideo}/5000`}</Typography>
+                <Typography>{`${descriptionVideo.length}/5000`}</Typography>
               </InputAdornment>
             ),
           }}

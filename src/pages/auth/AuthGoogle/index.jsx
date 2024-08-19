@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../../context/AppContext";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 export default function AuthGoogle() {
   const navigate = useNavigate();
@@ -32,6 +33,9 @@ export default function AuthGoogle() {
           localStorage.setItem("accessToken", data.result?.token);
           setIsLoggedin(true);
           getMyAccount();
+        })
+        .catch((error) => {
+          console.log(error);
         });
     }
   }, []);
@@ -42,5 +46,12 @@ export default function AuthGoogle() {
     }
   }, [isLoggedin, navigate]);
 
-  return <></>;
+  return (
+    <Backdrop
+      open={true}
+      sx={{ bgcolor: "primary.main", transitionDuration: "0ms" }}
+    >
+      <CircularProgress sx={{ color: "text.primary" }} size={100} />
+    </Backdrop>
+  );
 }

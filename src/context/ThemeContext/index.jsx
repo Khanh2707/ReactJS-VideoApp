@@ -6,21 +6,11 @@ import { ThemeProvider, useMediaQuery } from "@mui/material";
 export const ThemeContext = createContext();
 
 export const ThemeContextProvider = ({ children }) => {
+  const [themeMode, setThemeMode] = useState(IThemeMode.LIGHT);
+
   const SYSTEM_THEME = useMediaQuery("(prefers-color-scheme: dark)")
     ? IThemeMode.DARK
     : IThemeMode.LIGHT;
-
-  const [themeMode, setThemeMode] = useState(IThemeMode.LIGHT);
-
-  useEffect(() => {
-    const themeModeFromPref = _getThemeModeFromPref();
-
-    if (themeModeFromPref === IThemeMode.SYSTEM) {
-      setThemeMode(SYSTEM_THEME);
-    } else {
-      setThemeMode(themeModeFromPref);
-    }
-  }, [SYSTEM_THEME]);
 
   const theme = useMemo(() => {
     switch (themeMode) {
@@ -49,6 +39,17 @@ export const ThemeContextProvider = ({ children }) => {
     setThemeMode(mode);
     _setThemeModeToPref(mode);
   };
+
+  useEffect(() => {
+    const themeModeFromPref = _getThemeModeFromPref();
+
+    if (themeModeFromPref === IThemeMode.SYSTEM) {
+      setThemeMode(SYSTEM_THEME);
+    } else {
+      setThemeMode(themeModeFromPref);
+    }
+  }, []);
+
   return (
     <ThemeContext.Provider value={{ themeMode, switchThemeMode }}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
