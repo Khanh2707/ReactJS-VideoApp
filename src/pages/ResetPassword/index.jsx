@@ -15,10 +15,8 @@ import {
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import iconGoogle from "../../assets/icon-google.png";
-import authAPI from "../../api/authAPI";
-import { AppContext } from "../../context/AppContext";
-import { OAuthConfig } from "../../configurations/configurations";
+import accountAPI from "../../api/accountAPI";
+import emailAPI from "../../api/emailAPI";
 
 const textFieldStyles = {
   "& .MuiOutlinedInput-root": {
@@ -47,7 +45,6 @@ const textFieldStyles = {
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-  const { getMyAccount } = useContext(AppContext);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [contentAlert, setContentAlert] = useState("");
   const [stateAlert, setStateAlert] = useState("success");
@@ -60,8 +57,11 @@ export default function Login() {
     register,
     handleSubmit,
     clearErrors,
+    watch,
     formState: { errors },
   } = useForm();
+
+  const emailValue = watch("email");
 
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
@@ -87,32 +87,18 @@ export default function Login() {
   };
 
   // API
-  const handleContinueWithGoogle = () => {
-    const callbackUrl = OAuthConfig.redirectUri;
-    const authUrl = OAuthConfig.authUri;
-    const googleClientId = OAuthConfig.clientId;
-    const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
-      callbackUrl
-    )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`;
-    console.log(targetUrl);
-    window.location.href = targetUrl;
-  };
-
-  // API
   const handleFormSubmit = (formData) => {
-    authAPI
-      .authenticate(formData)
+    accountAPI
+      .changePasswordAccount(emailValue, {
+        currentPassword: formData.codeGmail,
+        newPassword: formData.newPassword,
+      })
       .then((response) => {
-        localStorage.setItem("accessToken", response.result.token);
-
-        getMyAccount();
-
-        navigate("/");
-
+        handleOpenSnackbar("success", "Đổi mật khẩu thành công!");
         console.log(response);
       })
       .catch((error) => {
-        handleOpenSnackbar("error", "Thông tin đăng nhập chưa chính xác!");
+        handleOpenSnackbar("error", "Lỗi!");
         console.log(error);
       });
   };
@@ -145,7 +131,7 @@ export default function Login() {
             variant='h6'
             sx={{ fontWeight: "600", mb: "8px", alignSelf: "center" }}
           >
-            Đăng nhập
+            Quên mật khẩu
           </Typography>
           <Typography
             variant='subtitle1'
@@ -165,42 +151,52 @@ export default function Login() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography sx={{ fontWeight: "600", mb: "4px" }}>
-                  Tên đăng nhập
+                  Email
                 </Typography>
                 <TextField
                   placeholder='VD: phuckhanh@gmail.com'
                   size='small'
-                  error={!!errors.username}
-                  autoComplete='username'
+                  error={!!errors.email}
+                  autoComplete='email'
                   fullWidth
-                  id='username'
-                  name='username'
+                  id='email'
+                  name='email'
                   autoFocus
-                  helperText={errors.username?.message || ""}
-                  {...register("username", {
+                  helperText={errors.email?.message || ""}
+                  {...register("email", {
                     required: "Vui lòng nhập trường này",
-                    onChange: () => clearErrors("username"),
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Email không hợp lệ",
+                    },
+                    onChange: () => clearErrors("email"),
                   })}
                   sx={textFieldStyles}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Typography sx={{ fontWeight: "600", mb: "4px" }}>
-                  Mật khẩu
+                  Mật khẩu mới
                 </Typography>
                 <TextField
-                  placeholder='Mật khẩu'
+                  placeholder='Mật khẩu mới'
                   size='small'
                   type={showPassword ? "text" : "password"}
-                  error={!!errors.password}
-                  autoComplete='password'
+                  error={!!errors.newPassword}
+                  autoComplete='newPassword'
                   fullWidth
-                  id='password'
-                  name='password'
-                  helperText={errors.password?.message || ""}
-                  {...register("password", {
+                  id='newPassword'
+                  name='newPassword'
+                  helperText={errors.newPassword?.message || ""}
+                  {...register("newPassword", {
                     required: "Vui lòng nhập trường này",
-                    onChange: () => clearErrors("password"),
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                      message:
+                        "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt",
+                    },
+                    onChange: () => clearErrors("newPassword"),
                   })}
                   sx={textFieldStyles}
                   InputProps={{
@@ -213,6 +209,67 @@ export default function Login() {
                         >
                           {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography sx={{ fontWeight: "600", mb: "4px" }}>
+                  Mã code (gửi tới gmail)
+                </Typography>
+                <TextField
+                  placeholder='Mã code'
+                  size='small'
+                  error={!!errors.codeGmail}
+                  autoComplete='codeGmail'
+                  fullWidth
+                  id='codeGmail'
+                  name='codeGmail'
+                  helperText={errors.codeGmail?.message || ""}
+                  {...register("codeGmail", {
+                    required: "Vui lòng nhập trường này",
+                    onChange: () => clearErrors("codeGmail"),
+                  })}
+                  sx={textFieldStyles}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment
+                        position='end'
+                        onClick={() => {
+                          if (!emailValue) {
+                            handleOpenSnackbar("error", "Chưa nhập mail!");
+                          } else {
+                            handleOpenSnackbar(
+                              "info",
+                              "Đang gửi code đến mail của bạn!"
+                            );
+                            emailAPI
+                              .verifyEmail({
+                                email: emailValue,
+                              })
+                              .then((response) => {
+                                console.log(response);
+                                handleOpenSnackbar(
+                                  "success",
+                                  "Kiểm tra mail để lấy code!"
+                                );
+                              })
+                              .catch((error) => {
+                                console.log(error);
+                                handleOpenSnackbar(
+                                  "error",
+                                  "Gửi code đến mail không thành công!"
+                                );
+                              });
+                          }
+                        }}
+                      >
+                        <Typography
+                          sx={{ cursor: "pointer", color: "text.primary" }}
+                        >
+                          Lấy mã
+                        </Typography>
                       </InputAdornment>
                     ),
                   }}
@@ -238,51 +295,19 @@ export default function Login() {
                 variant='subtitle2'
                 sx={{ fontWeight: "600", color: "#fff" }}
               >
-                Đăng nhập
-              </Typography>
-            </Button>
-            <Button
-              variant='outlined'
-              fullWidth
-              sx={{
-                mt: "32px",
-                p: "8px",
-                borderColor: "customGreySubTitle.main",
-                "&:hover": {
-                  backgroundColor: "customBgcolorForm.main",
-                  borderColor: "customGreySubTitle.main",
-                },
-                borderRadius: "8px",
-              }}
-              onClick={handleContinueWithGoogle}
-            >
-              <Box sx={{ width: "20px", height: "20px" }}>
-                <img
-                  alt=''
-                  src={iconGoogle}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </Box>
-              <Typography variant='subtitle2' sx={{ ml: "8px" }}>
-                Đăng nhập với Google
+                Thay đổi
               </Typography>
             </Button>
             <Box sx={{ mt: "32px", textAlign: "center" }}>
               <Typography component='span' sx={{ mr: "4px" }}>
-                Bạn chưa có tài khoản?
+                Quay về đăng nhập?
               </Typography>
-              <Link to='/register' style={{ textDecoration: "none" }}>
+              <Link to='/login' style={{ textDecoration: "none" }}>
                 <Typography
                   component='span'
                   sx={{ color: "#1ac7b6", cursor: "pointer" }}
                 >
-                  Đăng ký
-                </Typography>
-              </Link>
-              <Typography>Hoặc</Typography>
-              <Link to='/reset-password' style={{ textDecoration: "none" }}>
-                <Typography sx={{ color: "#1ac7b6", cursor: "pointer" }}>
-                  Quên mật khẩu?
+                  Đăng nhập
                 </Typography>
               </Link>
             </Box>

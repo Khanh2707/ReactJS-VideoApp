@@ -17,6 +17,7 @@ import DetailVideo from "../pages/DetailVideo";
 import AdminLayout from "../components/layout/AdminLayout";
 import AuthGoogle from "../pages/auth/AuthGoogle";
 import { ThemeContext } from "../context/ThemeContext";
+import ResetPassword from "../pages/ResetPassword";
 
 const AuthLayout = () => {
   const { themeMode } = useContext(ThemeContext);
@@ -52,6 +53,10 @@ export default createBrowserRouter([
       {
         element: <Register />,
         path: "/register",
+      },
+      {
+        element: <ResetPassword />,
+        path: "/reset-password",
       },
       {
         element: <ProtectedRoute />,

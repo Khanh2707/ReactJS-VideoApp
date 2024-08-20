@@ -337,28 +337,32 @@ export default function Register() {
                       <InputAdornment
                         position='end'
                         onClick={() => {
-                          handleOpenSnackbar(
-                            "info",
-                            "Đang gửi code đến mail của bạn!"
-                          );
-                          emailAPI
-                            .verifyEmail({
-                              email: usernameValue,
-                            })
-                            .then((response) => {
-                              console.log(response);
-                              handleOpenSnackbar(
-                                "success",
-                                "Kiểm tra mail để lấy code!"
-                              );
-                            })
-                            .catch((error) => {
-                              console.log(error);
-                              handleOpenSnackbar(
-                                "error",
-                                "Gửi code đến mail không thành công!"
-                              );
-                            });
+                          if (!usernameValue) {
+                            handleOpenSnackbar("error", "Chưa nhập mail!");
+                          } else {
+                            handleOpenSnackbar(
+                              "info",
+                              "Đang gửi code đến mail của bạn!"
+                            );
+                            emailAPI
+                              .verifyEmail({
+                                email: usernameValue,
+                              })
+                              .then((response) => {
+                                console.log(response);
+                                handleOpenSnackbar(
+                                  "success",
+                                  "Kiểm tra mail để lấy code!"
+                                );
+                              })
+                              .catch((error) => {
+                                console.log(error);
+                                handleOpenSnackbar(
+                                  "error",
+                                  "Gửi code đến mail không thành công!"
+                                );
+                              });
+                          }
                         }}
                       >
                         <Typography

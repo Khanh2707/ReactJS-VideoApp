@@ -10,6 +10,11 @@ const accountAPI = {
     const url = "/api/accounts";
     return axiosClient.post(url, data);
   },
+
+  changePasswordAccount: (id, data) => {
+    const url = `/api/accounts/password/${id}`;
+    return axiosClient.put(url, data);
+  },
 };
 
 export default accountAPI;
