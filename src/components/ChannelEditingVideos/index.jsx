@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 
@@ -15,22 +16,96 @@ const columns = [
     field: "fullName",
     headerName: "Full name",
     description: "This column has a value getter and is not sortable.",
-    sortable: false,
     width: 160,
     valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
+  },
+  {
+    field: "profilePicture",
+    headerName: "Profile Picture",
+    sortable: false,
+    width: 200,
+    renderCell: (params) => (
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={params.value}
+          alt='profile'
+          style={{ width: "160px", height: "90px" }}
+        />
+      </Box>
+    ),
   },
 ];
 
 const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 27 },
-  { id: 6, lastName: "Melisandre", firstName: "John", age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+  {
+    id: 1,
+    lastName: "Snow",
+    firstName: "Jon",
+    age: 35,
+    profilePicture: "https://picsum.photos/200?random=1",
+  },
+  {
+    id: 2,
+    lastName: "Lannister",
+    firstName: "Cersei",
+    age: 42,
+    profilePicture: "https://picsum.photos/200?random=2",
+  },
+  {
+    id: 3,
+    lastName: "Lannister",
+    firstName: "Jaime",
+    age: 45,
+    profilePicture: "https://picsum.photos/200?random=3",
+  },
+  {
+    id: 4,
+    lastName: "Stark",
+    firstName: "Arya",
+    age: 16,
+    profilePicture: "https://picsum.photos/200?random=4",
+  },
+  {
+    id: 5,
+    lastName: "Targaryen",
+    firstName: "Daenerys",
+    age: 27,
+    profilePicture: "https://picsum.photos/200?random=5",
+  },
+  {
+    id: 6,
+    lastName: "Melisandre",
+    firstName: "John",
+    age: 150,
+    profilePicture: "https://picsum.photos/200?random=6",
+  },
+  {
+    id: 7,
+    lastName: "Clifford",
+    firstName: "Ferrara",
+    age: 44,
+    profilePicture: "https://picsum.photos/200?random=7",
+  },
+  {
+    id: 8,
+    lastName: "Frances",
+    firstName: "Rossini",
+    age: 36,
+    profilePicture: "https://picsum.photos/200?random=8",
+  },
+  {
+    id: 9,
+    lastName: "Roxie",
+    firstName: "Harvey",
+    age: 65,
+    profilePicture: "https://picsum.photos/200?random=9",
+  },
 ];
 
 export default function ChannelEditingVideos() {
@@ -39,6 +114,7 @@ export default function ChannelEditingVideos() {
       rows={rows}
       columns={columns}
       autoHeight={true}
+      rowHeight={110} // Chỉnh sửa chiều cao của hàng ở đây
       initialState={{
         pagination: {
           paginationModel: { page: 0, pageSize: 5 },

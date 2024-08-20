@@ -16,6 +16,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import accountAPI from "../../api/accountAPI";
+import emailAPI from "../../api/emailAPI";
 
 const textFieldStyles = {
   "& .MuiOutlinedInput-root": {
@@ -48,6 +49,19 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [contentAlert, setContentAlert] = useState("");
+  const [stateAlert, setStateAlert] = useState("success");
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const usernameValue = watch("username");
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -65,14 +79,18 @@ export default function Register() {
     setShowConfirmPassword((show) => !show);
   };
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
+  const handleOpenSnackbar = (state, message) => {
+    setOpenSnackbar(false);
 
+    setStateAlert(state);
+    setContentAlert(message);
+
+    setTimeout(() => {
+      setOpenSnackbar(true);
+    }, 100);
+  };
+
+  // API
   const handleFormSubmit = (formData) => {
     if (formData.password !== formData.confirmPassword) {
       setError("confirmPassword", {
@@ -90,13 +108,20 @@ export default function Register() {
         password: formData.password,
         name: formData.nameChannel,
         nameUnique: formData.nameUniqueChannel,
+        codeEmail: formData.codeGmail,
       })
       .then((response) => {
-        setOpenSnackbar(true);
+        handleOpenSnackbar("success", "Đăng ký tài khoản thành công!");
         console.log(response);
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.data.code == 1003) {
+          handleOpenSnackbar("error", "Tên đăng nhập đã tồn tại!");
+        } else if (error.response.data.code == 1005) {
+          handleOpenSnackbar("error", "Id kênh đã tồn tại!");
+        } else {
+          handleOpenSnackbar("error", "Mã code chưa chính xác!");
+        }
       });
   };
 
@@ -289,6 +314,63 @@ export default function Register() {
                   sx={textFieldStyles}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <Typography sx={{ fontWeight: "600", mb: "4px" }}>
+                  Mã code (gửi tới gmail)
+                </Typography>
+                <TextField
+                  placeholder='Mã code'
+                  size='small'
+                  error={!!errors.codeGmail}
+                  autoComplete='codeGmail'
+                  fullWidth
+                  id='codeGmail'
+                  name='codeGmail'
+                  helperText={errors.codeGmail?.message || ""}
+                  {...register("codeGmail", {
+                    required: "Vui lòng nhập trường này",
+                    onChange: () => clearErrors("codeGmail"),
+                  })}
+                  sx={textFieldStyles}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment
+                        position='end'
+                        onClick={() => {
+                          handleOpenSnackbar(
+                            "info",
+                            "Đang gửi code đến mail của bạn!"
+                          );
+                          emailAPI
+                            .verifyEmail({
+                              email: usernameValue,
+                            })
+                            .then((response) => {
+                              console.log(response);
+                              handleOpenSnackbar(
+                                "success",
+                                "Kiểm tra mail để lấy code!"
+                              );
+                            })
+                            .catch((error) => {
+                              console.log(error);
+                              handleOpenSnackbar(
+                                "error",
+                                "Gửi code đến mail không thành công!"
+                              );
+                            });
+                        }}
+                      >
+                        <Typography
+                          sx={{ cursor: "pointer", color: "text.primary" }}
+                        >
+                          Lấy mã
+                        </Typography>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
             </Grid>
             <Button
               type='submit'
@@ -333,11 +415,11 @@ export default function Register() {
       >
         <Alert
           onClose={handleCloseSnackbar}
-          severity='success'
+          severity={stateAlert}
           variant='filled'
           sx={{ width: "100%" }}
         >
-          Đăng ký tài khoản thành công!
+          {contentAlert}
         </Alert>
       </Snackbar>
     </>
