@@ -49,6 +49,23 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const { getMyAccount } = useContext(AppContext);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [contentAlert, setContentAlert] = useState("");
+  const [stateAlert, setStateAlert] = useState("success");
+
+  const navigate = useNavigate();
+
+  const theme = useTheme();
+
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
+
+  const handleClickShowPassword = () => {
+    setShowPassword((show) => !show);
+  };
 
   const handleCloseSnackbar = (event, reason) => {
     if (reason === "clickaway") {
@@ -58,35 +75,18 @@ export default function Login() {
     setOpenSnackbar(false);
   };
 
-  const navigate = useNavigate();
+  const handleOpenSnackbar = (state, message) => {
+    setOpenSnackbar(false);
 
-  const {
-    register,
-    handleSubmit,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
+    setStateAlert(state);
+    setContentAlert(message);
 
-  const theme = useTheme();
-
-  const handleClickShowPassword = () => {
-    setShowPassword((show) => !show);
+    setTimeout(() => {
+      setOpenSnackbar(true);
+    }, 100);
   };
+
   // API
-  const handleFormSubmit = (formData) => {
-    authAPI
-      .authenticate(formData)
-      .then((response) => {
-        localStorage.setItem("accessToken", response.result.token);
-        getMyAccount();
-        navigate("/");
-        console.log(response);
-      })
-      .catch((error) => {
-        setOpenSnackbar(true);
-        console.log(error);
-      });
-  };
   const handleContinueWithGoogle = () => {
     const callbackUrl = OAuthConfig.redirectUri;
     const authUrl = OAuthConfig.authUri;
@@ -96,6 +96,27 @@ export default function Login() {
     )}&response_type=code&client_id=${googleClientId}&scope=openid%20email%20profile`;
     console.log(targetUrl);
     window.location.href = targetUrl;
+  };
+
+  // API
+  const handleFormSubmit = (formData) => {
+    authAPI
+      .authenticate(formData)
+      .then((response) => {
+        handleOpenSnackbar("success", "Đăng nhập thành công!");
+
+        localStorage.setItem("accessToken", response.result.token);
+
+        getMyAccount();
+
+        navigate("/");
+
+        console.log(response);
+      })
+      .catch((error) => {
+        handleOpenSnackbar("error", "Thông tin đăng nhập chưa chính xác!");
+        console.log(error);
+      });
   };
 
   return (
@@ -276,11 +297,11 @@ export default function Login() {
       >
         <Alert
           onClose={handleCloseSnackbar}
-          severity='error'
+          severity={stateAlert}
           variant='filled'
           sx={{ width: "100%" }}
         >
-          Thông tin đăng nhập chưa chính xác!
+          {contentAlert}
         </Alert>
       </Snackbar>
     </>
