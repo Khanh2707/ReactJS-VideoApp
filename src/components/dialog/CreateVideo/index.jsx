@@ -14,8 +14,6 @@ import {
   Stepper,
   Step,
   StepLabel,
-  TextField,
-  InputAdornment,
   Chip,
   FormControl,
   RadioGroup,
@@ -29,6 +27,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useForm } from "react-hook-form";
 import InputInfoCreateVideo from "../../InputInfoCreateVideo";
 import { useTheme } from "@emotion/react";
+import ListSelectCategory from "../../ListSelectCategory";
 
 const steps = ["Chi tiết", "Chế độ hiển thị"];
 
@@ -50,6 +49,7 @@ export default function CreateVideo({
   const [fileVideo, setFileVideo] = useState();
   const [fileImagePreview, setFileImagePreview] = useState();
   const [error, setError] = useState("");
+  const [errorFileImagePreview, setErrorFileImagePreview] = useState("");
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [tabContext, setTabContext] = useState("1");
   const [isDisplayTabContext, setIsDisplayTabContext] = useState(true);
@@ -58,6 +58,8 @@ export default function CreateVideo({
   const [activeStep, setActiveStep] = useState(0);
   const [displayMode, setDisplayMode] = useState("");
   const [isSelectDisplayMode, setIsSelectDisplayMode] = useState("");
+  const [category, setCategory] = useState(null);
+  const [errorCategory, setErrorCategory] = useState("");
 
   const { themeMode } = useContext(ThemeContext);
   const buttonSelectFileVideoRef = useRef(null);
@@ -89,6 +91,7 @@ export default function CreateVideo({
     setError("");
     setFileVideo(null);
     setFileImagePreview(null);
+    setCategory(null);
     setTabContext("1");
     setActiveStep(0);
 
@@ -141,7 +144,12 @@ export default function CreateVideo({
   };
 
   const handleFormSubmit = (formData) => {
-    if (formData && activeStep !== steps.length - 1) {
+    if (!fileImagePreview) {
+      setErrorFileImagePreview("Chọn ảnh xem trước!");
+    } else if (!category) {
+      setErrorCategory("Chọn thể loại cho video!");
+    } else if (formData && activeStep !== steps.length - 1) {
+      setErrorFileImagePreview("");
       const nextTab = (parseInt(tabContext) + 1).toString();
       if (nextTab <= "3") {
         setTabContext(nextTab);
@@ -157,6 +165,7 @@ export default function CreateVideo({
         console.log(formData);
         console.log(fileVideo);
         console.log(fileImagePreview);
+        console.log(category);
       }
     }
   };
@@ -335,8 +344,10 @@ export default function CreateVideo({
                       fileVideo={fileVideo}
                       fileImagePreview={fileImagePreview}
                       setFileImagePreview={setFileImagePreview}
+                      errorFileImagePreview={errorFileImagePreview}
+                      setErrorFileImagePreview={setErrorFileImagePreview}
                     />
-                    <Box>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
                       {fileVideo && (
                         <video
                           controls
@@ -350,7 +361,7 @@ export default function CreateVideo({
                           <source src={fileVideo.preview} type='video/mp4' />
                         </video>
                       )}
-                      <Box sx={{ mt: "8px" }}>
+                      <Box sx={{ mt: "8px", mb: "8px" }}>
                         <Typography
                           variant='subtitle2'
                           sx={{ color: "customGreySubTitle.main" }}
@@ -359,6 +370,12 @@ export default function CreateVideo({
                         </Typography>
                         <Typography>{fileVideo && fileVideo.name}</Typography>
                       </Box>
+                      <ListSelectCategory
+                        category={category}
+                        setCategory={setCategory}
+                        errorCategory={errorCategory}
+                        setErrorCategory={setErrorCategory}
+                      />
                     </Box>
                   </Box>
                 </TabPanel>

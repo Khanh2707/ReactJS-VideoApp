@@ -42,6 +42,8 @@ export default function InputInfoCreateVideo({
   fileVideo,
   fileImagePreview,
   setFileImagePreview,
+  errorFileImagePreview,
+  setErrorFileImagePreview,
 }) {
   const [titleVideo, setTitleVideo] = useState("");
   const [descriptionVideo, setDescriptionVideo] = useState("");
@@ -56,6 +58,8 @@ export default function InputInfoCreateVideo({
   };
 
   const handleSelectFileImagePreview = (e) => {
+    setErrorFileImagePreview("");
+
     const file = e.target.files[0];
 
     console.log(file);
@@ -91,6 +95,10 @@ export default function InputInfoCreateVideo({
       clearErrors("titleVideo");
     }
   }, [fileVideo, setValue, clearErrors]);
+
+  useEffect(() => {
+    if (errorFileImagePreview) setError("");
+  }, [errorFileImagePreview]);
 
   return (
     <Box
@@ -209,30 +217,35 @@ export default function InputInfoCreateVideo({
         />
       </Box>
       {!fileImagePreview && (
-        <Box
-          sx={{
-            width: "150px",
-            height: "80px",
-            border: `1px dashed ${theme.palette.customGreySubTitle.main}`,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-          onClick={handleClickImagePreview}
-        >
-          <Box sx={{ textAlign: "center" }}>
-            <AddPhotoAlternateIcon
-              sx={{ color: `${theme.palette.customGreySubTitle.main}` }}
-            />
-            <Typography
-              variant='subtitle2'
-              sx={{ color: "customGreySubTitle.main" }}
-            >
-              Tải tệp lên
-            </Typography>
+        <>
+          <Box
+            sx={{
+              width: "150px",
+              height: "80px",
+              border: `1px dashed ${theme.palette.customGreySubTitle.main}`,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+            onClick={handleClickImagePreview}
+          >
+            <Box sx={{ textAlign: "center" }}>
+              <AddPhotoAlternateIcon
+                sx={{ color: `${theme.palette.customGreySubTitle.main}` }}
+              />
+              <Typography
+                variant='subtitle2'
+                sx={{ color: "customGreySubTitle.main" }}
+              >
+                Tải tệp lên
+              </Typography>
+            </Box>
           </Box>
-        </Box>
+          <Typography color='error' variant='subtitle2' sx={{ mt: "-16px" }}>
+            {errorFileImagePreview}
+          </Typography>
+        </>
       )}
       <input
         type='file'
@@ -242,7 +255,7 @@ export default function InputInfoCreateVideo({
         // accept="video/mp4"
       />
       {error && (
-        <Typography color='error' variant='subtitle2' sx={{ mt: "-16px" }}>
+        <Typography color='error' variant='subtitle2' sx={{ mt: "-24px" }}>
           {error}
         </Typography>
       )}
