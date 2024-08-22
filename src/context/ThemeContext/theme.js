@@ -233,6 +233,20 @@ export const AppLightTheme = createTheme({
         },
       },
     },
+    MuiAlert: {
+      styleOverrides: {
+        action: {
+          "& .MuiSvgIcon-root": {
+            color: "#fff",
+          },
+        },
+        icon: {
+          "& .MuiSvgIcon-root": {
+            color: "#fff",
+          },
+        },
+      },
+    },
   },
 });
 
@@ -459,6 +473,20 @@ export const AppDarkTheme = createTheme({
       styleOverrides: {
         root: {
           color: grey[400],
+        },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        action: {
+          "& .MuiSvgIcon-root": {
+            color: "#fff",
+          },
+        },
+        icon: {
+          "& .MuiSvgIcon-root": {
+            color: "#fff",
+          },
         },
       },
     },

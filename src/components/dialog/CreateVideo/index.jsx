@@ -28,16 +28,18 @@ import { useForm } from "react-hook-form";
 import InputInfoCreateVideo from "../../InputInfoCreateVideo";
 import { useTheme } from "@emotion/react";
 import ListSelectCategory from "../../ListSelectCategory";
+import videoAPI from "../../../api/videoAPI";
+import { AppContext } from "../../../context/AppContext";
 
 const steps = ["Chi tiết", "Chế độ hiển thị"];
 
 const displayModes = [
   {
-    value: "1",
+    value: "0",
     label: "Riêng tư",
   },
   {
-    value: "2",
+    value: "1",
     label: "Công khai",
   },
 ];
@@ -50,7 +52,7 @@ export default function CreateVideo({
   const [fileImagePreview, setFileImagePreview] = useState();
   const [error, setError] = useState("");
   const [errorFileImagePreview, setErrorFileImagePreview] = useState("");
-  const [openBackdrop, setOpenBackdrop] = useState(false);
+  const [openBackdropUploadFile, setOpenBackdropUploadFile] = useState(false);
   const [tabContext, setTabContext] = useState("1");
   const [isDisplayTabContext, setIsDisplayTabContext] = useState(true);
   const [isDisplayDialogConfirmCancel, setIsDisplayDialogConfirmCancel] =
@@ -60,8 +62,11 @@ export default function CreateVideo({
   const [isSelectDisplayMode, setIsSelectDisplayMode] = useState("");
   const [category, setCategory] = useState(null);
   const [errorCategory, setErrorCategory] = useState("");
+  const [openBackdropCreateVideo, setOpenBackdropCreateVideo] = useState(false);
 
   const { themeMode } = useContext(ThemeContext);
+  const { myAccount } = useContext(AppContext);
+
   const buttonSelectFileVideoRef = useRef(null);
   const videoControlsRef = useRef(null);
 
@@ -107,17 +112,20 @@ export default function CreateVideo({
   };
 
   const handleSelectFileVideo = (e) => {
+    setOpenBackdropUploadFile(true);
+
     const file = e.target.files[0];
 
-    if (file && file.type === "video/mp4") {
-      setOpenBackdrop(true);
+    console.log(file);
 
+    if (file && file.type === "video/mp4") {
       file.preview = URL.createObjectURL(file);
       setFileVideo(file);
       setError("");
-      setOpenBackdrop(false);
+      setOpenBackdropUploadFile(false);
       setTabContext("2");
     } else {
+      setOpenBackdropUploadFile(false);
       setError("Định dạng không hợp lệ");
       setFileVideo(null);
     }
@@ -125,10 +133,6 @@ export default function CreateVideo({
 
   const handleClickIcon = () => {
     buttonSelectFileVideoRef.current.click();
-  };
-
-  const handleCloseBackdrop = () => {
-    setOpenBackdrop(false);
   };
 
   const handleChangeTabContext = (event, newValue) => {
@@ -143,6 +147,7 @@ export default function CreateVideo({
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
+  // API
   const handleFormSubmit = (formData) => {
     if (!fileImagePreview) {
       setErrorFileImagePreview("Chọn ảnh xem trước!");
@@ -162,10 +167,34 @@ export default function CreateVideo({
         setIsSelectDisplayMode("Vui lòng chọn chế độ hiển thị");
       } else {
         setIsSelectDisplayMode("");
-        console.log(formData);
-        console.log(fileVideo);
-        console.log(fileImagePreview);
-        console.log(category);
+
+        setOpenBackdropCreateVideo(true);
+
+        const formDataCreateVideo = new FormData();
+        formDataCreateVideo.append("title", formData?.titleVideo);
+        formDataCreateVideo.append("description", formData?.descriptionVideo);
+        formDataCreateVideo.append("hide", displayMode === 0 ? false : true);
+        formDataCreateVideo.append("idCategory", category?.idCategory);
+        formDataCreateVideo.append("idChannel", myAccount?.channel?.idChannel);
+        formDataCreateVideo.append("fileVideo", fileVideo);
+        formDataCreateVideo.append("fileImagePreview", fileImagePreview);
+
+        videoAPI
+          .createVideo(formDataCreateVideo, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            setOpenBackdropCreateVideo(false);
+            handleCancelCreateVideo();
+          });
       }
     }
   };
@@ -176,10 +205,6 @@ export default function CreateVideo({
   };
 
   useEffect(() => {
-    if (fileVideo) {
-      console.log("Video đã được chọn:", fileVideo);
-    }
-
     return () => {
       fileVideo && URL.revokeObjectURL(fileVideo.preview);
       fileImagePreview && URL.revokeObjectURL(fileImagePreview.preview);
@@ -289,8 +314,7 @@ export default function CreateVideo({
                           ? "rgba(255, 255, 255, 0.4)"
                           : "rgba(15, 18, 20, 0.4)",
                     }}
-                    open={openBackdrop}
-                    onClick={handleCloseBackdrop}
+                    open={openBackdropUploadFile}
                   >
                     <CircularProgress
                       color='inherit'
@@ -505,6 +529,19 @@ export default function CreateVideo({
           </TabContext>
         </>
       )}
+      <Backdrop
+        sx={{
+          zIndex: 100,
+        }}
+        open={openBackdropCreateVideo}
+      >
+        <CircularProgress
+          color='inherit'
+          sx={{
+            position: "absolute",
+          }}
+        />
+      </Backdrop>
     </Dialog>
   );
 }
