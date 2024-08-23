@@ -6,6 +6,11 @@ const accountAPI = {
     return axiosClient.get(url);
   },
 
+  getByChannelNameUnique: (value) => {
+    const url = `/api/accounts/by/channel/name_unique/${value}`;
+    return axiosClient.get(url);
+  },
+
   createAccount: (data) => {
     const url = "/api/accounts";
     return axiosClient.post(url, data);

@@ -8,7 +8,7 @@ export default function DefaultLayout({ children, hideSidebar }) {
     <>
       <Header />
       <Container maxWidth='lg'>
-        <Grid container flexWrap='nowrap' sx={{ pt: "96px", pb: "16px" }}>
+        <Grid container flexWrap='nowrap' sx={{ pt: "96px", pb: "16px" }} gap={2}>
           {!hideSidebar && (
             <Grid item md={3} sm={3} xs={3}>
               <Sidebar />

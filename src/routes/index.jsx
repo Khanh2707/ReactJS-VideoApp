@@ -18,6 +18,8 @@ import AdminLayout from "../components/layout/AdminLayout";
 import AuthGoogle from "../pages/auth/AuthGoogle";
 import { ThemeContext } from "../context/ThemeContext";
 import ResetPassword from "../pages/ResetPassword";
+import accountAPI from "../api/accountAPI";
+import videoAPI from "../api/videoAPI";
 
 const AuthLayout = () => {
   const { themeMode } = useContext(ThemeContext);
@@ -83,7 +85,22 @@ export default createBrowserRouter([
                 <MyChannel />
               </DefaultLayout>
             ),
-            path: "/:idMyChannel",
+            path: "/:nameUniqueChannel",
+            loader: async ({ params }) => {
+              const account = await accountAPI.getByChannelNameUnique(
+                params.nameUniqueChannel
+              );
+
+              const videos = await videoAPI.getAllByChannelNameUnique(
+                params.nameUniqueChannel
+              );
+
+              const amountVideo = await videoAPI.countAllByChannelNameUnique(
+                params.nameUniqueChannel
+              );
+              
+              return { account, videos, amountVideo };
+            },
           },
           {
             element: (

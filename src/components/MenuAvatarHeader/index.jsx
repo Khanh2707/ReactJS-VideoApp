@@ -94,9 +94,15 @@ export default function MenuAvatarHeader() {
             </Box>
             <Box>
               <Typography>{myAccount.channel.name}</Typography>
-              <Typography>@{myAccount.channel.nameUnique}</Typography>
-              <Link to='/abc' style={{ textDecoration: "none" }}>
-                <Typography sx={{ color: "#3ea6ff", mt: "4px" }}>
+              <Typography>{myAccount.channel.nameUnique}</Typography>
+              <Link
+                to={`/${myAccount.channel.nameUnique}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Typography
+                  sx={{ color: "#3ea6ff", mt: "4px" }}
+                  onClick={() => setShowListMenuAvatar(false)}
+                >
                   Xem kênh của bạn
                 </Typography>
               </Link>
