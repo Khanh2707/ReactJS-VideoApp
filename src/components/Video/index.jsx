@@ -30,7 +30,7 @@ const format = (seconds) => {
 
 let count = 0;
 
-export default function Video() {
+export default function Video({ titleVideo, linkVideo }) {
   const [width, setWidth] = useState(0);
   const [state, setState] = useState({
     playing: false,
@@ -90,7 +90,7 @@ export default function Video() {
   };
 
   const handleProgress = (changeState) => {
-    if (count > 3) {
+    if (count >= 1) {
       controlsRef.current.style.visibility = "hidden";
       count = 0;
     }
@@ -163,7 +163,7 @@ export default function Video() {
         ref={playerRef}
         width='100%'
         height={width / 1.777777777777778}
-        url='http://127.0.0.1:4000/BẠC PHẬN - ICM x JACK - OFFICIAL MV.mp4'
+        url={linkVideo}
         style={{ backgroundColor: "#000" }}
         playing={playing}
         muted={muted}
@@ -173,6 +173,8 @@ export default function Video() {
       />
 
       <PlayerControls
+        screenfull={screenfull}
+        titleVideo={titleVideo}
         ref={controlsRef}
         onPlayPause={handlePlayPause}
         playing={playing}

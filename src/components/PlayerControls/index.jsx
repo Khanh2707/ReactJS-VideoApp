@@ -5,7 +5,6 @@ import {
   Button,
   Grid,
   IconButton,
-  Popover,
   Slider,
   Typography,
 } from "@mui/material";
@@ -32,6 +31,8 @@ const ControlsWrapper = styled(Box)(({ theme }) => ({
 
 export default forwardRef(function PlayerControls(
   {
+    screenfull,
+    titleVideo,
     onPlayPause,
     playing,
     onRewind,
@@ -88,32 +89,13 @@ export default forwardRef(function PlayerControls(
         justifyContent='space-between'
         sx={{ p: "16px" }}
       >
-        <Grid item>
-          <Typography variant='h5' sx={{ color: "#fff" }}>
-            Video Title
-          </Typography>
-        </Grid>
-      </Grid>
-
-      <Grid
-        container
-        direction='row'
-        alignItems='center'
-        justifyContent='center'
-      >
-        <IconButton onClick={onRewind}>
-          <FastRewindIcon sx={{ color: "#fff" }} />
-        </IconButton>
-        <IconButton onClick={onPlayPause}>
-          {playing ? (
-            <PauseIcon sx={{ color: "#fff" }} />
-          ) : (
-            <PlayArrowIcon sx={{ color: "#fff" }} />
-          )}
-        </IconButton>
-        <IconButton onClick={onFastForward}>
-          <FastForwardIcon sx={{ color: "#fff" }} />
-        </IconButton>
+        {screenfull.isFullscreen && (
+          <Grid item>
+            <Typography variant='h5' sx={{ color: "#fff" }}>
+              {titleVideo}
+            </Typography>
+          </Grid>
+        )}
       </Grid>
 
       <Grid
@@ -133,15 +115,20 @@ export default forwardRef(function PlayerControls(
             onChangeCommitted={onSeekMouseUp}
           />
         </Grid>
-
         <Grid item>
           <Grid container alignItems='center' direction='row'>
+            <IconButton onClick={onRewind}>
+              <FastRewindIcon sx={{ color: "#fff" }} />
+            </IconButton>
             <IconButton onClick={onPlayPause}>
               {playing ? (
                 <PauseIcon sx={{ color: "#fff" }} />
               ) : (
                 <PlayArrowIcon sx={{ color: "#fff" }} />
               )}
+            </IconButton>
+            <IconButton onClick={onFastForward}>
+              <FastForwardIcon sx={{ color: "#fff" }} />
             </IconButton>
 
             <IconButton onClick={onMute}>
@@ -163,7 +150,7 @@ export default forwardRef(function PlayerControls(
 
             <Button
               variant='text'
-              sx={{ color: "#fff", ml: "16px" }}
+              sx={{ color: "#fff", ml: "8px" }}
               onClick={onChangeDisplayFormat}
             >
               <Typography>

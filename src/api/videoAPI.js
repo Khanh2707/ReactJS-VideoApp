@@ -1,13 +1,18 @@
 import axiosClient from "./axiosClient";
 
 const videoAPI = {
-  getAllByChannelNameUnique: (value) => {
-    const url = `/api/videos/all/by/channel/name_unique/${value}`;
+  getById: (param) => {
+    const url = `/api/videos/${param}`;
     return axiosClient.get(url);
   },
 
-  countAllByChannelNameUnique: (value) => {
-    const url = `/api/videos/count/all/by/channel/name_unique/${value}`;
+  getAllByChannelNameUnique: (param) => {
+    const url = `/api/videos/all/by/channel/name_unique/${param}`;
+    return axiosClient.get(url);
+  },
+
+  countAllByChannelNameUnique: (param) => {
+    const url = `/api/videos/count/all/by/channel/name_unique/${param}`;
     return axiosClient.get(url);
   },
 

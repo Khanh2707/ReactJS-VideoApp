@@ -78,6 +78,11 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/watch/:idVideo",
+            loader: async ({ params }) => {
+              const video = await videoAPI.getById(params.idVideo);
+
+              return { video };
+            },
           },
           {
             element: (
@@ -95,11 +100,7 @@ export default createBrowserRouter([
                 params.nameUniqueChannel
               );
 
-              const amountVideo = await videoAPI.countAllByChannelNameUnique(
-                params.nameUniqueChannel
-              );
-              
-              return { account, videos, amountVideo };
+              return { account, videos };
             },
           },
           {

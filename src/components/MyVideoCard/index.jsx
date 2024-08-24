@@ -1,5 +1,7 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import React from "react";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { vi } from "date-fns/locale";
 
 export default function MyVideoCard({
   title,
@@ -21,6 +23,7 @@ export default function MyVideoCard({
           width: "100%",
           height: "140px",
           objectFit: "contain",
+          backgroundColor: "#000",
         }}
         alt=''
       />
@@ -45,7 +48,12 @@ export default function MyVideoCard({
             <Typography variant='subtitle2'>•</Typography>
           </Grid>
           <Grid item>
-            <Typography variant='subtitle2'>{dateTimeCreate}</Typography>
+            <Typography variant='subtitle2'>
+              {formatDistanceToNow(parseISO(dateTimeCreate), {
+                addSuffix: true,
+                locale: vi,
+              })}
+            </Typography>
           </Grid>
         </Grid>
       </CardContent>

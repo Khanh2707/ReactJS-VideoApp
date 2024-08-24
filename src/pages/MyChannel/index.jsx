@@ -16,9 +16,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import MyVideoCard from "../../components/MyVideoCard";
-import iconReact from "../../assets/react.svg";
 import { useTheme } from "@emotion/react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 
 const tab = [
@@ -36,7 +35,7 @@ export default function MyChannel() {
 
   const { myAccount } = useContext(AppContext);
 
-  const { account, videos, amountVideo } = useLoaderData();
+  const { account, videos } = useLoaderData();
 
   const handleChangeTab = (event, newValue) => {
     setValueTab(newValue);
@@ -100,7 +99,9 @@ export default function MyChannel() {
               <Typography variant='subtitle2'>•</Typography>
             </Grid>
             <Grid item>
-              <Typography variant='subtitle2'>{amountVideo.result} video</Typography>
+              <Typography variant='subtitle2'>
+                {videos.result.length} video
+              </Typography>
             </Grid>
           </Grid>
           <Grid container spacing={1} sx={{ mt: "0", cursor: "pointer" }}>
@@ -168,12 +169,17 @@ export default function MyChannel() {
               {videos.result.map((item) => {
                 return (
                   <Grid item md={4} sm={6} xs={12} key={item.idVideo}>
-                    <MyVideoCard
-                      title={item.title}
-                      imagePreview={item.imagePreview}
-                      viewVideo='Lượt xem'
-                      dateTimeCreate={item.dateTimeCreate}
-                    />
+                    <Link
+                      to={`/watch/${item.idVideo}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <MyVideoCard
+                        title={item.title}
+                        imagePreview={item.imagePreview}
+                        viewVideo='Lượt xem'
+                        dateTimeCreate={item.dateTimeCreate}
+                      />
+                    </Link>
                   </Grid>
                 );
               })}
