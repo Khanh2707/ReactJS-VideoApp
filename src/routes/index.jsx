@@ -20,6 +20,7 @@ import { ThemeContext } from "../context/ThemeContext";
 import ResetPassword from "../pages/ResetPassword";
 import accountAPI from "../api/accountAPI";
 import videoAPI from "../api/videoAPI";
+import channelAPI from "../api/channelAPI";
 
 const AuthLayout = () => {
   const { themeMode } = useContext(ThemeContext);
@@ -81,7 +82,11 @@ export default createBrowserRouter([
             loader: async ({ params }) => {
               const video = await videoAPI.getById(params.idVideo);
 
-              return { video };
+              const amountSub = await channelAPI.countSubChannel(
+                video.result.channel.idChannel
+              );
+
+              return { video, amountSub };
             },
           },
           {

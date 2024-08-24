@@ -8,7 +8,6 @@ import {
 import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
-import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import RestoreIcon from "@mui/icons-material/Restore";
 import EditIcon from "@mui/icons-material/Edit";
 import { AppContext } from "../../context/AppContext";
@@ -18,11 +17,6 @@ const listContent = [
     name: "Trang chủ",
     route: "/",
     icon: <HomeIcon />,
-  },
-  {
-    name: "Kênh của bạn",
-    route: null,
-    icon: <SwitchAccountIcon />,
   },
   {
     name: "Video đã xem",
@@ -53,7 +47,7 @@ export default function Sidebar() {
           <ListItem key={item.name} disablePadding>
             <ListItemButton
               component={Link}
-              to={item.route ?? `/${myAccount.channel.nameUnique}`}
+              to={item.route}
               selected={isSelected}
               sx={{
                 borderRadius: "12px",

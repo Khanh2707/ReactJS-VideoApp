@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Avatar,
   Backdrop,
   Box,
@@ -9,6 +10,7 @@ import {
   ListItem,
   ListItemButton,
   Paper,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -28,9 +30,12 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
 import ListCommentComment from "../../components/ListCommentComment";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import { useLoaderData } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
+import { AppContext } from "../../context/AppContext";
+import channelAPI from "../../api/channelAPI";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -58,12 +63,31 @@ export default function DetailVideo() {
   const [openDialogListRadioReportVideo, setOpenDialogListRadioReportVideo] =
     useState(false);
   const [openBackdrop, setOpenBackdrop] = useState(true);
+  const [isSub, setIsSub] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [stateAlert, setStateAlert] = useState("info");
+  const [contentAlert, setContentAlert] = useState("");
 
   const theme = useTheme();
 
   const { themeMode } = useContext(ThemeContext);
 
-  const { video } = useLoaderData();
+  const { myAccount } = useContext(AppContext);
+  console.log(myAccount);
+
+  const { video, amountSub } = useLoaderData();
+
+  const getIsSub = () => {
+    channelAPI
+      .checkChannelSubChannel(
+        myAccount.channel.idChannel,
+        video.result.channel.idChannel
+      )
+      .then((response) => {
+        setIsSub(response.result);
+      })
+      .catch((error) => {});
+  };
 
   const handleClickOutside = (event) => {
     if (
@@ -115,19 +139,80 @@ export default function DetailVideo() {
     setValueComment((prev) => prev + e.emoji);
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleCloseBackdrop = () => {
     setOpenBackdrop(false);
   };
   const handleOpenBackdrop = () => {
     setOpenBackdrop(true);
   };
+
+  const handleOpenSnackbar = (state, message) => {
+    setOpenSnackbar(false);
+
+    setStateAlert(state);
+    setContentAlert(message);
+
+    setTimeout(() => {
+      setOpenSnackbar(true);
+    }, 100);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+  // API
+  const handleSubscribe = () => {
+    channelAPI
+      .createChannelSubChannel({
+        idChannel1: myAccount.channel.idChannel,
+        idChannel2: video.result.channel.idChannel,
+      })
+      .then((response) => {
+        console.log(response);
+        getIsSub();
+        handleOpenSnackbar(
+          "success",
+          `Bạn vừa đăng ký kênh ${video.result.channel.name}`
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // API
+  const handleUnSubscribe = () => {
+    channelAPI
+      .deleteChannelSubChannel(
+        myAccount.channel.idChannel,
+        video.result.channel.idChannel
+      )
+      .then((response) => {
+        console.log(response);
+        getIsSub();
+        handleOpenSnackbar(
+          "info",
+          `Bạn vừa hủy đăng ký kênh ${video.result.channel.name}`
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getIsSub();
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -167,24 +252,43 @@ export default function DetailVideo() {
                   variant='caption'
                   sx={{ color: "customGreySubTitle.main" }}
                 >
-                  4,9 Tr người đăng ký
+                  {amountSub.result} người đăng ký
                 </Typography>
               </Box>
-              <Chip
-                label='Đăng ký'
-                sx={{
-                  p: "4px",
-                  ml: "24px",
-                  bgcolor: "text.primary",
-                  color: "secondary.main",
-                  "&:hover": {
+              {!isSub && (
+                <Chip
+                  label='Đăng ký'
+                  sx={{
+                    p: "4px",
+                    ml: "24px",
                     bgcolor: "text.primary",
-                    opacity: "0.9",
-                  },
-                  fontSize: "14px",
-                  fontWeight: "600",
-                }}
-              />
+                    color: "secondary.main",
+                    "&:hover": {
+                      bgcolor: "text.primary",
+                      opacity: "0.9",
+                    },
+                    fontSize: "14px",
+                    fontWeight: "600",
+                  }}
+                  onClick={handleSubscribe}
+                />
+              )}
+              {isSub && (
+                <Chip
+                  icon={<NotificationsActiveIcon />}
+                  label='Đã đăng ký'
+                  sx={{
+                    p: "4px",
+                    ml: "24px",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    "& .MuiChip-icon": {
+                      color: "text.primary",
+                    },
+                  }}
+                  onClick={handleUnSubscribe}
+                />
+              )}
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Chip
@@ -481,6 +585,21 @@ export default function DetailVideo() {
         openDialogListRadioReportVideo={openDialogListRadioReportVideo}
         setOpenDialogListRadioReportVideo={setOpenDialogListRadioReportVideo}
       />
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={stateAlert}
+          variant='filled'
+          sx={{ width: "100%" }}
+        >
+          {contentAlert}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
