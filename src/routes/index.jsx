@@ -86,7 +86,11 @@ export default createBrowserRouter([
                 video.result.channel.idChannel
               );
 
-              return { video, amountSub };
+              const amountLike = await videoAPI.countLikeVideo(
+                video.result.idVideo
+              );
+
+              return { video, amountSub, amountLike };
             },
           },
           {

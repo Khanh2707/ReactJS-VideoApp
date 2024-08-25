@@ -1,6 +1,16 @@
 import axiosClient from "./axiosClient";
 
 const videoAPI = {
+  countLikeVideo: (params) => {
+    const url = `/api/videos/count/like/${params}`;
+    return axiosClient.get(url);
+  },
+
+  checkChannelLikeVideo: (idChannel, idVideo) => {
+    const url = `/api/videos/is/like/${idChannel}/${idVideo}`;
+    return axiosClient.get(url);
+  },
+
   getById: (param) => {
     const url = `/api/videos/${param}`;
     return axiosClient.get(url);
@@ -19,6 +29,16 @@ const videoAPI = {
   createVideo: (data, config) => {
     const url = "/api/videos";
     return axiosClient.post(url, data, config);
+  },
+
+  createChannelLikeVideo: (data) => {
+    const url = `/api/videos/like`;
+    return axiosClient.post(url, data);
+  },
+
+  deleteHistoryLikeVideo: (idChannel, idVideo) => {
+    const url = `/api/videos/like/${idChannel}/${idVideo}`;
+    return axiosClient.delete(url);
   },
 };
 
