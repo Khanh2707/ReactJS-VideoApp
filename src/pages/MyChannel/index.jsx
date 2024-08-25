@@ -179,7 +179,7 @@ export default function MyChannel() {
                       <MyVideoCard
                         title={item.title}
                         imagePreview={item.imagePreview}
-                        viewVideo='Lượt xem'
+                        viewVideo={item.view}
                         dateTimeCreate={item.dateTimeCreate}
                       />
                     </Link>

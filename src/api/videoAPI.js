@@ -16,6 +16,11 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
+  getAllVideoChannelWatched: (params) => {
+    const url = `/api/videos/all/video/channel/watched/${params}`;
+    return axiosClient.get(url);
+  },
+
   getById: (param) => {
     const url = `/api/videos/${param}`;
     return axiosClient.get(url);

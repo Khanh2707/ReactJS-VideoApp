@@ -42,7 +42,7 @@ export default function MyVideoCard({
         </Typography>
         <Grid container spacing={1} sx={{ color: "customGreySubTitle.main" }}>
           <Grid item>
-            <Typography variant='subtitle2'>{viewVideo}</Typography>
+            <Typography variant='subtitle2'>{viewVideo} lượt xem</Typography>
           </Grid>
           <Grid item>
             <Typography variant='subtitle2'>•</Typography>

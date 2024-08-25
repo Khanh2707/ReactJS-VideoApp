@@ -1,8 +1,10 @@
 import { Paper, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import React from "react";
-import iconReact from "../../assets/react.svg";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { vi } from "date-fns/locale";
 
 export default function WatchedVideoCard({
+  imagePreview,
   title,
   nameChannel,
   viewVideo,
@@ -13,7 +15,6 @@ export default function WatchedVideoCard({
       sx={{
         display: "flex",
         alignItems: "center",
-        width: "628px",
         height: "138px",
         mt: "16px",
         cursor: "pointer",
@@ -21,16 +22,15 @@ export default function WatchedVideoCard({
     >
       <CardMedia
         component='img'
-        image={iconReact}
+        image={imagePreview}
         sx={{
           width: "246px",
           height: "138px",
           objectFit: "contain",
-          borderRadius: "8px",
         }}
         alt=''
       />
-      <CardContent sx={{ width: "382px" }}>
+      <CardContent sx={{ flexGrow: "1" }}>
         <Typography
           variant='h6'
           sx={{
@@ -47,13 +47,16 @@ export default function WatchedVideoCard({
         <Paper sx={{ color: "customGreySubTitle.main" }}>
           <Typography variant='subtitle2'>{nameChannel}</Typography>
           <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
-            {viewVideo}
+            {viewVideo} lượt xem
           </Typography>
           <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
             -
           </Typography>
           <Typography variant='subtitle2' component='span'>
-            {dateTimeCreateVideo}
+            {formatDistanceToNow(parseISO(dateTimeCreateVideo), {
+              addSuffix: true,
+              locale: vi,
+            })}
           </Typography>
         </Paper>
       </CardContent>

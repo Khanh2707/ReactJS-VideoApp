@@ -31,7 +31,7 @@ import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
 import ListCommentComment from "../../components/ListCommentComment";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
@@ -523,7 +523,7 @@ export default function DetailVideo() {
                   keepNewLines={true}
                   lines={4}
                 >
-                  {`11.327.025 lượt xem \u00A0\u00A0\u00A0\u00A0\u00A0 ${formatDistanceToNow(
+                  {`${video.result.view} lượt xem \u00A0\u00A0\u00A0 ${formatDistanceToNow(
                     parseISO(video.result.dateTimeCreate),
                     { addSuffix: true, locale: vi }
                   )}
