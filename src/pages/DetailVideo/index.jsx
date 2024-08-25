@@ -31,7 +31,7 @@ import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
 import ListCommentComment from "../../components/ListCommentComment";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
@@ -50,6 +50,8 @@ const textFieldStyles = {
 };
 
 export default function DetailVideo() {
+  const { video, amountSub: initialAmountSub } = useLoaderData();
+
   const [liked, setLiked] = useState(false);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showListActionVideo, setShowListActionVideo] = useState(false);
@@ -62,11 +64,13 @@ export default function DetailVideo() {
   const [valueComment, setValueComment] = useState("");
   const [openDialogListRadioReportVideo, setOpenDialogListRadioReportVideo] =
     useState(false);
-  const [openBackdrop, setOpenBackdrop] = useState(true);
-  const [isSub, setIsSub] = useState(false);
+  const [openBackdropInfoVideo, setOpenBackdropInfoVideo] = useState(true);
+  const [isSub, setIsSub] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [stateAlert, setStateAlert] = useState("info");
   const [contentAlert, setContentAlert] = useState("");
+  const [amountSub, setAmountSub] = useState(initialAmountSub.result);
+  const [openBackdropCommentVideo, setOpenBackdropCommentVideo] = useState(true);
 
   const theme = useTheme();
 
@@ -74,20 +78,6 @@ export default function DetailVideo() {
 
   const { myAccount } = useContext(AppContext);
   console.log(myAccount);
-
-  const { video, amountSub } = useLoaderData();
-
-  const getIsSub = () => {
-    channelAPI
-      .checkChannelSubChannel(
-        myAccount.channel.idChannel,
-        video.result.channel.idChannel
-      )
-      .then((response) => {
-        setIsSub(response.result);
-      })
-      .catch((error) => {});
-  };
 
   const handleClickOutside = (event) => {
     if (
@@ -139,13 +129,6 @@ export default function DetailVideo() {
     setValueComment((prev) => prev + e.emoji);
   };
 
-  const handleCloseBackdrop = () => {
-    setOpenBackdrop(false);
-  };
-  const handleOpenBackdrop = () => {
-    setOpenBackdrop(true);
-  };
-
   const handleOpenSnackbar = (state, message) => {
     setOpenSnackbar(false);
 
@@ -166,6 +149,31 @@ export default function DetailVideo() {
   };
 
   // API
+  const getAmountSub = () => {
+    channelAPI
+      .countSubChannel(video.result.channel.idChannel)
+      .then((response) => {
+        setAmountSub(response.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // API
+  const getIsSub = () => {
+    channelAPI
+      .checkChannelSubChannel(
+        myAccount.channel.idChannel,
+        video.result.channel.idChannel
+      )
+      .then((response) => {
+        setIsSub(response.result);
+      })
+      .catch((error) => {});
+  };
+
+  // API
   const handleSubscribe = () => {
     channelAPI
       .createChannelSubChannel({
@@ -175,6 +183,7 @@ export default function DetailVideo() {
       .then((response) => {
         console.log(response);
         getIsSub();
+        getAmountSub();
         handleOpenSnackbar(
           "success",
           `Bạn vừa đăng ký kênh ${video.result.channel.name}`
@@ -195,6 +204,7 @@ export default function DetailVideo() {
       .then((response) => {
         console.log(response);
         getIsSub();
+        getAmountSub();
         handleOpenSnackbar(
           "info",
           `Bạn vừa hủy đăng ký kênh ${video.result.channel.name}`
@@ -207,12 +217,15 @@ export default function DetailVideo() {
 
   useEffect(() => {
     getIsSub();
+    if (isSub !== null) {
+      setOpenBackdropInfoVideo(false);
+    }
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isSub]);
 
   return (
     <>
@@ -229,174 +242,194 @@ export default function DetailVideo() {
           >
             {video.result.title}
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              cursor: "pointer",
-              mt: "12px",
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Avatar alt='' src='' />
-              <Box sx={{ ml: "12px", lineHeight: "1" }}>
-                <Typography
-                  variant='subtitle1'
-                  sx={{ lineHeight: "1.3" }}
-                  fontWeight='600'
-                >
-                  {video.result.channel.name}
-                </Typography>
-                <Typography
-                  variant='caption'
-                  sx={{ color: "customGreySubTitle.main" }}
-                >
-                  {amountSub.result} người đăng ký
-                </Typography>
-              </Box>
-              {!isSub && (
-                <Chip
-                  label='Đăng ký'
-                  sx={{
-                    p: "4px",
-                    ml: "24px",
-                    bgcolor: "text.primary",
-                    color: "secondary.main",
-                    "&:hover": {
-                      bgcolor: "text.primary",
-                      opacity: "0.9",
-                    },
-                    fontSize: "14px",
-                    fontWeight: "600",
-                  }}
-                  onClick={handleSubscribe}
-                />
-              )}
-              {isSub && (
-                <Chip
-                  icon={<NotificationsActiveIcon />}
-                  label='Đã đăng ký'
-                  sx={{
-                    p: "4px",
-                    ml: "24px",
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    "& .MuiChip-icon": {
-                      color: "text.primary",
-                    },
-                  }}
-                  onClick={handleUnSubscribe}
-                />
-              )}
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Chip
-                icon={liked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
-                label='11N'
+          <Box sx={{ position: "relative" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                cursor: "pointer",
+                mt: "12px",
+              }}
+            >
+              <Backdrop
                 sx={{
-                  p: "4px",
-                  mr: "8px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  "& .MuiChip-icon": {
-                    color: "text.primary",
-                  },
+                  zIndex: 100,
+                  position: "absolute",
+                  backgroundColor:
+                    themeMode === "light"
+                      ? "rgb(255, 255, 255)"
+                      : "rgb(15, 18, 20)",
                 }}
-              />
-              <Chip
-                icon={<VerticalAlignBottomIcon />}
-                label='Tải xuống'
-                sx={{
-                  p: "4px",
-                  mr: "8px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  "& .MuiChip-icon": {
-                    color: "text.primary",
-                  },
-                }}
-              />
-              <Box sx={{ position: "relative" }}>
-                <Chip
-                  ref={actionVideoButtonRef}
-                  icon={<MoreHorizIcon />}
+                open={openBackdropInfoVideo}
+              >
+                <CircularProgress
+                  color='inherit'
                   sx={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: "50%",
-                    padding: 0,
-                    "& .MuiChip-label": {
-                      display: "none",
-                    },
-                    "& .MuiChip-icon": {
-                      color: "text.primary",
-                      m: "0",
-                    },
+                    position: "absolute",
                   }}
-                  onClick={togglelistActionVideo}
                 />
-                {showListActionVideo && (
-                  <Paper
-                    ref={listActionVideoRef}
-                    sx={{
-                      position: "absolute",
-                      zIndex: "10",
-                      minWidth: "160px",
-                      borderRadius: "8px",
-                      top: "0",
-                      left: "34px",
-                      bgcolor: theme.palette.customBgcolorMenu.main,
-                      boxShadow: theme.palette.customBoxShadowMenu.main,
-                    }}
+              </Backdrop>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar alt='' src='' />
+                <Box sx={{ ml: "12px", lineHeight: "1" }}>
+                  <Typography
+                    variant='subtitle1'
+                    sx={{ lineHeight: "1.3" }}
+                    fontWeight='600'
                   >
-                    <List>
-                      <ListItem
-                        disablePadding
-                        onClick={handleClickOpenDialogListRadioReportVideo}
-                      >
-                        <ListItemButton>
-                          <EmojiFlagsIcon />
-                          <Typography sx={{ ml: "12px" }}>
-                            Báo vi phạm
-                          </Typography>
-                        </ListItemButton>
-                      </ListItem>
-                    </List>
-                  </Paper>
+                    {video.result.channel.name}
+                  </Typography>
+                  <Typography
+                    variant='caption'
+                    sx={{ color: "customGreySubTitle.main" }}
+                  >
+                    {amountSub} người đăng ký
+                  </Typography>
+                </Box>
+                {!isSub && (
+                  <Chip
+                    label='Đăng ký'
+                    sx={{
+                      p: "4px",
+                      ml: "24px",
+                      bgcolor: "text.primary",
+                      color: "secondary.main",
+                      "&:hover": {
+                        bgcolor: "text.primary",
+                        opacity: "0.9",
+                      },
+                      fontSize: "14px",
+                      fontWeight: "600",
+                    }}
+                    onClick={handleSubscribe}
+                  />
+                )}
+                {isSub && (
+                  <Chip
+                    icon={<NotificationsActiveIcon />}
+                    label='Đã đăng ký'
+                    sx={{
+                      p: "4px",
+                      ml: "24px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      "& .MuiChip-icon": {
+                        color: "text.primary",
+                      },
+                    }}
+                    onClick={handleUnSubscribe}
+                  />
                 )}
               </Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Chip
+                  icon={liked ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
+                  label='11N'
+                  sx={{
+                    p: "4px",
+                    mr: "8px",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    "& .MuiChip-icon": {
+                      color: "text.primary",
+                    },
+                  }}
+                />
+                <Chip
+                  icon={<VerticalAlignBottomIcon />}
+                  label='Tải xuống'
+                  sx={{
+                    p: "4px",
+                    mr: "8px",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    "& .MuiChip-icon": {
+                      color: "text.primary",
+                    },
+                  }}
+                />
+                <Box sx={{ position: "relative" }}>
+                  <Chip
+                    ref={actionVideoButtonRef}
+                    icon={<MoreHorizIcon />}
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: "50%",
+                      padding: 0,
+                      "& .MuiChip-label": {
+                        display: "none",
+                      },
+                      "& .MuiChip-icon": {
+                        color: "text.primary",
+                        m: "0",
+                      },
+                    }}
+                    onClick={togglelistActionVideo}
+                  />
+                  {showListActionVideo && (
+                    <Paper
+                      ref={listActionVideoRef}
+                      sx={{
+                        position: "absolute",
+                        zIndex: "10",
+                        minWidth: "160px",
+                        borderRadius: "8px",
+                        top: "0",
+                        left: "34px",
+                        bgcolor: theme.palette.customBgcolorMenu.main,
+                        boxShadow: theme.palette.customBoxShadowMenu.main,
+                      }}
+                    >
+                      <List>
+                        <ListItem
+                          disablePadding
+                          onClick={handleClickOpenDialogListRadioReportVideo}
+                        >
+                          <ListItemButton>
+                            <EmojiFlagsIcon />
+                            <Typography sx={{ ml: "12px" }}>
+                              Báo vi phạm
+                            </Typography>
+                          </ListItemButton>
+                        </ListItem>
+                      </List>
+                    </Paper>
+                  )}
+                </Box>
+              </Box>
             </Box>
-          </Box>
-          <Box
-            sx={{
-              bgcolor: "customBgcolorSecondary.main",
-              borderRadius: "12px",
-              p: "12px",
-              mt: "16px",
-              cursor: "pointer",
-            }}
-          >
-            <ShowMoreText
-              more={
-                <Typography variant='span' sx={{ fontWeight: "600" }}>
-                  thêm
-                </Typography>
-              }
-              less={
-                <Typography sx={{ fontWeight: "600", mt: "16px" }}>
-                  Ẩn bớt
-                </Typography>
-              }
-              keepNewLines={true}
-              lines={4}
+            <Box
+              sx={{
+                bgcolor: "customBgcolorSecondary.main",
+                borderRadius: "12px",
+                p: "12px",
+                mt: "16px",
+                cursor: "pointer",
+              }}
             >
-              {`11.327.025 lượt xem \u00A0\u00A0\u00A0\u00A0\u00A0 ${formatDistanceToNow(
-                parseISO(video.result.dateTimeCreate),
-                { addSuffix: true, locale: vi }
-              )}
+              <ShowMoreText
+                more={
+                  <Typography variant='span' sx={{ fontWeight: "600" }}>
+                    thêm
+                  </Typography>
+                }
+                less={
+                  <Typography sx={{ fontWeight: "600", mt: "16px" }}>
+                    Ẩn bớt
+                  </Typography>
+                }
+                keepNewLines={true}
+                lines={4}
+              >
+                {`11.327.025 lượt xem \u00A0\u00A0\u00A0\u00A0\u00A0 ${formatDistanceToNow(
+                  parseISO(video.result.dateTimeCreate),
+                  { addSuffix: true, locale: vi }
+                )}
               ${video.result.description}`}
-            </ShowMoreText>
+              </ShowMoreText>
+            </Box>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", mt: "24px" }}>
             <Typography variant='h6' fontWeight='600'>
@@ -549,8 +582,7 @@ export default function DetailVideo() {
                     ? "rgba(255, 255, 255, 0.4)"
                     : "rgba(15, 18, 20, 0.4)",
               }}
-              open={openBackdrop}
-              onClick={handleCloseBackdrop}
+              open={openBackdropCommentVideo}
             >
               <CircularProgress
                 color='inherit'
