@@ -282,6 +282,31 @@ export default function DetailVideo() {
       });
   };
 
+  // API
+  const handleDownloadVideo = () => {
+    handleOpenSnackbar("info", "Video sắp được tải")
+    videoAPI
+      .downloadVideo(video.result.idVideo, {
+        responseType: "blob",
+        headers: {
+          "Content-Type": "application/octet-stream",
+        },
+      })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${video.result.title}.mp4`; // Tên file khi tải xuống
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.error("Failed to download video:", error);
+      });
+  };
+
   useEffect(() => {
     getIsSub();
     getIsLike();
@@ -422,6 +447,7 @@ export default function DetailVideo() {
                         color: "text.primary",
                       },
                     }}
+                    onClick={handleDownloadVideo}
                   />
                   <Box sx={{ position: "relative" }}>
                     <Chip

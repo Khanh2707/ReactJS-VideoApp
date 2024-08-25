@@ -1,6 +1,11 @@
 import axiosClient from "./axiosClient";
 
 const videoAPI = {
+  downloadVideo: (params, config) => {
+    const url = `/api/videos/download/${params}`;
+    return axiosClient.get(url, config);
+  },
+
   countLikeVideo: (params) => {
     const url = `/api/videos/count/like/${params}`;
     return axiosClient.get(url);
