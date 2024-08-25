@@ -109,7 +109,11 @@ export default createBrowserRouter([
                 params.nameUniqueChannel
               );
 
-              return { account, videos };
+              const amountSub = await channelAPI.countSubChannel(
+                account.result.channel.idChannel
+              );
+
+              return { account, videos, amountSub };
             },
           },
           {

@@ -293,10 +293,10 @@ export default function DetailVideo() {
         },
       })
       .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = window.URL.createObjectURL(new Blob([response]));
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${video.result.title}.mp4`; // Tên file khi tải xuống
+        a.download = `${video.result.title}.mp4`;
         document.body.appendChild(a);
         a.click();
         a.remove();

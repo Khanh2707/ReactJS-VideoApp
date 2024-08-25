@@ -28,14 +28,15 @@ const tab = [
 ];
 
 export default function MyChannel() {
+  const { account, videos, amountSub: initialAmountSub } = useLoaderData();
+
   const [valueTab, setValueTab] = useState("1");
   const [searchValue, setSearchValue] = useState("");
+  const [amountSub, setAmountSub] = useState(initialAmountSub.result);
 
   const theme = useTheme();
 
   const { myAccount } = useContext(AppContext);
-
-  const { account, videos } = useLoaderData();
 
   const handleChangeTab = (event, newValue) => {
     setValueTab(newValue);
@@ -93,7 +94,9 @@ export default function MyChannel() {
               <Typography variant='subtitle2'>•</Typography>
             </Grid>
             <Grid item>
-              <Typography variant='subtitle2'>6 người đăng ký</Typography>
+              <Typography variant='subtitle2'>
+                {amountSub} người đăng ký
+              </Typography>
             </Grid>
             <Grid item>
               <Typography variant='subtitle2'>•</Typography>
