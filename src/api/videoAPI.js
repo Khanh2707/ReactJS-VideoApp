@@ -46,10 +46,20 @@ const videoAPI = {
     return axiosClient.post(url, data);
   },
 
+  createHistoryWatchVideo: (data) => {
+    const url = `/api/videos/watch`;
+    return axiosClient.post(url, data);
+  },
+
   deleteHistoryLikeVideo: (idChannel, idVideo) => {
     const url = `/api/videos/like/${idChannel}/${idVideo}`;
     return axiosClient.delete(url);
   },
+
+  deleteAllVideoWatched: (params) => {
+    const url = `/api/videos/all/watch/${params}`;
+    return axiosClient.delete(url);
+  }
 };
 
 export default videoAPI;

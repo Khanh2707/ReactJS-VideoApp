@@ -33,7 +33,10 @@ export default function Header() {
           zIndex: "1000",
         }}
       >
-        <Container maxWidth='lg'>
+        <Container
+          maxWidth='lg'
+          sx={{ display: "flex", alignItems: "center", height: "48px" }}
+        >
           <Grid container alignItems='center' justifyContent='space-between'>
             <Grid item>
               <Link

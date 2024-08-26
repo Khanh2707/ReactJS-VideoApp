@@ -284,7 +284,7 @@ export default function DetailVideo() {
 
   // API
   const handleDownloadVideo = () => {
-    handleOpenSnackbar("info", "Video sắp được tải")
+    handleOpenSnackbar("info", "Video sắp được tải");
     videoAPI
       .downloadVideo(video.result.idVideo, {
         responseType: "blob",
@@ -307,7 +307,23 @@ export default function DetailVideo() {
       });
   };
 
+  const handleWatchVideo = () => {
+    videoAPI
+      .createHistoryWatchVideo({
+        idChannel: myAccount.channel.idChannel,
+        idVideo: video.result.idVideo,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
+    handleWatchVideo();
+
     getIsSub();
     getIsLike();
     if (isSub !== null && isLike !== null) {
@@ -523,7 +539,9 @@ export default function DetailVideo() {
                   keepNewLines={true}
                   lines={4}
                 >
-                  {`${video.result.view} lượt xem \u00A0\u00A0\u00A0 ${formatDistanceToNow(
+                  {`${
+                    video.result.view
+                  } lượt xem \u00A0\u00A0\u00A0 ${formatDistanceToNow(
                     parseISO(video.result.dateTimeCreate),
                     { addSuffix: true, locale: vi }
                   )}
