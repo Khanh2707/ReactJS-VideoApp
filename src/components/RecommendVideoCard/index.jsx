@@ -7,9 +7,9 @@ import {
   Box,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 export default function RecommendVideoCard({
   title,
@@ -19,6 +19,8 @@ export default function RecommendVideoCard({
   dateTimeCreateVideo,
   imagePreview,
 }) {
+  const navigate = useNavigate();
+
   return (
     <Card
       sx={{
@@ -65,15 +67,16 @@ export default function RecommendVideoCard({
           {title}
         </Typography>
         <Paper sx={{ color: "customGreySubTitle.main", lineHeight: "1" }}>
-          <Link to={`/${nameUnique}`} style={{ textDecoration: "none" }}>
-            <Typography
-              variant='caption'
-              component='div'
-              sx={{ lineHeight: "1.1" }}
-            >
-              {nameChannel}
-            </Typography>
-          </Link>
+          <Typography
+            variant='caption'
+            component='div'
+            sx={{ lineHeight: "1.1" }}
+            onClick={() => {
+              navigate(`/${nameUnique}`);
+            }}
+          >
+            {nameChannel}
+          </Typography>
           <Typography
             variant='caption'
             component='span'

@@ -21,6 +21,7 @@ import ResetPassword from "../pages/ResetPassword";
 import accountAPI from "../api/accountAPI";
 import videoAPI from "../api/videoAPI";
 import channelAPI from "../api/channelAPI";
+import LikedVideo from "../pages/LikedVideo";
 
 const AuthLayout = () => {
   const { themeMode } = useContext(ThemeContext);
@@ -84,6 +85,7 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/watch/:idVideo",
+            key: (params) => `/watch/${params.idVideo}`,
             loader: async ({ params }) => {
               const video = await videoAPI.getById(params.idVideo);
 
@@ -129,7 +131,15 @@ export default createBrowserRouter([
                 <WatchedVideo />
               </DefaultLayout>
             ),
-            path: "/feed/history",
+            path: "/history/watch",
+          },
+          {
+            element: (
+              <DefaultLayout>
+                <LikedVideo />
+              </DefaultLayout>
+            ),
+            path: "/history/like",
           },
           {
             element: (
@@ -154,6 +164,11 @@ export default createBrowserRouter([
               {
                 element: <ChannelEditingVideos />,
                 path: "videos",
+                loader: async () => {
+                  const videos = await videoAPI.getAll();
+
+                  return { videos };
+                },
               },
             ],
           },

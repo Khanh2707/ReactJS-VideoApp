@@ -10,6 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
 import RestoreIcon from "@mui/icons-material/Restore";
 import EditIcon from "@mui/icons-material/Edit";
+import RecommendIcon from "@mui/icons-material/Recommend";
 import { AppContext } from "../../context/AppContext";
 
 const listContent = [
@@ -19,15 +20,20 @@ const listContent = [
     icon: <HomeIcon />,
   },
   {
-    name: "Video đã xem",
-    route: "/feed/history",
-    icon: <RestoreIcon />,
-  },
-  {
     name: "Tùy chỉnh kênh",
     route: "/channel/editing",
     icon: <EditIcon />,
     dynamic: true,
+  },
+  {
+    name: "Video đã xem",
+    route: "/history/watch",
+    icon: <RestoreIcon />,
+  },
+  {
+    name: "Video đã thích",
+    route: "/history/like",
+    icon: <RecommendIcon />,
   },
 ];
 

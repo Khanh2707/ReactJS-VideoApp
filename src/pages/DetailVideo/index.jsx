@@ -31,7 +31,7 @@ import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
 import ListCommentComment from "../../components/ListCommentComment";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
@@ -78,13 +78,15 @@ export default function DetailVideo() {
   const [isLike, setIsLike] = useState(null);
   const [amountLike, setAmountLike] = useState(initialAmountLike.result);
   const [openBackdropCommentVideo, setOpenBackdropCommentVideo] =
-    useState(true);
+    useState(false);
 
   const theme = useTheme();
 
   const { themeMode } = useContext(ThemeContext);
 
   const { myAccount } = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   const handleClickOutside = (event) => {
     if (
@@ -400,16 +402,18 @@ export default function DetailVideo() {
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Link
-                    to={`/${video.result.channel.nameUnique}`}
-                    style={{ textDecoration: "none" }}
+                  <Box
+                    onClick={() => {
+                      navigate(`/${video.result.channel.nameUnique}`);
+                    }}
                   >
                     <Avatar alt='' src={video.result.channel.avatar} />
-                  </Link>
+                  </Box>
                   <Box sx={{ ml: "12px", lineHeight: "1" }}>
-                    <Link
-                      to={`/${video.result.channel.nameUnique}`}
-                      style={{ textDecoration: "none" }}
+                    <Box
+                      onClick={() => {
+                        navigate(`/${video.result.channel.nameUnique}`);
+                      }}
                     >
                       <Typography
                         variant='subtitle1'
@@ -418,7 +422,7 @@ export default function DetailVideo() {
                       >
                         {video.result.channel.name}
                       </Typography>
-                    </Link>
+                    </Box>
                     <Typography
                       variant='caption'
                       sx={{ color: "customGreySubTitle.main" }}
@@ -777,10 +781,11 @@ export default function DetailVideo() {
         <Box sx={{ ml: "24px" }}>
           {videos.result.map((item) => {
             return (
-              <Link
-                to={`/watch/${item.idVideo}`}
-                style={{ textDecoration: "none" }}
+              <Box
                 key={item.idVideo}
+                onClick={() => {
+                  navigate(`/watch/${item.idVideo}`);
+                }}
               >
                 <RecommendVideoCard
                   title={item.title}
@@ -790,7 +795,7 @@ export default function DetailVideo() {
                   dateTimeCreateVideo={item.dateTimeCreate}
                   imagePreview={item.imagePreview}
                 />
-              </Link>
+              </Box>
             );
           })}
         </Box>

@@ -35,11 +35,11 @@ const steps = ["Chi tiết", "Chế độ hiển thị"];
 
 const displayModes = [
   {
-    value: "0",
+    value: "1",
     label: "Riêng tư",
   },
   {
-    value: "1",
+    value: "0",
     label: "Công khai",
   },
 ];

@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function WatchedVideoCard({
   imagePreview,
@@ -19,6 +19,8 @@ export default function WatchedVideoCard({
   viewVideo,
   dateTimeCreateVideo,
 }) {
+  const navigate = useNavigate();
+
   return (
     <Card
       sx={{
@@ -64,9 +66,14 @@ export default function WatchedVideoCard({
           {title}
         </Typography>
         <Paper sx={{ color: "customGreySubTitle.main" }}>
-          <Link to={`/${nameUnique}`} style={{ textDecoration: "none" }}>
-            <Typography variant='subtitle2'>{nameChannel}</Typography>
-          </Link>
+          <Typography
+            variant='subtitle2'
+            onClick={() => {
+              navigate(`/${nameUnique}`);
+            }}
+          >
+            {nameChannel}
+          </Typography>
           <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
             {viewVideo} lượt xem
           </Typography>

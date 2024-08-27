@@ -6,10 +6,13 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import iconReact from "../../assets/react.svg";
+import { AppContext } from "../../context/AppContext";
 
 export default function ChannelEditingImages() {
+  const { myAccount } = useContext(AppContext);
+
   const handleChangeAvatar = () => {};
 
   return (
@@ -24,7 +27,7 @@ export default function ChannelEditingImages() {
       <Paper sx={{ width: "290px" }}>
         <CardMedia
           component='img'
-          image={iconReact}
+          image={myAccount.channel.avatar}
           sx={{
             width: "140px",
             height: "140px",

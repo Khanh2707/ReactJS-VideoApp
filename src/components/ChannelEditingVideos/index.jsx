@@ -1,28 +1,15 @@
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import videoAPI from "../../api/videoAPI";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { vi } from "date-fns/locale";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
-  },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    width: 160,
-    valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
-  },
-  {
-    field: "profilePicture",
-    headerName: "Profile Picture",
-    sortable: false,
+    field: "imagePreview",
+    headerName: "Video",
     width: 200,
     renderCell: (params) => (
       <Box
@@ -40,81 +27,84 @@ const columns = [
       </Box>
     ),
   },
-];
-
-const rows = [
   {
-    id: 1,
-    lastName: "Snow",
-    firstName: "Jon",
-    age: 35,
-    profilePicture: "https://picsum.photos/200?random=1",
+    field: "hide",
+    headerName: "Hiển thị",
+    valueGetter: (value) => {
+      return !value ? "Công khai" : "Riêng tư";
+    },
   },
   {
-    id: 2,
-    lastName: "Lannister",
-    firstName: "Cersei",
-    age: 42,
-    profilePicture: "https://picsum.photos/200?random=2",
+    field: "ban",
+    headerName: "Hạn chế",
+    valueGetter: (value) => {
+      return value ? "Bị gỡ" : "Không có";
+    },
   },
   {
-    id: 3,
-    lastName: "Lannister",
-    firstName: "Jaime",
-    age: 45,
-    profilePicture: "https://picsum.photos/200?random=3",
+    field: "dateTimeCreate",
+    headerName: "Thời gian tạo",
+    valueGetter: (value) => {
+      return formatDistanceToNow(parseISO(value), {
+        addSuffix: true,
+        locale: vi,
+      });
+    },
   },
   {
-    id: 4,
-    lastName: "Stark",
-    firstName: "Arya",
-    age: 16,
-    profilePicture: "https://picsum.photos/200?random=4",
+    field: "view",
+    headerName: "Lượt xem",
+    type: "number",
   },
   {
-    id: 5,
-    lastName: "Targaryen",
-    firstName: "Daenerys",
-    age: 27,
-    profilePicture: "https://picsum.photos/200?random=5",
-  },
-  {
-    id: 6,
-    lastName: "Melisandre",
-    firstName: "John",
-    age: 150,
-    profilePicture: "https://picsum.photos/200?random=6",
-  },
-  {
-    id: 7,
-    lastName: "Clifford",
-    firstName: "Ferrara",
-    age: 44,
-    profilePicture: "https://picsum.photos/200?random=7",
-  },
-  {
-    id: 8,
-    lastName: "Frances",
-    firstName: "Rossini",
-    age: 36,
-    profilePicture: "https://picsum.photos/200?random=8",
-  },
-  {
-    id: 9,
-    lastName: "Roxie",
-    firstName: "Harvey",
-    age: 65,
-    profilePicture: "https://picsum.photos/200?random=9",
+    field: "amountLike",
+    headerName: "Lượt thích",
+    type: "number",
   },
 ];
 
 export default function ChannelEditingVideos() {
+  const [allVideos, setAllVideos] = useState([]);
+  const { videos } = useLoaderData();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const updatedVideos = await Promise.all(
+        videos.result.map(async (video) => {
+          try {
+            const amountLikeResponse = await videoAPI.countLikeVideo(
+              video.idVideo
+            );
+            const amountLike = amountLikeResponse.result;
+
+            return {
+              ...video,
+              amountLike,
+            };
+          } catch (error) {
+            console.log(
+              "Error fetching amountLike for video:",
+              video.idVideo,
+              error
+            );
+            return { ...video, amountLike: 0 };
+          }
+        })
+      );
+
+      setAllVideos(updatedVideos);
+    };
+
+    fetchData();
+  }, [videos]);
+
   return (
     <DataGrid
-      rows={rows}
+      rows={allVideos}
       columns={columns}
+      getRowId={(row) => row.idVideo}
       autoHeight={true}
-      rowHeight={110} // Chỉnh sửa chiều cao của hàng ở đây
+      rowHeight={110}
       initialState={{
         pagination: {
           paginationModel: { page: 0, pageSize: 5 },

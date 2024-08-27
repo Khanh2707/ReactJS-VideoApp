@@ -6,8 +6,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { AppContext } from "../../context/AppContext";
 
 const textFieldStyles = {
   "& .MuiOutlinedInput-root": {
@@ -37,16 +38,24 @@ const textFieldStyles = {
 export default function ChannelEditingDetails() {
   const [descriptionLength, setDescriptionLength] = useState(0);
 
-  const handleDescriptionChange = (event) => {
-    setDescriptionLength(event.target.value.length);
-  };
+  const { myAccount } = useContext(AppContext);
 
   const {
     register,
     handleSubmit,
     clearErrors,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      nameChannel: myAccount.channel.name,
+      nameUniqueChannel: myAccount.channel.nameUnique,
+      descriptionChannel: myAccount.channel.description,
+    },
+  });
+
+  const handleDescriptionChange = (event) => {
+    setDescriptionLength(event.target.value.length);
+  };
 
   const handleFormSubmit = (formData) => {
     console.log("Form data is: ", formData);
@@ -94,19 +103,19 @@ export default function ChannelEditingDetails() {
           <TextField
             placeholder='VD: Trần Phúc Khánh'
             size='small'
-            error={!!errors.nameUser}
-            autoComplete='nameUser'
+            error={!!errors.nameUniqueChannel}
+            autoComplete='nameUniqueChannel'
             fullWidth
-            id='nameUser'
-            name='nameUser'
-            helperText={errors.nameUser?.message || ""}
-            {...register("nameUser", {
+            id='nameUniqueChannel'
+            name='nameUniqueChannel'
+            helperText={errors.nameUniqueChannel?.message || ""}
+            {...register("nameUniqueChannel", {
               required: "Vui lòng nhập trường này",
               maxLength: {
                 value: 45,
                 message: "Tên người dùng không được quá 45 ký tự",
               },
-              onChange: () => clearErrors("nameUser"),
+              onChange: () => clearErrors("nameUniqueChannel"),
             })}
             sx={textFieldStyles}
           />
@@ -118,20 +127,20 @@ export default function ChannelEditingDetails() {
           <TextField
             placeholder='VD: Đến từ Hà Nội'
             size='small'
-            error={!!errors.description}
-            autoComplete='description'
+            error={!!errors.descriptionChannel}
+            autoComplete='descriptionChannel'
             fullWidth
-            id='description'
-            name='description'
-            helperText={errors.description?.message || ""}
-            {...register("description", {
+            id='descriptionChannel'
+            name='descriptionChannel'
+            helperText={errors.descriptionChannel?.message || ""}
+            {...register("descriptionChannel", {
               required: "Vui lòng nhập trường này",
               maxLength: {
                 value: 255,
                 message: "Thông tin mô tả không được quá 255 ký tự",
               },
               onChange: (e) => {
-                clearErrors("description");
+                clearErrors("descriptionChannel");
                 handleDescriptionChange(e);
               },
             })}
@@ -181,7 +190,10 @@ export default function ChannelEditingDetails() {
           },
         }}
       >
-        <Typography variant='subtitle2' sx={{ fontWeight: "600" }}>
+        <Typography
+          variant='subtitle2'
+          sx={{ fontWeight: "600", color: "#fff" }}
+        >
           Thay đổi
         </Typography>
       </Button>
