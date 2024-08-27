@@ -71,6 +71,11 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/",
+            loader: async () => {
+              const videos = await videoAPI.getAll();
+
+              return { videos };
+            },
           },
           {
             element: (
@@ -90,7 +95,9 @@ export default createBrowserRouter([
                 video.result.idVideo
               );
 
-              return { video, amountSub, amountLike };
+              const videos = await videoAPI.getAll();
+
+              return { video, amountSub, amountLike, videos };
             },
           },
           {

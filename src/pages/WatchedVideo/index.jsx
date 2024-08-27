@@ -115,10 +115,10 @@ export default function WatchedVideo() {
       <Typography sx={{ fontWeight: "700", fontSize: "36px", mb: "32px" }}>
         Nhật ký xem
       </Typography>
-      <Grid container flexWrap='nowrap' justifyContent='space-between'>
+      <Grid container flexWrap='nowrap' gap='16px'>
         {myAccount ? (
           <>
-            <Grid item flexGrow='1' position='relative'>
+            <Grid item position='relative' flexGrow='1'>
               <Backdrop
                 sx={{
                   zIndex: 100,
@@ -151,6 +151,7 @@ export default function WatchedVideo() {
                           imagePreview={item.imagePreview}
                           title={item.title}
                           nameChannel={item.channel.name}
+                          nameUnique={item.channel.nameUnique}
                           viewVideo={item.view}
                           dateTimeCreateVideo={item.dateTimeCreate}
                         />
@@ -171,7 +172,7 @@ export default function WatchedVideo() {
                 flexDirection: "column",
               }}
             >
-              <Paper sx={{ display: "flex" }}>
+              <Paper sx={{ display: "flex", width: "250px" }}>
                 <IconButton type='button'>
                   <SearchIcon />
                 </IconButton>

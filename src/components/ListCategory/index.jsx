@@ -2,19 +2,17 @@ import React, { useRef, useState, useEffect } from "react";
 import { Chip, Grid, IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import categoryVideoAPI from "../../api/categoryVideoAPI";
+
+const scrollBy = 200;
 
 export default function ListCategory() {
-  const carouselRef = useRef(null);
   const [position, setPosition] = useState(0);
-  const [selectedChip, setSelectedChip] = useState(null);
+  const [selectedChip, setSelectedChip] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const [isOverflowing, setIsOverflowing] = useState(false);
 
-  const scrollBy = 200;
-
-  useEffect(() => {
-    if (listCategory.length > 0) {
-      setSelectedChip(listCategory[0].id);
-    }
-  }, []);
+  const carouselRef = useRef(null);
 
   const handleNext = () => {
     if (carouselRef.current) {
@@ -40,23 +38,63 @@ export default function ListCategory() {
     }
   };
 
-  const listCategory = Array.from({ length: 21 }, (_, index) => ({
-    id: `${index + 1}`,
-    name: `Danh mục ${index + 1}`,
-  }));
-
-  const handleClick = (id) => () => {
-    setSelectedChip(id);
+  const handleSelectCategory = (idCategory) => {
+    setSelectedChip(idCategory);
   };
+
+  const checkOverflow = () => {
+    if (carouselRef.current) {
+      setIsOverflowing(
+        carouselRef.current.scrollWidth > carouselRef.current.clientWidth
+      );
+    }
+  };
+
+  // API
+  const getAllCategory = () => {
+    categoryVideoAPI
+      .getAllCategory()
+      .then((response) => {
+        const defaultCategory = { idCategory: 0, nameCategory: "Tất cả" };
+        const updatedCategories = [defaultCategory, ...response.result];
+        setCategories(updatedCategories);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getAllCategory();
+  }, []);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      setSelectedChip(0);
+    }
+  }, [categories]);
+
+  useEffect(() => {
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [categories]);
 
   return (
     <Grid container alignItems='center' flexWrap='nowrap' sx={{ pb: "16px" }}>
-      <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' onClick={handlePrev}>
-          <ArrowBackIosNewIcon />
-        </IconButton>
-      </Grid>
-      <Grid item md={10} sm={10} xs={10}>
+      {isOverflowing && (
+        <Grid item md={1} sm={1} xs={1} textAlign='center'>
+          <IconButton type='button' onClick={handlePrev}>
+            <ArrowBackIosNewIcon />
+          </IconButton>
+        </Grid>
+      )}
+      <Grid
+        item
+        md={isOverflowing ? 10 : 12}
+        sm={isOverflowing ? 10 : 12}
+        xs={isOverflowing ? 10 : 12}
+      >
         <Grid
           container
           spacing={1}
@@ -64,16 +102,16 @@ export default function ListCategory() {
           overflow='hidden'
           ref={carouselRef}
         >
-          {listCategory.map((item) => (
-            <Grid item key={item.id}>
+          {categories.map((item) => (
+            <Grid item key={item.idCategory}>
               <Chip
-                label={item.name}
-                onClick={handleClick(item.id)}
+                label={item.nameCategory}
+                onClick={() => handleSelectCategory(item.idCategory)}
                 sx={{
-                  bgcolor: selectedChip === item.id ? "#3ea6ff" : "",
-                  color: selectedChip === item.id ? "common.white" : "",
+                  bgcolor: selectedChip === item.idCategory ? "#3ea6ff" : "",
+                  color: selectedChip === item.idCategory ? "common.white" : "",
                   "&:hover": {
-                    bgcolor: selectedChip === item.id ? "#3ea6ff" : "",
+                    bgcolor: selectedChip === item.idCategory ? "#3ea6ff" : "",
                   },
                 }}
               />
@@ -81,11 +119,13 @@ export default function ListCategory() {
           ))}
         </Grid>
       </Grid>
-      <Grid item md={1} sm={1} xs={1} textAlign='center'>
-        <IconButton type='button' onClick={handleNext}>
-          <ArrowForwardIosIcon />
-        </IconButton>
-      </Grid>
+      {isOverflowing && (
+        <Grid item md={1} sm={1} xs={1} textAlign='center'>
+          <IconButton type='button' onClick={handleNext}>
+            <ArrowForwardIosIcon />
+          </IconButton>
+        </Grid>
+      )}
     </Grid>
   );
 }

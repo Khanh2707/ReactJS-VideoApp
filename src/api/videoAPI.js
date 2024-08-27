@@ -31,6 +31,11 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
+  getAll: () => {
+    const url = `/api/videos`;
+    return axiosClient.get(url);
+  },
+
   countAllByChannelNameUnique: (param) => {
     const url = `/api/videos/count/all/by/channel/name_unique/${param}`;
     return axiosClient.get(url);
@@ -59,7 +64,7 @@ const videoAPI = {
   deleteAllVideoWatched: (params) => {
     const url = `/api/videos/all/watch/${params}`;
     return axiosClient.delete(url);
-  }
+  },
 };
 
 export default videoAPI;

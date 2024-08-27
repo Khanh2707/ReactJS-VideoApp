@@ -10,8 +10,10 @@ import {
   Typography,
   Chip,
   Avatar,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -19,6 +21,8 @@ import MyVideoCard from "../../components/MyVideoCard";
 import { useTheme } from "@emotion/react";
 import { Link, useLoaderData } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
+import channelAPI from "../../api/channelAPI";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 
 const tab = [
   {
@@ -33,6 +37,10 @@ export default function MyChannel() {
   const [valueTab, setValueTab] = useState("1");
   const [searchValue, setSearchValue] = useState("");
   const [amountSub, setAmountSub] = useState(initialAmountSub.result);
+  const [isSub, setIsSub] = useState(null);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [stateAlert, setStateAlert] = useState("info");
+  const [contentAlert, setContentAlert] = useState("");
 
   const theme = useTheme();
 
@@ -56,6 +64,100 @@ export default function MyChannel() {
       handleClearSearch();
     }
   };
+
+  const handleOpenSnackbar = (state, message) => {
+    setOpenSnackbar(false);
+
+    setStateAlert(state);
+    setContentAlert(message);
+
+    setTimeout(() => {
+      setOpenSnackbar(true);
+    }, 100);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+  // API
+  const getAmountSub = () => {
+    channelAPI
+      .countSubChannel(account.result?.channel.idChannel)
+      .then((response) => {
+        setAmountSub(response.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // API
+  const getIsSub = () => {
+    if (myAccount) {
+      channelAPI
+        .checkChannelSubChannel(
+          myAccount?.channel?.idChannel,
+          account.result?.channel.idChannel
+        )
+        .then((response) => {
+          setIsSub(response.result);
+        })
+        .catch((error) => {});
+    } else {
+      setIsSub(false);
+    }
+  };
+
+  // API
+  const handleSubscribe = () => {
+    channelAPI
+      .createChannelSubChannel({
+        idChannel1: myAccount.channel.idChannel,
+        idChannel2: account.result.channel.idChannel,
+      })
+      .then((response) => {
+        console.log(response);
+        getIsSub();
+        getAmountSub();
+        handleOpenSnackbar(
+          "success",
+          `Bạn vừa đăng ký kênh ${account.result.channel.idChannel}`
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // API
+  const handleUnSubscribe = () => {
+    channelAPI
+      .deleteChannelSubChannel(
+        myAccount.channel.idChannel,
+        account.result.channel.idChannel
+      )
+      .then((response) => {
+        console.log(response);
+        getIsSub();
+        getAmountSub();
+        handleOpenSnackbar(
+          "info",
+          `Bạn vừa hủy đăng ký kênh ${account.result.channel.idChannel}`
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getIsSub();
+  }, []);
 
   return (
     <>
@@ -117,25 +219,57 @@ export default function MyChannel() {
               </Typography>
             </Grid>
           </Grid>
-          {myAccount.channel.nameUnique !==
-            account.result.channel.nameUnique && (
-            <Chip
-              label='Đăng ký'
-              sx={{
-                p: "4px",
-                mt: "12px",
-                bgcolor: "text.primary",
-                color: "secondary.main",
-                "&:hover": {
+          {myAccount?.channel.nameUnique !==
+            account.result?.channel.nameUnique &&
+            (!isSub ? (
+              <Chip
+                label='Đăng ký'
+                sx={{
+                  p: "4px",
                   bgcolor: "text.primary",
-                  opacity: "0.9",
-                },
-                fontSize: "14px",
-                fontWeight: "600",
-                cursor: "pointer",
-              }}
-            />
-          )}
+                  color: "secondary.main",
+                  "&:hover": {
+                    bgcolor: "text.primary",
+                    opacity: "0.9",
+                  },
+                  fontSize: "14px",
+                  fontWeight: "600",
+                }}
+                onClick={() => {
+                  if (myAccount) {
+                    handleSubscribe();
+                  } else {
+                    handleOpenSnackbar(
+                      "error",
+                      "Đăng nhập để có thể thực hiện chức năng!"
+                    );
+                  }
+                }}
+              />
+            ) : (
+              <Chip
+                icon={<NotificationsActiveIcon />}
+                label='Đã đăng ký'
+                sx={{
+                  p: "4px",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  "& .MuiChip-icon": {
+                    color: "text.primary",
+                  },
+                }}
+                onClick={() => {
+                  if (myAccount) {
+                    handleUnSubscribe();
+                  } else {
+                    handleOpenSnackbar(
+                      "error",
+                      "Đăng nhập để có thể thực hiện chức năng!"
+                    );
+                  }
+                }}
+              />
+            ))}
           <Paper sx={{ display: "flex", mt: "12px" }}>
             <IconButton type='button'>
               <SearchIcon />
@@ -190,6 +324,21 @@ export default function MyChannel() {
           </TabPanel>
         </TabContext>
       </Paper>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={stateAlert}
+          variant='filled'
+          sx={{ width: "100%" }}
+        >
+          {contentAlert}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

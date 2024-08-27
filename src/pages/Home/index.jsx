@@ -2,52 +2,37 @@ import { Grid } from "@mui/material";
 import React from "react";
 import MediaCard from "../../components/MediaCard";
 import ListCategory from "../../components/ListCategory";
+import { Link, useLoaderData } from "react-router-dom";
 
 export default function Home() {
+  const { videos } = useLoaderData();
+
+  console.log(videos);
+
   return (
     <>
       <ListCategory />
       <Grid container spacing={2}>
-        <Grid item md={6} sm={12} xs={12}>
-          <MediaCard
-            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
-            nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
-            Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-            nameChannel='Name Channel'
-            viewVideo='View Video'
-            dateTimeCreateVideo='Date time create video'
-          />
-        </Grid>
-        <Grid item md={6} sm={12} xs={12}>
-          <MediaCard
-            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
-            nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
-            Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-            nameChannel='Name Channel'
-            viewVideo='View Video'
-            dateTimeCreateVideo='Date time create video'
-          />
-        </Grid>
-        <Grid item md={6} sm={12} xs={12}>
-          <MediaCard
-            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
-            nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
-            Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-            nameChannel='Name Channel'
-            viewVideo='View Video'
-            dateTimeCreateVideo='Date time create video'
-          />
-        </Grid>
-        <Grid item md={6} sm={12} xs={12}>
-          <MediaCard
-            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
-            nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
-            Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-            nameChannel='Name Channel'
-            viewVideo='View Video'
-            dateTimeCreateVideo='Date time create video'
-          />
-        </Grid>
+        {videos.result.map((item) => {
+          return (
+            <Grid item md={6} sm={12} xs={12} key={item.idVideo}>
+              <Link
+                to={`/watch/${item.idVideo}`}
+                style={{ textDecoration: "none" }}
+              >
+                <MediaCard
+                  avatar={item.channel.avatar}
+                  title={item.title}
+                  nameChannel={item.channel.name}
+                  nameUnique={item.channel.nameUnique}
+                  viewVideo={item.view}
+                  dateTimeCreateVideo={item.dateTimeCreate}
+                  imagePreview={item.imagePreview}
+                />
+              </Link>
+            </Grid>
+          );
+        })}
       </Grid>
     </>
   );

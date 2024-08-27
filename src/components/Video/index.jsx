@@ -7,7 +7,7 @@ import screenfull from "screenfull";
 
 const PlayerWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
-  borderRadius: "8px",
+  borderRadius: "12px",
   overflow: "hidden",
 }));
 

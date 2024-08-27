@@ -1,12 +1,21 @@
-import { Paper, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import {
+  Paper,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Box,
+} from "@mui/material";
 import React from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
+import { Link } from "react-router-dom";
 
 export default function WatchedVideoCard({
   imagePreview,
   title,
   nameChannel,
+  nameUnique,
   viewVideo,
   dateTimeCreateVideo,
 }) {
@@ -15,22 +24,32 @@ export default function WatchedVideoCard({
       sx={{
         display: "flex",
         alignItems: "center",
-        height: "138px",
         mt: "16px",
         cursor: "pointer",
+        gap: "16px",
       }}
     >
-      <CardMedia
-        component='img'
-        image={imagePreview}
+      <Box sx={{ width: "246px", height: "138px" }}>
+        <CardMedia
+          component='img'
+          image={imagePreview}
+          sx={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            borderRadius: "8px",
+          }}
+          alt=''
+        />
+      </Box>
+      <CardContent
         sx={{
-          width: "246px",
+          width: "calc(100% - 246px)",
           height: "138px",
-          objectFit: "contain",
+          p: "0",
+          "&:last-child": { p: "0" },
         }}
-        alt=''
-      />
-      <CardContent sx={{ flexGrow: "1" }}>
+      >
         <Typography
           variant='h6'
           sx={{
@@ -45,7 +64,9 @@ export default function WatchedVideoCard({
           {title}
         </Typography>
         <Paper sx={{ color: "customGreySubTitle.main" }}>
-          <Typography variant='subtitle2'>{nameChannel}</Typography>
+          <Link to={`/${nameUnique}`} style={{ textDecoration: "none" }}>
+            <Typography variant='subtitle2'>{nameChannel}</Typography>
+          </Link>
           <Typography variant='subtitle2' component='span' sx={{ mr: "8px" }}>
             {viewVideo} lượt xem
           </Typography>

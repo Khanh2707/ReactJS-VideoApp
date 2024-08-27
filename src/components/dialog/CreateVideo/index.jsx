@@ -392,7 +392,9 @@ export default function CreateVideo({
                         >
                           Tên tệp
                         </Typography>
-                        <Typography>{fileVideo && fileVideo.name}</Typography>
+                        <Typography sx={{ width: "320px" }}>
+                          {fileVideo && fileVideo.name}
+                        </Typography>
                       </Box>
                       <ListSelectCategory
                         category={category}
@@ -469,7 +471,9 @@ export default function CreateVideo({
                         >
                           Tên tệp
                         </Typography>
-                        <Typography>{fileVideo && fileVideo.name}</Typography>
+                        <Typography sx={{ width: "320px" }}>
+                          {fileVideo && fileVideo.name}
+                        </Typography>
                       </Box>
                     </Box>
                   </Box>

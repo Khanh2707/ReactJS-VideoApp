@@ -13,7 +13,6 @@ export default function MyVideoCard({
     <Card
       sx={{
         cursor: "pointer",
-        width: "100%",
       }}
     >
       <CardMedia
@@ -21,8 +20,8 @@ export default function MyVideoCard({
         image={imagePreview}
         sx={{
           width: "100%",
-          height: "140px",
-          objectFit: "contain",
+          height: "100%",
+          objectFit: "cover",
           backgroundColor: "#000",
         }}
         alt=''

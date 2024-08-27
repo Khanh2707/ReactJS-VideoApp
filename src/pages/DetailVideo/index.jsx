@@ -31,7 +31,7 @@ import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
 import ListCommentComment from "../../components/ListCommentComment";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
@@ -55,6 +55,7 @@ export default function DetailVideo() {
     video,
     amountSub: initialAmountSub,
     amountLike: initialAmountLike,
+    videos,
   } = useLoaderData();
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -168,15 +169,19 @@ export default function DetailVideo() {
 
   // API
   const getIsSub = () => {
-    channelAPI
-      .checkChannelSubChannel(
-        myAccount.channel.idChannel,
-        video.result.channel.idChannel
-      )
-      .then((response) => {
-        setIsSub(response.result);
-      })
-      .catch((error) => {});
+    if (myAccount) {
+      channelAPI
+        .checkChannelSubChannel(
+          myAccount?.channel?.idChannel,
+          video.result?.channel?.idChannel
+        )
+        .then((response) => {
+          setIsSub(response.result);
+        })
+        .catch((error) => {});
+    } else {
+      setIsSub(false);
+    }
   };
 
   // API
@@ -235,12 +240,19 @@ export default function DetailVideo() {
 
   // API
   const getIsLike = () => {
-    videoAPI
-      .checkChannelLikeVideo(myAccount.channel.idChannel, video.result.idVideo)
-      .then((response) => {
-        setIsLike(response.result);
-      })
-      .catch((error) => {});
+    if (myAccount) {
+      videoAPI
+        .checkChannelLikeVideo(
+          myAccount?.channel?.idChannel,
+          video.result.idVideo
+        )
+        .then((response) => {
+          setIsLike(response.result);
+        })
+        .catch((error) => {});
+    } else {
+      setIsLike(false);
+    }
   };
 
   // API
@@ -307,18 +319,21 @@ export default function DetailVideo() {
       });
   };
 
+  // API
   const handleWatchVideo = () => {
-    videoAPI
-      .createHistoryWatchVideo({
-        idChannel: myAccount.channel.idChannel,
-        idVideo: video.result.idVideo,
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (myAccount) {
+      videoAPI
+        .createHistoryWatchVideo({
+          idChannel: myAccount?.channel?.idChannel,
+          idVideo: video.result.idVideo,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -385,15 +400,25 @@ export default function DetailVideo() {
                 }}
               >
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <Avatar alt='' src={video.result.channel.avatar} />
+                  <Link
+                    to={`/${video.result.channel.nameUnique}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Avatar alt='' src={video.result.channel.avatar} />
+                  </Link>
                   <Box sx={{ ml: "12px", lineHeight: "1" }}>
-                    <Typography
-                      variant='subtitle1'
-                      sx={{ lineHeight: "1.3" }}
-                      fontWeight='600'
+                    <Link
+                      to={`/${video.result.channel.nameUnique}`}
+                      style={{ textDecoration: "none" }}
                     >
-                      {video.result.channel.name}
-                    </Typography>
+                      <Typography
+                        variant='subtitle1'
+                        sx={{ lineHeight: "1.3" }}
+                        fontWeight='600'
+                      >
+                        {video.result.channel.name}
+                      </Typography>
+                    </Link>
                     <Typography
                       variant='caption'
                       sx={{ color: "customGreySubTitle.main" }}
@@ -416,7 +441,16 @@ export default function DetailVideo() {
                         fontSize: "14px",
                         fontWeight: "600",
                       }}
-                      onClick={handleSubscribe}
+                      onClick={() => {
+                        if (myAccount) {
+                          handleSubscribe();
+                        } else {
+                          handleOpenSnackbar(
+                            "error",
+                            "Đăng nhập để có thể thực hiện chức năng!"
+                          );
+                        }
+                      }}
                     />
                   )}
                   {isSub && (
@@ -432,7 +466,16 @@ export default function DetailVideo() {
                           color: "text.primary",
                         },
                       }}
-                      onClick={handleUnSubscribe}
+                      onClick={() => {
+                        if (myAccount) {
+                          handleUnSubscribe();
+                        } else {
+                          handleOpenSnackbar(
+                            "error",
+                            "Đăng nhập để có thể thực hiện chức năng!"
+                          );
+                        }
+                      }}
                     />
                   )}
                 </Box>
@@ -449,7 +492,16 @@ export default function DetailVideo() {
                         color: "text.primary",
                       },
                     }}
-                    onClick={isLike ? handleUnLikeVideo : handleLikeVideo}
+                    onClick={() => {
+                      if (myAccount) {
+                        isLike ? handleUnLikeVideo() : handleLikeVideo();
+                      } else {
+                        handleOpenSnackbar(
+                          "error",
+                          "Đăng nhập để có thể thực hiện chức năng!"
+                        );
+                      }
+                    }}
                   />
                   <Chip
                     icon={<VerticalAlignBottomIcon />}
@@ -463,7 +515,16 @@ export default function DetailVideo() {
                         color: "text.primary",
                       },
                     }}
-                    onClick={handleDownloadVideo}
+                    onClick={() => {
+                      if (myAccount) {
+                        handleDownloadVideo();
+                      } else {
+                        handleOpenSnackbar(
+                          "error",
+                          "Đăng nhập để có thể thực hiện chức năng!"
+                        );
+                      }
+                    }}
                   />
                   <Box sx={{ position: "relative" }}>
                     <Chip
@@ -714,22 +775,24 @@ export default function DetailVideo() {
           </Box>
         </Box>
         <Box sx={{ ml: "24px" }}>
-          <RecommendVideoCard
-            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
-            nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
-            Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-            nameChannel='Name Channel'
-            viewVideo='View Video'
-            dateTimeCreateVideo='Date time create'
-          />
-          <RecommendVideoCard
-            title="Đúng, bạn có thể sử dụng thuộc tính whiteSpace: 'nowrap' để đảm bảo
-            nội dung không xuống dòng và sẽ hiển thị dấu ba chấm nếu quá dài.
-            Dưới đây là cách bạn có thể sử dụng thuộc tính này với"
-            nameChannel='Name Channel'
-            viewVideo='View Video'
-            dateTimeCreateVideo='Date time create'
-          />
+          {videos.result.map((item) => {
+            return (
+              <Link
+                to={`/watch/${item.idVideo}`}
+                style={{ textDecoration: "none" }}
+                key={item.idVideo}
+              >
+                <RecommendVideoCard
+                  title={item.title}
+                  nameChannel={item.channel.name}
+                  nameUnique={item.channel.nameUnique}
+                  viewVideo={item.view}
+                  dateTimeCreateVideo={item.dateTimeCreate}
+                  imagePreview={item.imagePreview}
+                />
+              </Link>
+            );
+          })}
         </Box>
       </Box>
       <ListRadioReportVideo
