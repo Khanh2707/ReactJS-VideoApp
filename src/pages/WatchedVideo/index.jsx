@@ -154,6 +154,7 @@ export default function WatchedVideo() {
                           nameUnique={item.channel.nameUnique}
                           viewVideo={item.view}
                           dateTimeCreateVideo={item.dateTimeCreate}
+                          descriptionChannel={item.description}
                         />
                       </Link>
                     );

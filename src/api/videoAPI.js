@@ -6,6 +6,11 @@ const videoAPI = {
     return axiosClient.get(url, config);
   },
 
+  getAllNotificationVideo: (params) => {
+    const url = `/api/videos/all/notification/video/${params}`;
+    return axiosClient.get(url);
+  },
+
   countLikeVideo: (params) => {
     const url = `/api/videos/count/like/${params}`;
     return axiosClient.get(url);

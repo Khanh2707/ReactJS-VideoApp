@@ -18,6 +18,7 @@ export default function WatchedVideoCard({
   nameUnique,
   viewVideo,
   dateTimeCreateVideo,
+  descriptionChannel,
 }) {
   const navigate = useNavigate();
 
@@ -85,6 +86,9 @@ export default function WatchedVideoCard({
               addSuffix: true,
               locale: vi,
             })}
+          </Typography>
+          <Typography variant='subtitle2' sx={{ mr: "8px" }}>
+            {descriptionChannel}
           </Typography>
         </Paper>
       </CardContent>

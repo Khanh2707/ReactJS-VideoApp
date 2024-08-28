@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function MediaCard({
   avatar,
@@ -20,6 +20,8 @@ export default function MediaCard({
   dateTimeCreateVideo,
   imagePreview,
 }) {
+  const navigate = useNavigate();
+
   return (
     <Card sx={{ cursor: "pointer" }}>
       <CardMedia
@@ -31,10 +33,13 @@ export default function MediaCard({
       />
       <CardContent sx={{ "&:last-child": { pb: "8px" } }}>
         <Grid container flexWrap='nowrap' spacing={2}>
-          <Grid item>
-            <Link to={`/${nameUnique}`} style={{ textDecoration: "none" }}>
-              <Avatar alt='' src={avatar} />
-            </Link>
+          <Grid
+            item
+            onClick={() => {
+              navigate(`/${nameUnique}`);
+            }}
+          >
+            <Avatar alt='' src={avatar} />
           </Grid>
           <Grid item>
             <Typography
@@ -50,14 +55,15 @@ export default function MediaCard({
             >
               {title}
             </Typography>
-            <Link to={`/${nameUnique}`} style={{ textDecoration: "none" }}>
-              <Typography
-                variant='subtitle2'
-                sx={{ color: "customGreySubTitle.main" }}
-              >
-                {nameChannel}
-              </Typography>
-            </Link>
+            <Typography
+              variant='subtitle2'
+              sx={{ color: "customGreySubTitle.main" }}
+              onClick={() => {
+                navigate(`/${nameUnique}`);
+              }}
+            >
+              {nameChannel}
+            </Typography>
             <Typography
               variant='subtitle2'
               component='span'

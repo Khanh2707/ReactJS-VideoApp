@@ -22,6 +22,7 @@ import accountAPI from "../api/accountAPI";
 import videoAPI from "../api/videoAPI";
 import channelAPI from "../api/channelAPI";
 import LikedVideo from "../pages/LikedVideo";
+import ResultSearch from "../pages/ResultSearch";
 
 const AuthLayout = () => {
   const { themeMode } = useContext(ThemeContext);
@@ -175,6 +176,19 @@ export default createBrowserRouter([
           {
             element: <AdminLayout />,
             path: "dashboard",
+          },
+          {
+            element: (
+              <DefaultLayout>
+                <ResultSearch />
+              </DefaultLayout>
+            ),
+            path: "/results",
+            loader: async () => {
+              const videos = await videoAPI.getAll();
+
+              return { videos };
+            },
           },
         ],
       },

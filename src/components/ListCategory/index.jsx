@@ -108,6 +108,9 @@ export default function ListCategory() {
                 label={item.nameCategory}
                 onClick={() => handleSelectCategory(item.idCategory)}
                 sx={{
+                  p: "4px",
+                  fontSize: "14px",
+                  fontWeight: "600",
                   bgcolor: selectedChip === item.idCategory ? "#3ea6ff" : "",
                   color: selectedChip === item.idCategory ? "common.white" : "",
                   "&:hover": {
