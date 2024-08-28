@@ -1,49 +1,116 @@
-import * as React from "react";
-import styles from "./Table.module.css";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { Box, Typography } from "@mui/material";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { vi } from "date-fns/locale";
+import videoAPI from "../../../api/videoAPI";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
+    field: "imagePreview",
+    headerName: "Video",
+    width: 200,
+    renderCell: (params) => (
+      <Box
+        sx={{
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <img
+          src={params.value}
+          alt='profile'
+          style={{ width: "160px", height: "90px" }}
+        />
+      </Box>
+    ),
   },
   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
+    field: "hide",
+    headerName: "Hiển thị",
+    valueGetter: (value) => {
+      return !value ? "Công khai" : "Riêng tư";
+    },
+  },
+  {
+    field: "ban",
+    headerName: "Hạn chế",
+    valueGetter: (value) => {
+      return value ? "Bị gỡ" : "Không";
+    },
+  },
+  {
+    field: "dateTimeCreate",
+    headerName: "Thời gian tạo",
     width: 160,
-    valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
+    valueGetter: (value) => {
+      return formatDistanceToNow(parseISO(value), {
+        addSuffix: true,
+        locale: vi,
+      });
+    },
+  },
+  {
+    field: "view",
+    headerName: "Lượt xem",
+    type: "number",
+  },
+  {
+    field: "amountLike",
+    headerName: "Lượt thích",
+    type: "number",
   },
 ];
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
+export default function BasicTable({ videos }) {
+  const [allVideos, setAllVideos] = useState([]);
 
-export default function BasicTable() {
+  useEffect(() => {
+    const fetchData = async () => {
+      const updatedVideos = await Promise.all(
+        videos.result.map(async (video) => {
+          try {
+            const amountLikeResponse = await videoAPI.countLikeVideo(
+              video.idVideo
+            );
+            const amountLike = amountLikeResponse.result;
+
+            return {
+              ...video,
+              amountLike,
+            };
+          } catch (error) {
+            console.log(
+              "Error fetching amountLike for video:",
+              video.idVideo,
+              error
+            );
+            return { ...video, amountLike: 0 };
+          }
+        })
+      );
+
+      setAllVideos(updatedVideos);
+    };
+
+    fetchData();
+  }, [videos]);
+
   return (
     <>
-      <h3>Recent Orders</h3>
+      <Typography variant='h6' fontWeight='700' margin='16px 0'>
+        Tất cả video
+      </Typography>
       <DataGrid
-        rows={rows}
+        rows={allVideos}
         columns={columns}
+        getRowId={(row) => row.idVideo}
+        autoHeight={true}
+        rowHeight={110}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
+            paginationModel: { page: 0, pageSize: 4 },
           },
         }}
         pageSizeOptions={[5, 10]}

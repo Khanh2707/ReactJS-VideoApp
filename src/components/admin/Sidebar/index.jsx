@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
 import { Box, Typography } from "@mui/material";
+import OndemandVideoIcon from "@mui/icons-material/OndemandVideo";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 export default function Sidebar() {
   const [selected, setSelected] = useState(0);
@@ -17,12 +19,12 @@ export default function Sidebar() {
 
   const menuItemSidebar = [
     {
-      icon: <DashboardIcon />,
-      heading: "Trang quản trị",
+      icon: <OndemandVideoIcon />,
+      heading: "Thống kê video",
     },
     {
-      icon: <DashboardIcon />,
-      heading: "Thống kê số liệu",
+      icon: <AccountBoxIcon />,
+      heading: "Thống kê tài khoản",
     },
   ];
 
@@ -84,7 +86,7 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <>
+    <Box sx={{ width: "220px" }}>
       <div className={styles.bars} onClick={() => setExpanded(!expanded)}>
         <MenuIcon />
       </div>
@@ -97,11 +99,11 @@ export default function Sidebar() {
             direction: "left",
           }}
         >
-          <div className={styles.Sidebar}>{sidebarContent}</div>
+          <Box>{sidebarContent}</Box>
         </Drawer>
       ) : (
-        <div className={styles.Sidebar}>{sidebarContent}</div>
+        <Box>{sidebarContent}</Box>
       )}
-    </>
+    </Box>
   );
 }

@@ -1,20 +1,26 @@
 import React from "react";
-import styles from "./AdminLayout.module.css";
 import Sidebar from "../../admin/Sidebar";
 import MainDash from "../../admin/MainDash";
 import RightSide from "../../admin/RightSide";
 import { Paper } from "@mui/material";
+import { useLoaderData } from "react-router-dom";
 
 export default function AdminLayout() {
+  const { videos } = useLoaderData();
+
   return (
-    <Paper>
-      <div className={styles.App}>
-        <div className={styles.AppGlass}>
-          <Sidebar />
-          <MainDash />
-          <RightSide />
-        </div>
-      </div>
+    <Paper
+      sx={{
+        display: "flex",
+        width: "100%",
+        gap: "24px",
+        pt: "40px",
+        alignItems: "start",
+      }}
+    >
+      <Sidebar />
+      <MainDash videos={videos} />
+      <RightSide />
     </Paper>
   );
 }

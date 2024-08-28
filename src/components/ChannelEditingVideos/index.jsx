@@ -38,7 +38,7 @@ const columns = [
     field: "ban",
     headerName: "Hạn chế",
     valueGetter: (value) => {
-      return value ? "Bị gỡ" : "Không có";
+      return value ? "Bị gỡ" : "Không";
     },
   },
   {

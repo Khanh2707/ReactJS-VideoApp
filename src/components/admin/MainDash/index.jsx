@@ -1,14 +1,14 @@
 import React from "react";
-import styles from "./MainDash.module.css";
-import Cards from "../Cards";
 import Table from "../Table";
+import { Box, Typography } from "@mui/material";
 
-export default function MainDash() {
+export default function MainDash({ videos }) {
   return (
-    <div className={styles.MainDash}>
-      <h1>Dashboard</h1>
-      <Cards />
-      <Table />
-    </div>
+    <Box flexGrow='1'>
+      <Typography variant='h4' fontWeight='700' marginBottom='16px'>
+        Thống kê video
+      </Typography>
+      <Table videos={videos} />
+    </Box>
   );
 }
