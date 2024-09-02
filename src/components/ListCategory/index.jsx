@@ -6,9 +6,13 @@ import categoryVideoAPI from "../../api/categoryVideoAPI";
 
 const scrollBy = 200;
 
-export default function ListCategory() {
+export default function ListCategory({
+  selectedChip,
+  setSelectedChip,
+  setOpenBackdropVideos,
+}) {
   const [position, setPosition] = useState(0);
-  const [selectedChip, setSelectedChip] = useState(0);
+
   const [categories, setCategories] = useState([]);
   const [isOverflowing, setIsOverflowing] = useState(false);
 
@@ -40,6 +44,7 @@ export default function ListCategory() {
 
   const handleSelectCategory = (idCategory) => {
     setSelectedChip(idCategory);
+    setOpenBackdropVideos(true);
   };
 
   const checkOverflow = () => {

@@ -1,39 +1,102 @@
-import { Grid } from "@mui/material";
-import React from "react";
+import {
+  Backdrop,
+  Box,
+  CircularProgress,
+  Grid,
+  Typography,
+} from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 import MediaCard from "../../components/MediaCard";
 import ListCategory from "../../components/ListCategory";
 import { Link, useLoaderData } from "react-router-dom";
+import videoAPI from "../../api/videoAPI";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export default function Home() {
-  const { videos } = useLoaderData();
+  const { videos: allVideos } = useLoaderData();
 
-  console.log(videos);
+  const [selectedChip, setSelectedChip] = useState(0);
+  const [videosByCategory, setVideosByCategory] = useState(allVideos.result);
+  const [openBackdropVideos, setOpenBackdropVideos] = useState(false);
+
+  const { themeMode } = useContext(ThemeContext);
+
+  useEffect(() => {
+    if (selectedChip !== 0) {
+      videoAPI
+        .getAllByCategory(selectedChip)
+        .then((response) => {
+          setVideosByCategory(response.result);
+        })
+        .catch((error) => {})
+        .finally(() => {
+          setOpenBackdropVideos(false);
+        });
+    } else {
+      setVideosByCategory(allVideos.result);
+      setOpenBackdropVideos(false);
+    }
+  }, [selectedChip]);
 
   return (
     <>
-      <ListCategory />
-      <Grid container spacing={2}>
-        {videos.result.map((item) => {
-          return (
-            <Grid item md={6} sm={12} xs={12} key={item.idVideo}>
-              <Link
-                to={`/watch/${item.idVideo}`}
-                style={{ textDecoration: "none" }}
-              >
-                <MediaCard
-                  avatar={item.channel.avatar}
-                  title={item.title}
-                  nameChannel={item.channel.name}
-                  nameUnique={item.channel.nameUnique}
-                  viewVideo={item.view}
-                  dateTimeCreateVideo={item.dateTimeCreate}
-                  imagePreview={item.imagePreview}
-                />
-              </Link>
-            </Grid>
-          );
-        })}
+      <ListCategory
+        selectedChip={selectedChip}
+        setSelectedChip={setSelectedChip}
+        setOpenBackdropVideos={setOpenBackdropVideos}
+      />
+      <Grid container spacing={2} sx={{ position: "relative" }}>
+        {videosByCategory.map((item) => (
+          <Grid item md={6} sm={12} xs={12} key={item.idVideo}>
+            <Link
+              to={`/watch/${item.idVideo}`}
+              style={{ textDecoration: "none" }}
+            >
+              <MediaCard
+                avatar={item.channel.avatar}
+                title={item.title}
+                nameChannel={item.channel.name}
+                nameUnique={item.channel.nameUnique}
+                viewVideo={item.view}
+                dateTimeCreateVideo={item.dateTimeCreate}
+                imagePreview={item.imagePreview}
+              />
+            </Link>
+          </Grid>
+        ))}
+        <Backdrop
+          sx={{
+            zIndex: 100,
+            position: "absolute",
+            backgroundColor:
+              themeMode === "light"
+                ? "rgba(255, 255, 255, 0.5)"
+                : "rgba(15, 18, 20, 0.5)",
+          }}
+          open={openBackdropVideos}
+        >
+          {/* <CircularProgress
+            color='inherit'
+            sx={{
+              position: "absolute",
+              top: "150px",
+            }}
+          /> */}
+        </Backdrop>
       </Grid>
+      {videosByCategory.length == 0 && (
+        <Box
+          sx={{
+            width: "100%",
+            height: "calc(100vh - 400px)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography>Không có video nào thuộc thể loại này</Typography>
+        </Box>
+      )}
     </>
   );
 }

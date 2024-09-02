@@ -31,18 +31,23 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  getById: (param) => {
-    const url = `/api/videos/${param}`;
+  getById: (params) => {
+    const url = `/api/videos/${params}`;
     return axiosClient.get(url);
   },
 
-  getAllByChannelNameUnique: (param) => {
-    const url = `/api/videos/all/by/channel/name_unique/${param}`;
+  getAllByChannelNameUnique: (params) => {
+    const url = `/api/videos/all/by/channel/name_unique/${params}`;
     return axiosClient.get(url);
   },
 
   getAll: () => {
     const url = `/api/videos`;
+    return axiosClient.get(url);
+  },
+
+  getAllByCategory: (params) => {
+    const url = `/api/videos/all/by/category/${params}`;
     return axiosClient.get(url);
   },
 

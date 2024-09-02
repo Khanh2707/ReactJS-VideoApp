@@ -6,13 +6,17 @@ import SearchHeader from "../SearchHeader";
 import Notification from "../Notification";
 import MenuAvatarHeader from "../MenuAvatarHeader";
 import { Link, useNavigate } from "react-router-dom";
-import iconReact from "../../assets/react.svg";
+import vineoDark from "../../assets/vineo-dark.svg";
+import vineoLight from "../../assets/vineo-light.svg";
 import { AppContext } from "../../context/AppContext";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CreateVideo from "../dialog/CreateVideo";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export default function Header() {
   const [openDialogCreateVideo, setOpenDialogCreateVideo] = useState(false);
+
+  const { themeMode } = useContext(ThemeContext);
 
   const { myAccount } = useContext(AppContext);
 
@@ -38,7 +42,7 @@ export default function Header() {
           sx={{ display: "flex", alignItems: "center", height: "48px" }}
         >
           <Grid container alignItems='center' justifyContent='space-between'>
-            <Grid item>
+            <Grid item sx={{ pl: "16px" }}>
               <Link
                 to='/'
                 style={{
@@ -47,7 +51,11 @@ export default function Header() {
                   textAlign: "center",
                 }}
               >
-                <img src={iconReact} alt='' />
+                <img
+                  src={themeMode === "light" ? vineoDark : vineoLight}
+                  alt=''
+                  style={{ width: "100%" }}
+                />
               </Link>
             </Grid>
             <Grid item>

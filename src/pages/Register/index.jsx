@@ -163,7 +163,7 @@ export default function Register() {
               color: "customGreySubTitle.main",
             }}
           >
-            Xem video online trên ViewTube ❤️
+            Xem video online trên Vineo ❤️
           </Typography>
           <Box
             component='form'
