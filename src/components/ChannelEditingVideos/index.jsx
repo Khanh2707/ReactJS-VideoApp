@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import videoAPI from "../../api/videoAPI";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
@@ -19,20 +19,25 @@ const columns = [
           alignItems: "center",
         }}
       >
-        <img
-          src={params.value}
-          alt='profile'
-          style={{ width: "160px", height: "90px" }}
-        />
+        <Link to={`/watch/${params.row.idVideo}`}>
+          <img
+            src={params.value}
+            alt='profile'
+            style={{ width: "160px", height: "90px", display: "block" }}
+          />
+        </Link>
       </Box>
     ),
   },
   {
     field: "hide",
     headerName: "Hiển thị",
-    valueGetter: (value) => {
-      return !value ? "Công khai" : "Riêng tư";
-    },
+    editable: true,
+    type: "singleSelect",
+    valueOptions: [
+      { value: false, label: "Công khai" },
+      { value: true, label: "Riêng tư" },
+    ],
   },
   {
     field: "ban",
@@ -100,6 +105,7 @@ export default function ChannelEditingVideos() {
 
   return (
     <DataGrid
+      editMode='row'
       rows={allVideos}
       columns={columns}
       getRowId={(row) => row.idVideo}
@@ -111,7 +117,6 @@ export default function ChannelEditingVideos() {
         },
       }}
       pageSizeOptions={[5, 10]}
-      checkboxSelection
     />
   );
 }

@@ -163,6 +163,18 @@ export const AppLightTheme = createTheme({
           "& .MuiDataGrid-container--top [role=row]": {
             backgroundColor: "#fafbfb",
           },
+          "& .MuiDataGrid-row--editing .MuiDataGrid-cell": {
+            backgroundColor: "#fff",
+          },
+          "& .MuiDataGrid-cell.MuiDataGrid-cell--editing": {
+            backgroundColor: "#fff",
+          },
+          "& .MuiDataGrid-cell.MuiDataGrid-cell--editing:focus-within": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
         },
       },
     },
@@ -404,6 +416,21 @@ export const AppDarkTheme = createTheme({
           borderRadius: "0",
           "& .MuiDataGrid-container--top [role=row]": {
             backgroundColor: "#121212",
+          },
+          "& .MuiDataGrid-cell--editable": {
+            backgroundColor: "#0f1214",
+          },
+          "& .MuiDataGrid-row--editing .MuiDataGrid-cell": {
+            backgroundColor: "#0f1214",
+          },
+          "& .MuiDataGrid-cell.MuiDataGrid-cell--editing": {
+            backgroundColor: "#0f1214",
+          },
+          "& .MuiDataGrid-cell.MuiDataGrid-cell--editing:focus-within": {
+            outline: "none",
+          },
+          "& .MuiDataGrid-cell:focus": {
+            outline: "none",
           },
         },
       },
