@@ -21,6 +21,11 @@ const channelAPI = {
     return axiosClient.put(url, data, config);
   },
 
+  updateChannelInfoRaw: (params, data) => {
+    const url = `/api/channels/info-raw/${params}`;
+    return axiosClient.put(url, data);
+  },
+
   deleteChannelSubChannel: (idChannel1, idChannel2) => {
     const url = `/api/channels/sub/${idChannel1}/${idChannel2}`;
     return axiosClient.delete(url);
