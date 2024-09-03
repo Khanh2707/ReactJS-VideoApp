@@ -125,8 +125,8 @@ export default function WatchedVideo() {
                   position: "absolute",
                   backgroundColor:
                     themeMode === "light"
-                      ? "rgb(255, 255, 255)"
-                      : "rgb(15, 18, 20)",
+                      ? "rgba(255, 255, 255, 0)"
+                      : "rgba(15, 18, 20, 0)",
                 }}
                 open={openBackdropInfoVideo}
               >

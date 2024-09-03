@@ -13,7 +13,6 @@ import React, { useContext, useEffect, useState } from "react";
 import WatchedVideoCard from "../../components/WatchedVideoCard";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { AppContext } from "../../context/AppContext";
 import videoAPI from "../../api/videoAPI";
 import { Link } from "react-router-dom";
@@ -79,8 +78,8 @@ export default function LikedVideo() {
                   position: "absolute",
                   backgroundColor:
                     themeMode === "light"
-                      ? "rgb(255, 255, 255)"
-                      : "rgb(15, 18, 20)",
+                      ? "rgba(255, 255, 255, 0)"
+                      : "rgba(15, 18, 20, 0)",
                 }}
                 open={openBackdropInfoVideo}
               >

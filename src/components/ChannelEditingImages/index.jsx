@@ -16,7 +16,7 @@ import ConfirmDeleteChannelAvatar from "../dialog/ConfirmDeleteChannelAvatar";
 export default function ChannelEditingImages() {
   const { myAccount } = useContext(AppContext);
 
-  const [avatar, setAvatar] = useState(myAccount.channel.avatar);
+  const [avatar, setAvatar] = useState(myAccount?.channel.avatar);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [contentAlert, setContentAlert] = useState("");
   const [stateAlert, setStateAlert] = useState("success");

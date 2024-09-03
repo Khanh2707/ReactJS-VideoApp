@@ -45,7 +45,7 @@ export default function ChannelEditingDetails() {
   const [contentAlert, setContentAlert] = useState("");
   const [stateAlert, setStateAlert] = useState("success");
   const [descriptionLength, setDescriptionLength] = useState(
-    myAccount.channel.description.length
+    myAccount?.channel.description.length
   );
 
   const {
@@ -56,9 +56,9 @@ export default function ChannelEditingDetails() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      nameChannel: myAccount.channel.name,
-      nameUniqueChannel: myAccount.channel.nameUnique,
-      descriptionChannel: myAccount.channel.description,
+      nameChannel: myAccount?.channel.name,
+      nameUniqueChannel: myAccount?.channel.nameUnique,
+      descriptionChannel: myAccount?.channel.description,
     },
   });
 
