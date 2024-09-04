@@ -6,13 +6,13 @@ const videoAPI = {
     return axiosClient.get(url, config);
   },
 
-  getAllNotificationVideo: (params) => {
-    const url = `/api/videos/all/notification/video/${params}`;
+  countLikeVideo: (params) => {
+    const url = `/api/videos/count/like/${params}`;
     return axiosClient.get(url);
   },
 
-  countLikeVideo: (params) => {
-    const url = `/api/videos/count/like/${params}`;
+  countAllByChannelNameUnique: (param) => {
+    const url = `/api/videos/count/all/by/channel/name_unique/${param}`;
     return axiosClient.get(url);
   },
 
@@ -21,38 +21,38 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  getAllVideoChannelWatched: (params) => {
-    const url = `/api/videos/all/video/channel/watched/${params}`;
-    return axiosClient.get(url);
-  },
-
-  getAllVideoChannelLiked: (params) => {
-    const url = `/api/videos/all/video/channel/liked/${params}`;
-    return axiosClient.get(url);
-  },
-
   getById: (params) => {
     const url = `/api/videos/${params}`;
     return axiosClient.get(url);
   },
 
-  getAllByChannelNameUnique: (params) => {
-    const url = `/api/videos/all/by/channel/name_unique/${params}`;
+  getAllNotificationVideo: (params) => {
+    const url = `/api/videos/all/notification/video/${params}`;
     return axiosClient.get(url);
   },
 
-  getAll: () => {
-    const url = `/api/videos`;
+  getAllVideoChannelWatched: (idChannel, page, size) => {
+    const url = `/api/videos/all/video/channel/watched/${idChannel}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
-  getAllByCategory: (params) => {
-    const url = `/api/videos/all/by/category/${params}`;
+  getAllVideoChannelLiked: (idChannel, page, size) => {
+    const url = `/api/videos/all/video/channel/liked/${idChannel}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
-  countAllByChannelNameUnique: (param) => {
-    const url = `/api/videos/count/all/by/channel/name_unique/${param}`;
+  getAllByChannelNameUnique: (nameUniqueChannel, page, size) => {
+    const url = `/api/videos/all/by/channel/name_unique/${nameUniqueChannel}/pageable/${page}/${size}`;
+    return axiosClient.get(url);
+  },
+
+  getAll: (page, size) => {
+    const url = `/api/videos/pageable/${page}/${size}`;
+    return axiosClient.get(url);
+  },
+
+  getAllByCategory: (idCategory, page, size) => {
+    const url = `/api/videos/all/by/category/${idCategory}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 

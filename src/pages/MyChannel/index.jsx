@@ -12,6 +12,7 @@ import {
   Avatar,
   Snackbar,
   Alert,
+  Box,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
@@ -178,7 +179,15 @@ export default function MyChannel() {
           }}
           alt=''
         />
-        <CardContent sx={{ pt: "0", pb: "0" }}>
+        <CardContent
+          sx={{
+            pt: "0",
+            pb: "0",
+            "&: last-child": {
+              pb: "0",
+            },
+          }}
+        >
           <Typography variant='h4' sx={{ fontWeight: "700" }}>
             {account.result.channel.name}
           </Typography>
@@ -205,7 +214,7 @@ export default function MyChannel() {
             </Grid>
             <Grid item>
               <Typography variant='subtitle2'>
-                {videos.result.length} video
+                {videos.result.content.length} video
               </Typography>
             </Grid>
           </Grid>
@@ -219,78 +228,87 @@ export default function MyChannel() {
               </Typography>
             </Grid>
           </Grid>
-          {myAccount?.channel.nameUnique !==
-            account.result?.channel.nameUnique &&
-            (!isSub ? (
-              <Chip
-                label='Đăng ký'
-                sx={{
-                  p: "4px",
-                  bgcolor: "text.primary",
-                  color: "secondary.main",
-                  "&:hover": {
+          <Paper
+            sx={{
+              display: "flex",
+              mt: "12px",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            {myAccount?.channel.nameUnique !==
+              account.result?.channel.nameUnique &&
+              (!isSub ? (
+                <Chip
+                  label='Đăng ký'
+                  sx={{
+                    p: "4px",
                     bgcolor: "text.primary",
-                    opacity: "0.9",
-                  },
-                  fontSize: "14px",
-                  fontWeight: "600",
-                }}
-                onClick={() => {
-                  if (myAccount) {
-                    handleSubscribe();
-                  } else {
-                    handleOpenSnackbar(
-                      "error",
-                      "Đăng nhập để có thể thực hiện chức năng!"
-                    );
-                  }
-                }}
-              />
-            ) : (
-              <Chip
-                icon={<NotificationsActiveIcon />}
-                label='Đã đăng ký'
+                    color: "secondary.main",
+                    "&:hover": {
+                      bgcolor: "text.primary",
+                      opacity: "0.9",
+                    },
+                    fontSize: "14px",
+                    fontWeight: "600",
+                  }}
+                  onClick={() => {
+                    if (myAccount) {
+                      handleSubscribe();
+                    } else {
+                      handleOpenSnackbar(
+                        "error",
+                        "Đăng nhập để có thể thực hiện chức năng!"
+                      );
+                    }
+                  }}
+                />
+              ) : (
+                <Chip
+                  icon={<NotificationsActiveIcon />}
+                  label='Đã đăng ký'
+                  sx={{
+                    p: "4px",
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    "& .MuiChip-icon": {
+                      color: "text.primary",
+                    },
+                  }}
+                  onClick={() => {
+                    if (myAccount) {
+                      handleUnSubscribe();
+                    } else {
+                      handleOpenSnackbar(
+                        "error",
+                        "Đăng nhập để có thể thực hiện chức năng!"
+                      );
+                    }
+                  }}
+                />
+              ))}
+            <Box>
+              <IconButton type='button'>
+                <SearchIcon />
+              </IconButton>
+              <InputBase
+                value={searchValue}
+                onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
                 sx={{
-                  p: "4px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  "& .MuiChip-icon": {
-                    color: "text.primary",
-                  },
+                  flexGrow: 1,
+                  borderBottom: `1px solid ${theme.palette.text.primary}`,
                 }}
-                onClick={() => {
-                  if (myAccount) {
-                    handleUnSubscribe();
-                  } else {
-                    handleOpenSnackbar(
-                      "error",
-                      "Đăng nhập để có thể thực hiện chức năng!"
-                    );
-                  }
-                }}
+                placeholder='Tìm kiếm... '
               />
-            ))}
-          <Paper sx={{ display: "flex", mt: "12px" }}>
-            <IconButton type='button'>
-              <SearchIcon />
-            </IconButton>
-            <InputBase
-              value={searchValue}
-              onChange={handleSearchChange}
-              onKeyDown={handleKeyDown}
-              sx={{
-                flexGrow: 1,
-                borderBottom: `1px solid ${theme.palette.text.primary}`,
-              }}
-              placeholder='Tìm kiếm... '
-            />
-            <IconButton
-              type='button'
-              onClick={handleClearSearch}
-              sx={{ visibility: searchValue ? "visible" : "hidden" }}
-            >
-              <ClearIcon />
-            </IconButton>
+              <IconButton
+                type='button'
+                onClick={handleClearSearch}
+                sx={{ visibility: searchValue ? "visible" : "hidden" }}
+              >
+                <ClearIcon />
+              </IconButton>
+            </Box>
           </Paper>
         </CardContent>
       </Card>
@@ -303,7 +321,7 @@ export default function MyChannel() {
           </TabList>
           <TabPanel value='1' sx={{ pl: "0", pr: "0" }}>
             <Grid container spacing={2}>
-              {videos.result.map((item) => {
+              {videos.result.content.map((item) => {
                 return (
                   <Grid item md={4} sm={6} xs={12} key={item.idVideo}>
                     <Link

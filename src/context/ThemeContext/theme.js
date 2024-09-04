@@ -16,7 +16,7 @@ export const AppLightTheme = createTheme({
       main: "#606060",
     },
     customBgcolorNotification: {
-      main: "#f7f7f7",
+      main: "#fff",
     },
     customHoverBgcolorListItemButtonNotification: {
       main: "#f2f2f2",

@@ -45,7 +45,7 @@ export default function ChannelEditingDetails() {
   const [contentAlert, setContentAlert] = useState("");
   const [stateAlert, setStateAlert] = useState("success");
   const [descriptionLength, setDescriptionLength] = useState(
-    myAccount?.channel.description.length
+    myAccount?.channel.description?.length ?? 0
   );
 
   const {

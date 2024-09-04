@@ -16,7 +16,9 @@ export default function Home() {
   const { videos: allVideos } = useLoaderData();
 
   const [selectedChip, setSelectedChip] = useState(0);
-  const [videosByCategory, setVideosByCategory] = useState(allVideos.result);
+  const [videosByCategory, setVideosByCategory] = useState(
+    allVideos.result.content
+  );
   const [openBackdropVideos, setOpenBackdropVideos] = useState(false);
 
   const { themeMode } = useContext(ThemeContext);
@@ -24,16 +26,16 @@ export default function Home() {
   useEffect(() => {
     if (selectedChip !== 0) {
       videoAPI
-        .getAllByCategory(selectedChip)
+        .getAllByCategory(selectedChip, 0, 4)
         .then((response) => {
-          setVideosByCategory(response.result);
+          setVideosByCategory(response.result.content);
         })
         .catch((error) => {})
         .finally(() => {
           setOpenBackdropVideos(false);
         });
     } else {
-      setVideosByCategory(allVideos.result);
+      setVideosByCategory(allVideos.result.content);
       setOpenBackdropVideos(false);
     }
   }, [selectedChip]);

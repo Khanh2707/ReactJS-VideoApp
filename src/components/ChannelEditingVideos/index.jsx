@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import videoAPI from "../../api/videoAPI";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
+import { AppContext } from "../../context/AppContext";
 
 const columns = [
   {
@@ -69,39 +70,64 @@ const columns = [
 ];
 
 export default function ChannelEditingVideos() {
+  const { myAccount } = useContext(AppContext);
+
   const [allVideos, setAllVideos] = useState([]);
-  const { videos } = useLoaderData();
+  const [rowCount, setRowCount] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 4,
+  });
+
+  const { page, pageSize } = paginationModel;
 
   useEffect(() => {
     const fetchData = async () => {
-      const updatedVideos = await Promise.all(
-        videos.result.map(async (video) => {
-          try {
-            const amountLikeResponse = await videoAPI.countLikeVideo(
-              video.idVideo
-            );
-            const amountLike = amountLikeResponse.result;
+      try {
+        const videoResponse = await videoAPI.getAllByChannelNameUnique(
+          myAccount.channel.nameUnique,
+          page,
+          pageSize
+        );
 
-            return {
-              ...video,
-              amountLike,
-            };
-          } catch (error) {
-            console.log(
-              "Error fetching amountLike for video:",
-              video.idVideo,
-              error
-            );
-            return { ...video, amountLike: 0 };
-          }
-        })
-      );
+        const updatedVideos = await Promise.all(
+          videoResponse.result.content.map(async (video) => {
+            try {
+              const amountLikeResponse = await videoAPI.countLikeVideo(
+                video.idVideo
+              );
+              const amountLike = amountLikeResponse.result;
 
-      setAllVideos(updatedVideos);
+              return {
+                ...video,
+                amountLike,
+              };
+            } catch (error) {
+              console.log(
+                "Error fetching amountLike for video:",
+                video.idVideo,
+                error
+              );
+              return { ...video, amountLike: 0 };
+            }
+          })
+        );
+
+        setAllVideos(updatedVideos);
+        setRowCount(videoResponse.result.totalElements);
+      } catch (error) {
+        console.log("Error fetching videos:", error);
+      }
     };
 
     fetchData();
-  }, [videos]);
+  }, [myAccount.channel.nameUnique, page, pageSize]);
+
+  const handleProcessRowUpdate = (newRow) => {
+    console.log("Row updated:", newRow);
+
+    return newRow;
+  };
 
   return (
     <DataGrid
@@ -111,12 +137,12 @@ export default function ChannelEditingVideos() {
       getRowId={(row) => row.idVideo}
       autoHeight={true}
       rowHeight={110}
-      initialState={{
-        pagination: {
-          paginationModel: { page: 0, pageSize: 5 },
-        },
-      }}
-      pageSizeOptions={[5, 10]}
+      disableRowSelectionOnClick
+      processRowUpdate={handleProcessRowUpdate}
+      paginationMode='server'
+      rowCount={rowCount}
+      paginationModel={paginationModel}
+      onPaginationModelChange={setPaginationModel}
     />
   );
 }

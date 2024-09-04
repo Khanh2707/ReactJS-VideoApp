@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Chip } from "@mui/material";
 import CommentVideo from "../CommentVideo";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export default function ListCommentComment() {
+  const { themeMode } = useContext(ThemeContext);
+
   const [showListCommentComment, setShowListCommentComment] = useState(false);
 
   return (
@@ -17,7 +20,7 @@ export default function ListCommentComment() {
           bgcolor: "primary.main",
           color: "#3ea6ff",
           "&:hover": {
-            bgcolor: "#263850",
+            backgroundColor: themeMode === "light" ? "#def1ff" : "#263850",
           },
           fontSize: "14px",
           cursor: "pointer",

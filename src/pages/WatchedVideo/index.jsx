@@ -79,9 +79,9 @@ export default function WatchedVideo() {
   // API
   const getAllVideoChannelWatched = () => {
     videoAPI
-      .getAllVideoChannelWatched(myAccount?.channel?.idChannel)
+      .getAllVideoChannelWatched(myAccount?.channel?.idChannel, 0, 4)
       .then((response) => {
-        setWatchedVideos(response.result);
+        setWatchedVideos(response.result.content);
         setOpenBackdropInfoVideo(false);
       })
       .catch((error) => {

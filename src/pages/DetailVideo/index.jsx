@@ -351,7 +351,7 @@ export default function DetailVideo() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isSub, isLike]);
+  }, [video, isSub, isLike]);
 
   return (
     <>
@@ -779,7 +779,7 @@ export default function DetailVideo() {
           </Box>
         </Box>
         <Box sx={{ ml: "24px" }}>
-          {videos.result.map((item) => {
+          {videos.result.content.map((item) => {
             return (
               <Box
                 key={item.idVideo}

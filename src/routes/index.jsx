@@ -74,7 +74,7 @@ export default createBrowserRouter([
             ),
             path: "/",
             loader: async () => {
-              const videos = await videoAPI.getAll();
+              const videos = await videoAPI.getAll(0, 4);
 
               return { videos };
             },
@@ -86,7 +86,6 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/watch/:idVideo",
-            key: (params) => `/watch/${params.idVideo}`,
             loader: async ({ params }) => {
               const video = await videoAPI.getById(params.idVideo);
 
@@ -98,7 +97,7 @@ export default createBrowserRouter([
                 video.result.idVideo
               );
 
-              const videos = await videoAPI.getAll();
+              const videos = await videoAPI.getAll(0, 4);
 
               return { video, amountSub, amountLike, videos };
             },
@@ -116,7 +115,9 @@ export default createBrowserRouter([
               );
 
               const videos = await videoAPI.getAllByChannelNameUnique(
-                params.nameUniqueChannel
+                params.nameUniqueChannel,
+                0,
+                6
               );
 
               const amountSub = await channelAPI.countSubChannel(
@@ -165,11 +166,6 @@ export default createBrowserRouter([
               {
                 element: <ChannelEditingVideos />,
                 path: "videos",
-                loader: async () => {
-                  const videos = await videoAPI.getAll();
-
-                  return { videos };
-                },
               },
             ],
           },

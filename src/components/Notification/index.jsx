@@ -18,15 +18,18 @@ import videoAPI from "../../api/videoAPI";
 import { AppContext } from "../../context/AppContext";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
+import { useTheme } from "@emotion/react";
 
 export default function Notification() {
   const [showListNotification, setShowListNotification] = useState(false);
   const [notificationVideos, setNotificationVideos] = useState([]);
 
+  const { myAccount } = useContext(AppContext);
+
+  const theme = useTheme();
+
   const listNotificationRef = useRef(null);
   const notificationButtonRef = useRef(null);
-
-  const { myAccount } = useContext(AppContext);
 
   const getAllNotificationVideo = () => {
     videoAPI
@@ -85,6 +88,7 @@ export default function Notification() {
             borderRadius: "8px",
             overflow: "hidden",
             bgcolor: "customBgcolorNotification.main",
+            boxShadow: theme.palette.customBoxShadowMenu.main,
           }}
         >
           <Box
