@@ -8,7 +8,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import MediaCard from "../../components/MediaCard";
 import ListCategory from "../../components/ListCategory";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import videoAPI from "../../api/videoAPI";
 import { ThemeContext } from "../../context/ThemeContext";
 
@@ -22,6 +22,8 @@ export default function Home() {
   const [openBackdropVideos, setOpenBackdropVideos] = useState(false);
 
   const { themeMode } = useContext(ThemeContext);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedChip !== 0) {
@@ -49,21 +51,25 @@ export default function Home() {
       />
       <Grid container spacing={2} sx={{ position: "relative" }}>
         {videosByCategory.map((item) => (
-          <Grid item md={6} sm={12} xs={12} key={item.idVideo}>
-            <Link
-              to={`/watch/${item.idVideo}`}
-              style={{ textDecoration: "none" }}
-            >
-              <MediaCard
-                avatar={item.channel.avatar}
-                title={item.title}
-                nameChannel={item.channel.name}
-                nameUnique={item.channel.nameUnique}
-                viewVideo={item.view}
-                dateTimeCreateVideo={item.dateTimeCreate}
-                imagePreview={item.imagePreview}
-              />
-            </Link>
+          <Grid
+            item
+            md={6}
+            sm={12}
+            xs={12}
+            key={item.idVideo}
+            onClick={() => {
+              navigate(`/watch/${item.idVideo}`);
+            }}
+          >
+            <MediaCard
+              avatar={item.channel.avatar}
+              title={item.title}
+              nameChannel={item.channel.name}
+              nameUnique={item.channel.nameUnique}
+              viewVideo={item.view}
+              dateTimeCreateVideo={item.dateTimeCreate}
+              imagePreview={item.imagePreview}
+            />
           </Grid>
         ))}
         <Backdrop

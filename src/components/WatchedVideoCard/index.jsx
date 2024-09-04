@@ -69,7 +69,8 @@ export default function WatchedVideoCard({
         <Paper sx={{ color: "customGreySubTitle.main" }}>
           <Typography
             variant='subtitle2'
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               navigate(`/${nameUnique}`);
             }}
           >

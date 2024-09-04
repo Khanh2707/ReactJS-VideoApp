@@ -71,7 +71,8 @@ export default function RecommendVideoCard({
             variant='caption'
             component='div'
             sx={{ lineHeight: "1.1" }}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               navigate(`/${nameUnique}`);
             }}
           >

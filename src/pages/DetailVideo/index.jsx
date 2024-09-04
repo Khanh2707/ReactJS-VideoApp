@@ -342,7 +342,9 @@ export default function DetailVideo() {
     handleWatchVideo();
 
     getIsSub();
+    getAmountSub();
     getIsLike();
+    getAmountLike();
     if (isSub !== null && isLike !== null) {
       setOpenBackdropInfoVideo(false);
     }
@@ -351,7 +353,7 @@ export default function DetailVideo() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [video, isSub, isLike]);
+  }, [video, isSub, amountSub, isLike, amountLike]);
 
   return (
     <>
@@ -566,7 +568,17 @@ export default function DetailVideo() {
                         <List>
                           <ListItem
                             disablePadding
-                            onClick={handleClickOpenDialogListRadioReportVideo}
+                            onClick={() => {
+                              if (myAccount) {
+                                handleClickOpenDialogListRadioReportVideo();
+                              } else {
+                                handleOpenSnackbar(
+                                  "error",
+                                  "Đăng nhập để có thể thực hiện chức năng!"
+                                );
+                                setShowListActionVideo(false);
+                              }
+                            }}
                           >
                             <ListItemButton>
                               <EmojiFlagsIcon />

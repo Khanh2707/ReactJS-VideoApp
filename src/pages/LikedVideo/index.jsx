@@ -15,7 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { AppContext } from "../../context/AppContext";
 import videoAPI from "../../api/videoAPI";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext, useTheme } from "@emotion/react";
 import UpdateIcon from "@mui/icons-material/Update";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -30,6 +30,8 @@ export default function LikedVideo() {
   const { themeMode } = useContext(ThemeContext);
 
   const { myAccount } = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
@@ -95,10 +97,11 @@ export default function LikedVideo() {
                 <>
                   {likedVideos.map((item, index) => {
                     return (
-                      <Link
-                        to={`/watch/${item.idVideo}`}
-                        style={{ textDecoration: "none" }}
+                      <Box
                         key={item.idVideo}
+                        onClick={() => {
+                          navigate(`/watch/${item.idVideo}`);
+                        }}
                       >
                         <WatchedVideoCard
                           imagePreview={item.imagePreview}
@@ -108,7 +111,7 @@ export default function LikedVideo() {
                           viewVideo={item.view}
                           dateTimeCreateVideo={item.dateTimeCreate}
                         />
-                      </Link>
+                      </Box>
                     );
                   })}
                   {likedVideos.length === 0 && (

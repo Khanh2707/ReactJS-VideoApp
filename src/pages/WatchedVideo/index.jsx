@@ -18,7 +18,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AppContext } from "../../context/AppContext";
 import videoAPI from "../../api/videoAPI";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ThemeContext, useTheme } from "@emotion/react";
 import ConfirmDeleteAllWatchedVideo from "../../components/dialog/ConfirmDeleteAllWatchedVideo";
 import UpdateIcon from "@mui/icons-material/Update";
@@ -41,6 +41,8 @@ export default function WatchedVideo() {
   const { themeMode } = useContext(ThemeContext);
 
   const { myAccount } = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   const handleOpenSnackbar = (state, message) => {
     setOpenSnackbar(false);
@@ -142,10 +144,11 @@ export default function WatchedVideo() {
                 <>
                   {watchedVideos.map((item, index) => {
                     return (
-                      <Link
-                        to={`/watch/${item.idVideo}`}
-                        style={{ textDecoration: "none" }}
+                      <Box
                         key={item.idVideo}
+                        onClick={() => {
+                          navigate(`/watch/${item.idVideo}`);
+                        }}
                       >
                         <WatchedVideoCard
                           imagePreview={item.imagePreview}
@@ -156,7 +159,7 @@ export default function WatchedVideo() {
                           dateTimeCreateVideo={item.dateTimeCreate}
                           descriptionChannel={item.description}
                         />
-                      </Link>
+                      </Box>
                     );
                   })}
                   {watchedVideos.length === 0 && (

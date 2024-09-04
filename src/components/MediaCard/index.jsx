@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function MediaCard({
   avatar,
@@ -35,7 +35,8 @@ export default function MediaCard({
         <Grid container flexWrap='nowrap' spacing={2}>
           <Grid
             item
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               navigate(`/${nameUnique}`);
             }}
           >
@@ -58,7 +59,8 @@ export default function MediaCard({
             <Typography
               variant='subtitle2'
               sx={{ color: "customGreySubTitle.main" }}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 navigate(`/${nameUnique}`);
               }}
             >
