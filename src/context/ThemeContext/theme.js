@@ -141,21 +141,6 @@ export const AppLightTheme = createTheme({
         },
       },
     },
-    MuiMenuItem: {
-      styleOverrides: {
-        root: {
-          "&.Mui-selected": {
-            backgroundColor: "#f2f2f2",
-            "&:hover": {
-              backgroundColor: "#f2f2f2",
-            },
-          },
-          "&:hover": {
-            backgroundColor: "#f2f2f2",
-          },
-        },
-      },
-    },
     MuiDataGrid: {
       styleOverrides: {
         root: {
@@ -255,6 +240,48 @@ export const AppLightTheme = createTheme({
         icon: {
           "& .MuiSvgIcon-root": {
             color: "#fff",
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#0f0f0f",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#0f0f0f",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#0f0f0f",
+            borderWidth: "1px",
+          },
+        },
+        icon: {
+          color: "#0f0f0f",
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          boxShadow:
+            "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px",
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#f2f2f2",
+            "&:hover": {
+              backgroundColor: "#f2f2f2",
+            },
+          },
+          "&:hover": {
+            backgroundColor: "#f2f2f2",
           },
         },
       },
@@ -395,21 +422,6 @@ export const AppDarkTheme = createTheme({
         },
       },
     },
-    MuiMenuItem: {
-      styleOverrides: {
-        root: {
-          "&.Mui-selected": {
-            backgroundColor: "#3e3e3e",
-            "&:hover": {
-              backgroundColor: "#3e3e3e",
-            },
-          },
-          "&:hover": {
-            backgroundColor: "#3e3e3e",
-          },
-        },
-      },
-    },
     MuiDataGrid: {
       styleOverrides: {
         root: {
@@ -513,6 +525,47 @@ export const AppDarkTheme = createTheme({
         icon: {
           "& .MuiSvgIcon-root": {
             color: "#fff",
+          },
+        },
+      },
+    },
+    MuiSelect: {
+      styleOverrides: {
+        root: {
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#f1f1f1",
+          },
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#f1f1f1",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#f1f1f1",
+            borderWidth: "1px",
+          },
+        },
+        icon: {
+          color: "#f1f1f1",
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#282828",
+        },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#3e3e3e",
+            "&:hover": {
+              backgroundColor: "#3e3e3e",
+            },
+          },
+          "&:hover": {
+            backgroundColor: "#3e3e3e",
           },
         },
       },
