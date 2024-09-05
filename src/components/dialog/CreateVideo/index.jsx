@@ -65,7 +65,7 @@ export default function CreateVideo({
   const [openBackdropCreateVideo, setOpenBackdropCreateVideo] = useState(false);
 
   const { themeMode } = useContext(ThemeContext);
-  const { myAccount } = useContext(AppContext);
+  const { myAccount, sendNotification } = useContext(AppContext);
 
   const buttonSelectFileVideoRef = useRef(null);
   const videoControlsRef = useRef(null);
@@ -147,6 +147,11 @@ export default function CreateVideo({
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
+  const handleDisplayModeChange = (event) => {
+    setDisplayMode(event.target.value);
+    setIsSelectDisplayMode("");
+  };
+
   // API
   const handleFormSubmit = (formData) => {
     if (!fileImagePreview) {
@@ -187,6 +192,7 @@ export default function CreateVideo({
           })
           .then((response) => {
             console.log(response);
+            sendNotification();
           })
           .catch((error) => {
             console.log(error);
@@ -197,11 +203,6 @@ export default function CreateVideo({
           });
       }
     }
-  };
-
-  const handleDisplayModeChange = (event) => {
-    setDisplayMode(event.target.value);
-    setIsSelectDisplayMode("");
   };
 
   useEffect(() => {

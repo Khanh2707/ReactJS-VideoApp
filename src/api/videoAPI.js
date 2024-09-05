@@ -6,6 +6,11 @@ const videoAPI = {
     return axiosClient.get(url, config);
   },
 
+  countHistoryNotificationVideoFromTimeToTime: (idChannel) => {
+    const url = `/api/videos/count/history_notification/from_time_to_time/${idChannel}`;
+    return axiosClient.get(url);
+  },
+
   countLikeVideo: (params) => {
     const url = `/api/videos/count/like/${params}`;
     return axiosClient.get(url);
@@ -26,8 +31,8 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  getAllNotificationVideo: (params) => {
-    const url = `/api/videos/all/notification/video/${params}`;
+  getAllNotificationVideo: (idChannel, page, size) => {
+    const url = `/api/videos/all/notification/video/${idChannel}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
@@ -56,9 +61,9 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  createVideo: (data, config) => {
-    const url = "/api/videos";
-    return axiosClient.post(url, data, config);
+  createHistoryWatchVideo: (data) => {
+    const url = `/api/videos/watch`;
+    return axiosClient.post(url, data);
   },
 
   createChannelLikeVideo: (data) => {
@@ -66,9 +71,19 @@ const videoAPI = {
     return axiosClient.post(url, data);
   },
 
-  createHistoryWatchVideo: (data) => {
-    const url = `/api/videos/watch`;
-    return axiosClient.post(url, data);
+  updateCheckHistoryNotificationVideo: (idChannel) => {
+    const url = `/api/videos/check/history/notification/video/${idChannel}`;
+    return axiosClient.post(url);
+  },
+
+  createVideo: (data, config) => {
+    const url = "/api/videos";
+    return axiosClient.post(url, data, config);
+  },
+
+  updateIsCheckHistoryNotificationVideo: (idChannel, idNotificationVideo, data) => {
+    const url = `/api/videos/is_check/history/notification/video/${idChannel}/${idNotificationVideo}`;
+    return axiosClient.put(url, data);
   },
 
   deleteHistoryLikeVideo: (idChannel, idVideo) => {
