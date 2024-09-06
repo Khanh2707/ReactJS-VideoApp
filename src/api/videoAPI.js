@@ -81,6 +81,11 @@ const videoAPI = {
     return axiosClient.post(url, data, config);
   },
 
+  updateViewVideo: (idVideo) => {
+    const url = `/api/videos/view/${idVideo}`;
+    return axiosClient.put(url);
+  },
+
   updateIsCheckHistoryNotificationVideo: (idChannel, idNotificationVideo, data) => {
     const url = `/api/videos/is_check/history/notification/video/${idChannel}/${idNotificationVideo}`;
     return axiosClient.put(url, data);

@@ -339,6 +339,11 @@ export default function DetailVideo() {
   };
 
   useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+
     handleWatchVideo();
 
     getIsSub();
@@ -360,6 +365,7 @@ export default function DetailVideo() {
       <Box sx={{ display: "flex", pb: "450px" }}>
         <Box sx={{ width: "100%" }}>
           <Video
+            idVideo={video.result.idVideo}
             titleVideo={video.result.title}
             linkVideo={video.result.linkVideo}
           />
