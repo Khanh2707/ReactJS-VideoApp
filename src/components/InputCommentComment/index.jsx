@@ -3,6 +3,8 @@ import React, { useContext, useState } from "react";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import EmojiPicker from "emoji-picker-react";
 import { ThemeContext } from "../../context/ThemeContext";
+import videoAPI from "../../api/videoAPI";
+import { AppContext } from "../../context/AppContext";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -16,8 +18,16 @@ const textFieldStyles = {
   },
 };
 
-export default function InputCommentComment({ setOpenInputCommentComment }) {
+export default function InputCommentComment({
+  idCommentVideo,
+  setOpenInputCommentComment,
+  setShowListCommentComment,
+  getAllCommentComment,
+  countCommentByCommentVideo,
+  handleOpenSnackbar,
+}) {
   const { themeMode } = useContext(ThemeContext);
+  const { myAccount } = useContext(AppContext);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [valueComment, setValueComment] = useState("");
@@ -33,7 +43,11 @@ export default function InputCommentComment({ setOpenInputCommentComment }) {
   };
 
   const handlePostComment = () => {
-    console.log("Bình luận đã gửi:", valueComment);
+    createCommentComment({
+      content: valueComment,
+      idChannel: myAccount.channel.idChannel,
+      idCommentVideo: idCommentVideo,
+    });
     handleCancelComment();
   };
 
@@ -45,9 +59,25 @@ export default function InputCommentComment({ setOpenInputCommentComment }) {
     setValueComment((prev) => prev + e.emoji);
   };
 
+  const createCommentComment = (data) => {
+    videoAPI
+      .createCommentComment(data)
+      .then((response) => {
+        getAllCommentComment(idCommentVideo);
+        countCommentByCommentVideo(idCommentVideo);
+        setShowListCommentComment(true);
+        handleOpenSnackbar("success", "Bình luận thành công!");
+      })
+      .catch((error) => {});
+  };
+
   return (
     <Box sx={{ display: "flex", mt: "24px", width: "100%" }}>
-      <Avatar alt='' src='' sx={{ width: "24px", height: "24px" }} />
+      <Avatar
+        alt=''
+        src={myAccount.channel.avatar}
+        sx={{ width: "24px", height: "24px" }}
+      />
       <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
         <TextField
           variant='standard'

@@ -29,9 +29,8 @@ import CommentVideo from "../../components/CommentVideo";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
-import ListCommentComment from "../../components/ListCommentComment";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
@@ -51,6 +50,14 @@ const textFieldStyles = {
 };
 
 export default function DetailVideo() {
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const { themeMode } = useContext(ThemeContext);
+  const { myAccount } = useContext(AppContext);
+
+  const { idVideo } = useParams();
+
   const {
     video,
     amountSub: initialAmountSub,
@@ -79,14 +86,8 @@ export default function DetailVideo() {
   const [amountLike, setAmountLike] = useState(initialAmountLike.result);
   const [openBackdropCommentVideo, setOpenBackdropCommentVideo] =
     useState(false);
-
-  const theme = useTheme();
-
-  const { themeMode } = useContext(ThemeContext);
-
-  const { myAccount } = useContext(AppContext);
-
-  const navigate = useNavigate();
+  const [amountCommentVideo, setAmountCommentVideo] = useState(0);
+  const [listCommentVideo, setListCommentVideo] = useState([]);
 
   const handleClickOutside = (event) => {
     if (
@@ -126,8 +127,19 @@ export default function DetailVideo() {
   };
 
   const handlePostComment = () => {
-    console.log("Bình luận đã gửi:", valueComment);
-    handleCancelComment();
+    videoAPI
+      .createCommentVideo({
+        content: valueComment,
+        idChannel: myAccount.channel.idChannel,
+        idVideo: idVideo,
+      })
+      .then((response) => {
+        getAllCommentVideo();
+        countCommentVideosByVideo();
+        handleCancelComment();
+        handleOpenSnackbar("success", "Bình luận thành công!");
+      })
+      .catch((error) => {});
   };
 
   const toggleEmojiPicker = () => {
@@ -338,6 +350,26 @@ export default function DetailVideo() {
     }
   };
 
+  // API
+  const getAllCommentVideo = () => {
+    videoAPI
+      .getAllCommentVideo(idVideo)
+      .then((response) => {
+        setListCommentVideo(response.result);
+      })
+      .catch((error) => {});
+  };
+
+  // API
+  const countCommentVideosByVideo = () => {
+    videoAPI
+      .countCommentVideosByVideo(idVideo)
+      .then((response) => {
+        setAmountCommentVideo(response.result);
+      })
+      .catch((error) => {});
+  };
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -350,6 +382,9 @@ export default function DetailVideo() {
     getAmountSub();
     getIsLike();
     getAmountLike();
+
+    countCommentVideosByVideo();
+    getAllCommentVideo();
     if (isSub !== null && isLike !== null) {
       setOpenBackdropInfoVideo(false);
     }
@@ -635,7 +670,7 @@ export default function DetailVideo() {
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", mt: "24px" }}>
             <Typography variant='h6' fontWeight='600'>
-              85 bình luận
+              {amountCommentVideo} bình luận
             </Typography>
             <Box sx={{ position: "relative", ml: "32px" }}>
               <Box
@@ -686,7 +721,7 @@ export default function DetailVideo() {
             </Box>
           </Box>
           <Box sx={{ display: "flex", mt: "24px", width: "100%" }}>
-            <Avatar alt='' src='' />
+            <Avatar alt='' src={myAccount?.channel.avatar} />
             <Box
               sx={{ width: "100%", display: "flex", flexDirection: "column" }}
             >
@@ -760,21 +795,25 @@ export default function DetailVideo() {
             </Box>
           </Box>
           <Box sx={{ mt: "24px", position: "relative" }}>
-            <CommentVideo
-              avatar=''
-              nameUser='@khanhtranphuc5193'
-              dateTimeComment='1 giờ trước'
-              comment='hay quá 😃'
-              type='comment-video'
-            />
-            <ListCommentComment />
-            <CommentVideo
-              avatar=''
-              nameUser='@khanhtranphuc5193'
-              dateTimeComment='1 giờ trước'
-              comment='hay quá 😃'
-              type='comment-video'
-            />
+            {listCommentVideo.map((item) => {
+              return (
+                <CommentVideo
+                  key={item.idCommentVideo}
+                  idCommentVideo={item.idCommentVideo}
+                  avatar={item.channel.avatar}
+                  nameUnique={item.channel.nameUnique}
+                  dateTimeComment={formatDistanceToNow(
+                    parseISO(item.dateTimeComment),
+                    { addSuffix: true, locale: vi }
+                  )}
+                  comment={item.content}
+                  type='comment-video'
+                  getAllCommentVideo={getAllCommentVideo}
+                  countCommentVideosByVideo={countCommentVideosByVideo}
+                  handleOpenSnackbar={handleOpenSnackbar}
+                />
+              );
+            })}
             <Backdrop
               sx={{
                 zIndex: 100,

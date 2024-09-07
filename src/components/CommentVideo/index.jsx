@@ -20,6 +20,9 @@ import InputCommentComment from "../InputCommentComment";
 import { ThemeContext } from "../../context/ThemeContext";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import EmojiPicker from "emoji-picker-react";
+import { AppContext } from "../../context/AppContext";
+import videoAPI from "../../api/videoAPI";
+import ListCommentComment from "../ListCommentComment";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -34,18 +37,28 @@ const textFieldStyles = {
 };
 
 export default function CommentVideo({
+  idCommentVideo,
+  idCommentInComment,
   avatar,
-  nameUser,
+  nameUnique,
   dateTimeComment,
   comment,
   type,
+  getAllCommentVideo,
+  countCommentVideosByVideo,
+  handleOpenSnackbar,
 }) {
   const theme = useTheme();
+
+  const { myAccount } = useContext(AppContext);
 
   const [showActionEditCommented, setShowActionEditCommented] = useState(false);
   const [openDialogConfirmDeleteComment, setOpenDialogConfirmDeleteComment] =
     useState(false);
   const [openInputCommentComment, setOpenInputCommentComment] = useState(false);
+  const [listCommentComment, setListCommentComment] = useState([]);
+  const [amountCommentComment, setAmountCommentComment] = useState(0);
+  const [showListCommentComment, setShowListCommentComment] = useState(false);
 
   const editCommentedButtonRef = useRef(null);
   const listEditCommentedRef = useRef(null);
@@ -53,26 +66,30 @@ export default function CommentVideo({
   const { themeMode } = useContext(ThemeContext);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [valueEditComment, setValueEditComment] = useState(comment);
   const [openInputComment, setOpenInputComment] = useState(false);
-
-  const toggleEmojiPicker = () => {
-    setShowEmojiPicker((prev) => !prev);
-  };
+  const [valueComment, setValueComment] = useState(comment);
+  const [valueEditComment, setValueEditComment] = useState(comment);
 
   const handleCancelComment = () => {
-    setValueEditComment(comment);
+    setValueEditComment(valueComment);
     setShowEmojiPicker(false);
     setOpenInputComment(false);
   };
 
   const handlePostComment = () => {
-    console.log("Bình luận đã gửi:", valueEditComment);
+    if (type === "comment-video")
+      updateCommentVideoContent(idCommentVideo, valueEditComment);
+    else if (type === "comment-comment")
+      updateCommentCommentContent(idCommentInComment, valueEditComment);
     handleCancelComment();
   };
 
   const handleComment = (e) => {
     setValueEditComment(e.target.value);
+  };
+
+  const toggleEmojiPicker = () => {
+    setShowEmojiPicker((prev) => !prev);
   };
 
   const handleEmojiClick = (e) => {
@@ -97,6 +114,84 @@ export default function CommentVideo({
   const handleClickOpenDialogConfirmDeleteComment = () => {
     setOpenDialogConfirmDeleteComment(true);
     setShowActionEditCommented(false);
+  };
+
+  // API
+  const updateCommentVideoContent = (idCommentVideo, content) => {
+    videoAPI
+      .updateCommentVideoContent(idCommentVideo, {
+        content: content,
+      })
+      .then((response) => {
+        if (valueComment !== valueEditComment) {
+          setValueComment(response.result.content);
+          setValueEditComment(response.result.content);
+          handleOpenSnackbar(
+            "success",
+            "Thay đổi nội dung bình luận thành công!"
+          );
+        }
+      })
+      .catch((error) => {});
+  };
+
+  // API
+  const updateCommentCommentContent = (idCommentInComment, content) => {
+    videoAPI
+      .updateCommentCommentContent(idCommentInComment, {
+        content: content,
+      })
+      .then((response) => {
+        if (valueComment !== valueEditComment) {
+          setValueComment(response.result.content);
+          setValueEditComment(response.result.content);
+          handleOpenSnackbar(
+            "success",
+            "Thay đổi nội dung bình luận thành công!"
+          );
+        }
+      })
+      .catch((error) => {});
+  };
+
+  // API
+  const getAllCommentComment = (idCommentVideo) => {
+    if (idCommentVideo) {
+      videoAPI
+        .getAllCommentComment(idCommentVideo)
+        .then((response) => {
+          setListCommentComment(response.result);
+        })
+        .catch((error) => {});
+    }
+  };
+
+  // API
+  const countCommentByCommentVideo = () => {
+    if (idCommentVideo) {
+      videoAPI
+        .countCommentByCommentVideo(idCommentVideo)
+        .then((response) => {
+          setAmountCommentComment(response.result);
+        })
+        .catch((error) => {});
+    }
+  };
+
+  // API
+  const deleteCommentVideo = () => {
+    videoAPI
+      .deleteCommentVideo(idCommentVideo)
+      .then((response) => {})
+      .catch((error) => {});
+  };
+
+  // API
+  const deleteCommentComment = () => {
+    videoAPI
+      .deleteCommentComment(idCommentInComment)
+      .then((response) => {})
+      .catch((error) => {});
   };
 
   useEffect(() => {
@@ -136,7 +231,7 @@ export default function CommentVideo({
               sx={{ mr: "4px", fontSize: "13px" }}
               fontWeight={600}
             >
-              {nameUser}
+              {nameUnique}
             </Typography>
             <Typography
               variant='caption'
@@ -194,7 +289,7 @@ export default function CommentVideo({
                     onClick={handleCancelComment}
                   />
                   <Chip
-                    label='Bình luận'
+                    label='Chỉnh sửa'
                     sx={{
                       p: "4px",
                       fontSize: "14px",
@@ -215,71 +310,98 @@ export default function CommentVideo({
               </Box>
             </Box>
           ) : (
-            <Typography variant='subtitle2'>{comment}</Typography>
+            <Typography variant='subtitle2'>{valueComment}</Typography>
           )}
           {openInputCommentComment ? (
             <InputCommentComment
+              idCommentVideo={idCommentVideo}
               setOpenInputCommentComment={setOpenInputCommentComment}
+              setShowListCommentComment={setShowListCommentComment}
+              getAllCommentComment={getAllCommentComment}
+              countCommentByCommentVideo={countCommentByCommentVideo}
+              handleOpenSnackbar={handleOpenSnackbar}
             />
           ) : (
-            <Typography
-              sx={{ fontSize: "13px", mt: "8px", cursor: "pointer" }}
-              fontWeight={600}
-              onClick={() => setOpenInputCommentComment(true)}
-            >
-              Phản hồi
-            </Typography>
+            type !== "comment-comment" && (
+              <Typography
+                sx={{ fontSize: "13px", mt: "8px", cursor: "pointer" }}
+                fontWeight={600}
+                onClick={() => setOpenInputCommentComment(true)}
+              >
+                Phản hồi
+              </Typography>
+            )
           )}
         </Box>
-        <Box sx={{ position: "relative" }}>
-          <IconButton
-            ref={editCommentedButtonRef}
-            onClick={toggleEditCommented}
-          >
-            <MoreVertIcon sx={{ cursor: "pointer" }} />
-          </IconButton>
-          {showActionEditCommented && (
-            <Paper
-              ref={listEditCommentedRef}
-              sx={{
-                position: "absolute",
-                zIndex: "10",
-                minWidth: "150px",
-                borderRadius: "8px",
-                bgcolor: theme.palette.customBgcolorMenu.main,
-                boxShadow: theme.palette.customBoxShadowMenu.main,
-              }}
+        {myAccount?.channel.nameUnique === nameUnique && (
+          <Box sx={{ position: "relative" }}>
+            <IconButton
+              ref={editCommentedButtonRef}
+              onClick={toggleEditCommented}
             >
-              <List>
-                <ListItem
-                  disablePadding
-                  onClick={() => {
-                    setOpenInputComment(true);
-                    setShowActionEditCommented(false);
-                  }}
-                >
-                  <ListItemButton>
-                    <EditIcon />
-                    <Typography sx={{ ml: "12px" }}>Chỉnh sửa</Typography>
-                  </ListItemButton>
-                </ListItem>
-                <ListItem
-                  disablePadding
-                  onClick={handleClickOpenDialogConfirmDeleteComment}
-                >
-                  <ListItemButton>
-                    <DeleteIcon />
-                    <Typography sx={{ ml: "12px" }}>Xóa</Typography>
-                  </ListItemButton>
-                </ListItem>
-              </List>
-            </Paper>
-          )}
-        </Box>
+              <MoreVertIcon sx={{ cursor: "pointer" }} />
+            </IconButton>
+            {showActionEditCommented && (
+              <Paper
+                ref={listEditCommentedRef}
+                sx={{
+                  position: "absolute",
+                  zIndex: "10",
+                  minWidth: "150px",
+                  borderRadius: "8px",
+                  bgcolor: theme.palette.customBgcolorMenu.main,
+                  boxShadow: theme.palette.customBoxShadowMenu.main,
+                }}
+              >
+                <List>
+                  <ListItem
+                    disablePadding
+                    onClick={() => {
+                      setOpenInputComment(true);
+                      setShowActionEditCommented(false);
+                    }}
+                  >
+                    <ListItemButton>
+                      <EditIcon />
+                      <Typography sx={{ ml: "12px" }}>Chỉnh sửa</Typography>
+                    </ListItemButton>
+                  </ListItem>
+                  <ListItem
+                    disablePadding
+                    onClick={handleClickOpenDialogConfirmDeleteComment}
+                  >
+                    <ListItemButton>
+                      <DeleteIcon />
+                      <Typography sx={{ ml: "12px" }}>Xóa</Typography>
+                    </ListItemButton>
+                  </ListItem>
+                </List>
+              </Paper>
+            )}
+          </Box>
+        )}
       </Box>
+      <ListCommentComment
+        idCommentVideo={idCommentVideo}
+        showListCommentComment={showListCommentComment}
+        setShowListCommentComment={setShowListCommentComment}
+        listCommentComment={listCommentComment}
+        getAllCommentComment={getAllCommentComment}
+        amountCommentComment={amountCommentComment}
+        countCommentByCommentVideo={countCommentByCommentVideo}
+        getAllCommentVideo={getAllCommentVideo}
+        countCommentVideosByVideo={countCommentVideosByVideo}
+        handleOpenSnackbar={handleOpenSnackbar}
+      />
       <ConfirmDeleteCommentVideo
+        type={type}
         openDialogConfirmDeleteComment={openDialogConfirmDeleteComment}
         setOpenDialogConfirmDeleteComment={setOpenDialogConfirmDeleteComment}
+        deleteCommentVideo={deleteCommentVideo}
+        deleteCommentComment={deleteCommentComment}
+        getAllCommentVideo={getAllCommentVideo}
+        countCommentVideosByVideo={countCommentVideosByVideo}
+        handleOpenSnackbar={handleOpenSnackbar}
       />
     </>
   );
