@@ -56,9 +56,9 @@ export default function CommentVideo({
   const [openDialogConfirmDeleteComment, setOpenDialogConfirmDeleteComment] =
     useState(false);
   const [openInputCommentComment, setOpenInputCommentComment] = useState(false);
+  const [showListCommentComment, setShowListCommentComment] = useState(false);
   const [listCommentComment, setListCommentComment] = useState([]);
   const [amountCommentComment, setAmountCommentComment] = useState(0);
-  const [showListCommentComment, setShowListCommentComment] = useState(false);
 
   const editCommentedButtonRef = useRef(null);
   const listEditCommentedRef = useRef(null);
@@ -117,6 +117,26 @@ export default function CommentVideo({
   };
 
   // API
+  const getAllCommentComment = () => {
+    videoAPI
+      .getAllCommentComment(idCommentVideo)
+      .then((response) => {
+        setListCommentComment(response.result);
+      })
+      .catch((error) => {});
+  };
+
+  // API
+  const countCommentByCommentVideo = () => {
+    videoAPI
+      .countCommentByCommentVideo(idCommentVideo)
+      .then((response) => {
+        setAmountCommentComment(response.result);
+      })
+      .catch((error) => {});
+  };
+
+  // API
   const updateCommentVideoContent = (idCommentVideo, content) => {
     videoAPI
       .updateCommentVideoContent(idCommentVideo, {
@@ -155,34 +175,13 @@ export default function CommentVideo({
   };
 
   // API
-  const getAllCommentComment = (idCommentVideo) => {
-    if (idCommentVideo) {
-      videoAPI
-        .getAllCommentComment(idCommentVideo)
-        .then((response) => {
-          setListCommentComment(response.result);
-        })
-        .catch((error) => {});
-    }
-  };
-
-  // API
-  const countCommentByCommentVideo = () => {
-    if (idCommentVideo) {
-      videoAPI
-        .countCommentByCommentVideo(idCommentVideo)
-        .then((response) => {
-          setAmountCommentComment(response.result);
-        })
-        .catch((error) => {});
-    }
-  };
-
-  // API
   const deleteCommentVideo = () => {
     videoAPI
       .deleteCommentVideo(idCommentVideo)
-      .then((response) => {})
+      .then((response) => {
+        getAllCommentVideo();
+        countCommentVideosByVideo();
+      })
       .catch((error) => {});
   };
 
@@ -190,7 +189,11 @@ export default function CommentVideo({
   const deleteCommentComment = () => {
     videoAPI
       .deleteCommentComment(idCommentInComment)
-      .then((response) => {})
+      .then((response) => {
+        getAllCommentComment();
+        countCommentByCommentVideo();
+        countCommentVideosByVideo();
+      })
       .catch((error) => {});
   };
 
@@ -319,6 +322,7 @@ export default function CommentVideo({
               setShowListCommentComment={setShowListCommentComment}
               getAllCommentComment={getAllCommentComment}
               countCommentByCommentVideo={countCommentByCommentVideo}
+              countCommentVideosByVideo={countCommentVideosByVideo}
               handleOpenSnackbar={handleOpenSnackbar}
             />
           ) : (
@@ -381,26 +385,26 @@ export default function CommentVideo({
           </Box>
         )}
       </Box>
-      <ListCommentComment
-        idCommentVideo={idCommentVideo}
-        showListCommentComment={showListCommentComment}
-        setShowListCommentComment={setShowListCommentComment}
-        listCommentComment={listCommentComment}
-        getAllCommentComment={getAllCommentComment}
-        amountCommentComment={amountCommentComment}
-        countCommentByCommentVideo={countCommentByCommentVideo}
-        getAllCommentVideo={getAllCommentVideo}
-        countCommentVideosByVideo={countCommentVideosByVideo}
-        handleOpenSnackbar={handleOpenSnackbar}
-      />
+      {(idCommentVideo || idCommentInComment) &&
+        !(idCommentVideo && idCommentInComment) && (
+          <ListCommentComment
+            idCommentVideo={idCommentVideo}
+            showListCommentComment={showListCommentComment}
+            setShowListCommentComment={setShowListCommentComment}
+            countCommentVideosByVideo={countCommentVideosByVideo}
+            listCommentComment={listCommentComment}
+            amountCommentComment={amountCommentComment}
+            getAllCommentComment={getAllCommentComment}
+            countCommentByCommentVideo={countCommentByCommentVideo}
+            handleOpenSnackbar={handleOpenSnackbar}
+          />
+        )}
       <ConfirmDeleteCommentVideo
         type={type}
         openDialogConfirmDeleteComment={openDialogConfirmDeleteComment}
         setOpenDialogConfirmDeleteComment={setOpenDialogConfirmDeleteComment}
         deleteCommentVideo={deleteCommentVideo}
         deleteCommentComment={deleteCommentComment}
-        getAllCommentVideo={getAllCommentVideo}
-        countCommentVideosByVideo={countCommentVideosByVideo}
         handleOpenSnackbar={handleOpenSnackbar}
       />
     </>

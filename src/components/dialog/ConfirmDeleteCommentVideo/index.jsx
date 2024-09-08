@@ -14,15 +14,15 @@ export default function ConfirmDeleteCommentVideo({
   setOpenDialogConfirmDeleteComment,
   deleteCommentVideo,
   deleteCommentComment,
-  getAllCommentVideo,
-  countCommentVideosByVideo,
   handleOpenSnackbar,
 }) {
   const handleCloseDialogConfirmDeleteComment = () => {
-    if (type === "comment-video") deleteCommentVideo();
-    if (type === "comment-comment") deleteCommentComment();
-    getAllCommentVideo();
-    countCommentVideosByVideo();
+    if (type === "comment-video") {
+      deleteCommentVideo();
+    }
+    if (type === "comment-comment") {
+      deleteCommentComment();
+    }
     handleOpenSnackbar("info", "Xóa bình luận thành công!");
     setOpenDialogConfirmDeleteComment(false);
   };

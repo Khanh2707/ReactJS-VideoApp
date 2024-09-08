@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Chip } from "@mui/material";
@@ -11,24 +11,23 @@ export default function ListCommentComment({
   idCommentVideo,
   showListCommentComment,
   setShowListCommentComment,
-  listCommentComment,
-  getAllCommentComment,
-  amountCommentComment,
-  countCommentByCommentVideo,
-  getAllCommentVideo,
   countCommentVideosByVideo,
+  listCommentComment,
+  amountCommentComment,
+  getAllCommentComment,
+  countCommentByCommentVideo,
   handleOpenSnackbar,
 }) {
   const { themeMode } = useContext(ThemeContext);
 
   useEffect(() => {
-    getAllCommentComment(idCommentVideo);
-    countCommentByCommentVideo(idCommentVideo);
-  }, []);
+    getAllCommentComment();
+    countCommentByCommentVideo();
+  }, [getAllCommentComment, countCommentByCommentVideo]);
 
   return (
     <>
-      {amountCommentComment != 0 && (
+      {amountCommentComment !== 0 && (
         <Chip
           icon={
             showListCommentComment ? <ExpandLessIcon /> : <ExpandMoreIcon />
@@ -53,25 +52,25 @@ export default function ListCommentComment({
       )}
       {showListCommentComment && (
         <Box sx={{ ml: "62px" }}>
-          {listCommentComment.map((item) => {
-            return (
-              <CommentVideo
-                key={item.idCommentInComment}
-                idCommentInComment={item.idCommentInComment}
-                avatar={item.channel.avatar}
-                nameUnique={item.channel.nameUnique}
-                dateTimeComment={formatDistanceToNow(
-                  parseISO(item.dateTimeComment),
-                  { addSuffix: true, locale: vi }
-                )}
-                comment={item.content}
-                type='comment-comment'
-                getAllCommentVideo={getAllCommentVideo}
-                countCommentVideosByVideo={countCommentVideosByVideo}
-                handleOpenSnackbar={handleOpenSnackbar}
-              />
-            );
-          })}
+          {listCommentComment.map((item) => (
+            <CommentVideo
+              key={item.idCommentInComment}
+              idCommentVideo={idCommentVideo}
+              idCommentInComment={item.idCommentInComment}
+              avatar={item.channel.avatar}
+              nameUnique={item.channel.nameUnique}
+              dateTimeComment={formatDistanceToNow(
+                parseISO(item.dateTimeComment),
+                { addSuffix: true, locale: vi }
+              )}
+              comment={item.content}
+              type='comment-comment'
+              countCommentVideosByVideo={countCommentVideosByVideo}
+              handleOpenSnackbar={handleOpenSnackbar}
+              getAllCommentComment={getAllCommentComment}
+              countCommentByCommentVideo={countCommentByCommentVideo}
+            />
+          ))}
         </Box>
       )}
     </>

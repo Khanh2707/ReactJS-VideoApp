@@ -24,6 +24,7 @@ export default function InputCommentComment({
   setShowListCommentComment,
   getAllCommentComment,
   countCommentByCommentVideo,
+  countCommentVideosByVideo,
   handleOpenSnackbar,
 }) {
   const { themeMode } = useContext(ThemeContext);
@@ -63,8 +64,9 @@ export default function InputCommentComment({
     videoAPI
       .createCommentComment(data)
       .then((response) => {
-        getAllCommentComment(idCommentVideo);
-        countCommentByCommentVideo(idCommentVideo);
+        getAllCommentComment();
+        countCommentByCommentVideo();
+        countCommentVideosByVideo();
         setShowListCommentComment(true);
         handleOpenSnackbar("success", "Bình luận thành công!");
       })

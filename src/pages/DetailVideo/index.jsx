@@ -355,6 +355,7 @@ export default function DetailVideo() {
     videoAPI
       .getAllCommentVideo(idVideo)
       .then((response) => {
+        console.log("abc");
         setListCommentVideo(response.result);
       })
       .catch((error) => {});
