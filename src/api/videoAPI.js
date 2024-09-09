@@ -51,6 +51,16 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
+  getAllNotificationCommentComment: (idChannel, page, size) => {
+    const url = `/api/videos/all/notification/comment_comment/${idChannel}/pageable/${page}/${size}`;
+    return axiosClient.get(url);
+  },
+
+  getAllNotificationCommentVideo: (idChannel, page, size) => {
+    const url = `/api/videos/all/notification/comment_video/${idChannel}/pageable/${page}/${size}`;
+    return axiosClient.get(url);
+  },
+
   getAllNotificationVideo: (idChannel, page, size) => {
     const url = `/api/videos/all/notification/video/${idChannel}/pageable/${page}/${size}`;
     return axiosClient.get(url);

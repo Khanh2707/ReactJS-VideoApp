@@ -22,10 +22,8 @@ export default function InputCommentComment({
   idCommentVideo,
   setOpenInputCommentComment,
   setShowListCommentComment,
-  getAllCommentComment,
-  countCommentByCommentVideo,
-  countCommentVideosByVideo,
   handleOpenSnackbar,
+  handleRefreshCommentComment,
 }) {
   const { themeMode } = useContext(ThemeContext);
   const { myAccount } = useContext(AppContext);
@@ -44,12 +42,19 @@ export default function InputCommentComment({
   };
 
   const handlePostComment = () => {
-    createCommentComment({
-      content: valueComment,
-      idChannel: myAccount.channel.idChannel,
-      idCommentVideo: idCommentVideo,
-    });
-    handleCancelComment();
+    videoAPI
+      .createCommentComment({
+        content: valueComment,
+        idChannel: myAccount.channel.idChannel,
+        idCommentVideo: idCommentVideo,
+      })
+      .then((response) => {
+        setShowListCommentComment(true);
+        handleOpenSnackbar("success", "Bình luận thành công!");
+        handleRefreshCommentComment();
+        handleCancelComment();
+      })
+      .catch((error) => {});
   };
 
   const handleComment = (e) => {
@@ -58,19 +63,6 @@ export default function InputCommentComment({
 
   const handleEmojiClick = (e) => {
     setValueComment((prev) => prev + e.emoji);
-  };
-
-  const createCommentComment = (data) => {
-    videoAPI
-      .createCommentComment(data)
-      .then((response) => {
-        getAllCommentComment();
-        countCommentByCommentVideo();
-        countCommentVideosByVideo();
-        setShowListCommentComment(true);
-        handleOpenSnackbar("success", "Bình luận thành công!");
-      })
-      .catch((error) => {});
   };
 
   return (

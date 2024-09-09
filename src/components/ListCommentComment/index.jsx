@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Chip } from "@mui/material";
@@ -6,24 +6,45 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import CommentVideo from "../CommentVideo";
 import { ThemeContext } from "../../context/ThemeContext";
+import videoAPI from "../../api/videoAPI";
 
 export default function ListCommentComment({
   idCommentVideo,
   showListCommentComment,
   setShowListCommentComment,
   countCommentVideosByVideo,
-  listCommentComment,
-  amountCommentComment,
-  getAllCommentComment,
-  countCommentByCommentVideo,
   handleOpenSnackbar,
+  refresh,
 }) {
   const { themeMode } = useContext(ThemeContext);
+
+  const [listCommentComment, setListCommentComment] = useState([]);
+  const [amountCommentComment, setAmountCommentComment] = useState(0);
+
+  // API
+  const getAllCommentComment = () => {
+    videoAPI
+      .getAllCommentComment(idCommentVideo)
+      .then((response) => {
+        setListCommentComment(response.result);
+      })
+      .catch((error) => {});
+  };
+
+  // API
+  const countCommentByCommentVideo = () => {
+    videoAPI
+      .countCommentByCommentVideo(idCommentVideo)
+      .then((response) => {
+        setAmountCommentComment(response.result);
+      })
+      .catch((error) => {});
+  };
 
   useEffect(() => {
     getAllCommentComment();
     countCommentByCommentVideo();
-  }, [getAllCommentComment, countCommentByCommentVideo]);
+  }, [refresh]);
 
   return (
     <>

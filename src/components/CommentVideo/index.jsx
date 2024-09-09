@@ -10,7 +10,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -36,6 +42,17 @@ const textFieldStyles = {
   },
 };
 
+const initialState = { refresh: false };
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "TOGGLE_REFRESH_COMMENT_COMMENT":
+      return { ...state, refresh: !state.refresh };
+    default:
+      return state;
+  }
+};
+
 export default function CommentVideo({
   idCommentVideo,
   idCommentInComment,
@@ -46,19 +63,28 @@ export default function CommentVideo({
   type,
   getAllCommentVideo,
   countCommentVideosByVideo,
+  getAllCommentComment,
+  countCommentByCommentVideo,
   handleOpenSnackbar,
 }) {
   const theme = useTheme();
 
   const { myAccount } = useContext(AppContext);
 
+  const [stateRefreshCommentComment, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+
+  const handleRefreshCommentComment = () => {
+    dispatch({ type: "TOGGLE_REFRESH_COMMENT_COMMENT" });
+  };
+
   const [showActionEditCommented, setShowActionEditCommented] = useState(false);
   const [openDialogConfirmDeleteComment, setOpenDialogConfirmDeleteComment] =
     useState(false);
   const [openInputCommentComment, setOpenInputCommentComment] = useState(false);
   const [showListCommentComment, setShowListCommentComment] = useState(false);
-  const [listCommentComment, setListCommentComment] = useState([]);
-  const [amountCommentComment, setAmountCommentComment] = useState(0);
 
   const editCommentedButtonRef = useRef(null);
   const listEditCommentedRef = useRef(null);
@@ -114,26 +140,6 @@ export default function CommentVideo({
   const handleClickOpenDialogConfirmDeleteComment = () => {
     setOpenDialogConfirmDeleteComment(true);
     setShowActionEditCommented(false);
-  };
-
-  // API
-  const getAllCommentComment = () => {
-    videoAPI
-      .getAllCommentComment(idCommentVideo)
-      .then((response) => {
-        setListCommentComment(response.result);
-      })
-      .catch((error) => {});
-  };
-
-  // API
-  const countCommentByCommentVideo = () => {
-    videoAPI
-      .countCommentByCommentVideo(idCommentVideo)
-      .then((response) => {
-        setAmountCommentComment(response.result);
-      })
-      .catch((error) => {});
   };
 
   // API
@@ -315,18 +321,16 @@ export default function CommentVideo({
           ) : (
             <Typography variant='subtitle2'>{valueComment}</Typography>
           )}
-          {openInputCommentComment ? (
-            <InputCommentComment
-              idCommentVideo={idCommentVideo}
-              setOpenInputCommentComment={setOpenInputCommentComment}
-              setShowListCommentComment={setShowListCommentComment}
-              getAllCommentComment={getAllCommentComment}
-              countCommentByCommentVideo={countCommentByCommentVideo}
-              countCommentVideosByVideo={countCommentVideosByVideo}
-              handleOpenSnackbar={handleOpenSnackbar}
-            />
-          ) : (
-            type !== "comment-comment" && (
+          {type !== "comment-comment" &&
+            (openInputCommentComment ? (
+              <InputCommentComment
+                idCommentVideo={idCommentVideo}
+                setOpenInputCommentComment={setOpenInputCommentComment}
+                setShowListCommentComment={setShowListCommentComment}
+                handleOpenSnackbar={handleOpenSnackbar}
+                handleRefreshCommentComment={handleRefreshCommentComment}
+              />
+            ) : (
               <Typography
                 sx={{ fontSize: "13px", mt: "8px", cursor: "pointer" }}
                 fontWeight={600}
@@ -334,8 +338,7 @@ export default function CommentVideo({
               >
                 Phản hồi
               </Typography>
-            )
-          )}
+            ))}
         </Box>
         {myAccount?.channel.nameUnique === nameUnique && (
           <Box sx={{ position: "relative" }}>
@@ -392,11 +395,8 @@ export default function CommentVideo({
             showListCommentComment={showListCommentComment}
             setShowListCommentComment={setShowListCommentComment}
             countCommentVideosByVideo={countCommentVideosByVideo}
-            listCommentComment={listCommentComment}
-            amountCommentComment={amountCommentComment}
-            getAllCommentComment={getAllCommentComment}
-            countCommentByCommentVideo={countCommentByCommentVideo}
             handleOpenSnackbar={handleOpenSnackbar}
+            refresh={stateRefreshCommentComment.refresh}
           />
         )}
       <ConfirmDeleteCommentVideo

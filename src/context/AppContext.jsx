@@ -15,6 +15,11 @@ export const AppProvider = ({ children }) => {
     amountHistoryNotificationVideoFromTimeToTime,
     setAmountHistoryNotificationVideoFromTimeToTime,
   ] = useState(0);
+  const [notificationCommentVideos, setNotificationCommentVideos] = useState(
+    []
+  );
+  const [notificationCommentComments, setNotificationCommentComments] =
+    useState([]);
 
   const getAllNotificationVideo = (idChannel, page, size) => {
     videoAPI
@@ -32,6 +37,28 @@ export const AppProvider = ({ children }) => {
       .countHistoryNotificationVideoFromTimeToTime(idChannel)
       .then((response) => {
         setAmountHistoryNotificationVideoFromTimeToTime(response.result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getAllNotificationCommentVideo = (idChannel, page, size) => {
+    videoAPI
+      .getAllNotificationCommentVideo(idChannel, page, size)
+      .then((response) => {
+        setNotificationCommentVideos(response.result.content);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getAllNotificationCommentComment = (idChannel, page, size) => {
+    videoAPI
+      .getAllNotificationCommentComment(idChannel, page, size)
+      .then((response) => {
+        setNotificationCommentComments(response.result.content);
       })
       .catch((error) => {
         console.log(error);
@@ -140,6 +167,10 @@ export const AppProvider = ({ children }) => {
         getAllNotificationVideo,
         amountHistoryNotificationVideoFromTimeToTime,
         countHistoryNotificationVideoFromTimeToTime,
+        notificationCommentVideos,
+        getAllNotificationCommentVideo,
+        notificationCommentComments,
+        getAllNotificationCommentComment,
       }}
     >
       {children}

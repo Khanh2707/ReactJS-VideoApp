@@ -24,15 +24,48 @@ export default function Notification() {
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const [showListNotification, setShowListNotification] = useState(false);
-
   const {
     myAccount,
     notificationVideos,
     getAllNotificationVideo,
     amountHistoryNotificationVideoFromTimeToTime,
     countHistoryNotificationVideoFromTimeToTime,
+    notificationCommentVideos,
+    getAllNotificationCommentVideo,
+    notificationCommentComments,
+    getAllNotificationCommentComment,
   } = useContext(AppContext);
+
+  const [showListNotification, setShowListNotification] = useState(false);
+  const [mergedNotifications, setMergedNotification] = useState([]);
+
+  const handleMergeAndSortNotifications = () => {
+    const mergedNotifications = [
+      ...notificationVideos.map((item) => ({
+        ...item,
+        type: "video",
+        dateTime: item.video.dateTimeCreate,
+      })),
+      ...notificationCommentVideos.map((item) => ({
+        ...item,
+        type: "commentVideo",
+        dateTime: item.commentVideo.dateTimeComment,
+      })),
+      ...notificationCommentComments.map((item) => ({
+        ...item,
+        type: "commentComment",
+        dateTime: item.commentInComment.dateTimeComment,
+      })),
+    ];
+
+    mergedNotifications.sort(
+      (a, b) => new Date(b.dateTime) - new Date(a.dateTime)
+    );
+
+    console.log(mergedNotifications);
+
+    setMergedNotification(mergedNotifications);
+  };
 
   const listNotificationRef = useRef(null);
   const notificationButtonRef = useRef(null);
@@ -62,6 +95,8 @@ export default function Notification() {
   };
 
   useEffect(() => {
+    handleMergeAndSortNotifications();
+
     getAllNotificationVideo(myAccount.channel.idChannel, 0, 6);
     countHistoryNotificationVideoFromTimeToTime(myAccount.channel.idChannel);
 
