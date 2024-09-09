@@ -49,11 +49,11 @@ export default function InputCommentComment({
         idCommentVideo: idCommentVideo,
       })
       .then((response) => {
+        sendNotification();
         setShowListCommentComment(true);
         handleOpenSnackbar("success", "Bình luận thành công!");
         handleRefreshCommentComment();
         handleCancelComment();
-        sendNotification();
       })
       .catch((error) => {});
   };

@@ -67,6 +67,8 @@ export default function CommentVideo({
   getAllCommentComment,
   countCommentByCommentVideo,
   handleOpenSnackbar,
+  stateSortComment,
+  setOpenBackdropCommentVideo,
 }) {
   const theme = useTheme();
 
@@ -402,6 +404,8 @@ export default function CommentVideo({
             handleOpenSnackbar={handleOpenSnackbar}
             refresh={stateRefreshCommentComment.refresh}
             nameUniqueByVideo={nameUniqueByVideo}
+            stateSortComment={stateSortComment}
+            setOpenBackdropCommentVideo={setOpenBackdropCommentVideo}
           />
         )}
       <ConfirmDeleteCommentVideo

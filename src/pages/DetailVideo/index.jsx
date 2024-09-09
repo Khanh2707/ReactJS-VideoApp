@@ -88,6 +88,7 @@ export default function DetailVideo() {
     useState(false);
   const [amountCommentVideo, setAmountCommentVideo] = useState(0);
   const [listCommentVideo, setListCommentVideo] = useState([]);
+  const [stateSortComment, setStateSortComment] = useState("desc");
 
   const handleClickOutside = (event) => {
     if (
@@ -105,6 +106,11 @@ export default function DetailVideo() {
 
   const toggleListSortComment = () => {
     setShowListSortComment((prev) => !prev);
+  };
+
+  const handleSelectStateSortComment = (state) => {
+    setStateSortComment(state);
+    setShowListSortComment(false);
   };
 
   const togglelistActionVideo = () => {
@@ -353,10 +359,12 @@ export default function DetailVideo() {
 
   // API
   const getAllCommentVideo = () => {
+    setOpenBackdropCommentVideo(true);
     videoAPI
-      .getAllCommentVideo(idVideo)
+      .getAllCommentVideo(idVideo, stateSortComment)
       .then((response) => {
         setListCommentVideo(response.result);
+        setOpenBackdropCommentVideo(false);
       })
       .catch((error) => {});
   };
@@ -372,6 +380,11 @@ export default function DetailVideo() {
   };
 
   useEffect(() => {
+    countCommentVideosByVideo();
+    getAllCommentVideo();
+  }, [stateSortComment]);
+
+  useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -384,8 +397,6 @@ export default function DetailVideo() {
     getIsLike();
     getAmountLike();
 
-    countCommentVideosByVideo();
-    getAllCommentVideo();
     if (isSub !== null && isLike !== null) {
       setOpenBackdropInfoVideo(false);
     }
@@ -706,14 +717,20 @@ export default function DetailVideo() {
                   }}
                 >
                   <List>
-                    <ListItem disablePadding>
-                      <ListItemButton selected={true}>
-                        <Typography>Bình luận hàng đầu</Typography>
+                    <ListItem
+                      disablePadding
+                      onClick={() => handleSelectStateSortComment("desc")}
+                    >
+                      <ListItemButton selected={stateSortComment === "desc"}>
+                        <Typography>Mới nhất xếp trước</Typography>
                       </ListItemButton>
                     </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemButton>
-                        <Typography>Mới nhất xếp trước</Typography>
+                    <ListItem
+                      disablePadding
+                      onClick={() => handleSelectStateSortComment("asc")}
+                    >
+                      <ListItemButton selected={stateSortComment === "asc"}>
+                        <Typography>Mới nhất xếp sau</Typography>
                       </ListItemButton>
                     </ListItem>
                   </List>
@@ -813,6 +830,8 @@ export default function DetailVideo() {
                   getAllCommentVideo={getAllCommentVideo}
                   countCommentVideosByVideo={countCommentVideosByVideo}
                   handleOpenSnackbar={handleOpenSnackbar}
+                  stateSortComment={stateSortComment}
+                  setOpenBackdropCommentVideo={setOpenBackdropCommentVideo}
                 />
               );
             })}

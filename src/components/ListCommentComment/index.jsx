@@ -16,6 +16,8 @@ export default function ListCommentComment({
   handleOpenSnackbar,
   refresh,
   nameUniqueByVideo,
+  stateSortComment,
+  setOpenBackdropCommentVideo,
 }) {
   const { themeMode } = useContext(ThemeContext);
 
@@ -24,10 +26,12 @@ export default function ListCommentComment({
 
   // API
   const getAllCommentComment = () => {
+    setOpenBackdropCommentVideo(true);
     videoAPI
-      .getAllCommentComment(idCommentVideo)
+      .getAllCommentComment(idCommentVideo, stateSortComment)
       .then((response) => {
         setListCommentComment(response.result);
+        setOpenBackdropCommentVideo(false);
       })
       .catch((error) => {});
   };
@@ -92,6 +96,8 @@ export default function ListCommentComment({
               handleOpenSnackbar={handleOpenSnackbar}
               getAllCommentComment={getAllCommentComment}
               countCommentByCommentVideo={countCommentByCommentVideo}
+              stateSortComment={stateSortComment}
+              setOpenBackdropCommentVideo={setOpenBackdropCommentVideo}
             />
           ))}
         </Box>

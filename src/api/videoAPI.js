@@ -51,13 +51,13 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  getAllCommentComment: (idCommentVideo) => {
-    const url = `/api/comment_comments/by/comment_video/${idCommentVideo}`;
+  getAllCommentComment: (idCommentVideo, option) => {
+    const url = `/api/comment_comments/by/comment_video/${idCommentVideo}/${option}`;
     return axiosClient.get(url);
   },
 
-  getAllCommentVideo: (idVideo) => {
-    const url = `/api/comment_videos/by/video/${idVideo}`;
+  getAllCommentVideo: (idVideo, option) => {
+    const url = `/api/comment_videos/by/video/${idVideo}/${option}`;
     return axiosClient.get(url);
   },
 
