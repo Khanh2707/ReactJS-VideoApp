@@ -15,6 +15,7 @@ export default function ListCommentComment({
   countCommentVideosByVideo,
   handleOpenSnackbar,
   refresh,
+  nameUniqueByVideo,
 }) {
   const { themeMode } = useContext(ThemeContext);
 
@@ -80,6 +81,7 @@ export default function ListCommentComment({
               idCommentInComment={item.idCommentInComment}
               avatar={item.channel.avatar}
               nameUnique={item.channel.nameUnique}
+              nameUniqueByVideo={nameUniqueByVideo}
               dateTimeComment={formatDistanceToNow(
                 parseISO(item.dateTimeComment),
                 { addSuffix: true, locale: vi }

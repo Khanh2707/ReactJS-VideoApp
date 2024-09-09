@@ -16,8 +16,18 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
+  countHistoryNotificationCommentCommentFromTimeToTime: (idChannel) => {
+    const url = `/api/comment_comments/count/history_notification_comment_comment/from_time_to_time/${idChannel}`;
+    return axiosClient.get(url);
+  },
+
+  countHistoryNotificationCommentVideoFromTimeToTime: (idChannel) => {
+    const url = `/api/comment_videos/count/history_notification_comment_video/from_time_to_time/${idChannel}`;
+    return axiosClient.get(url);
+  },
+
   countHistoryNotificationVideoFromTimeToTime: (idChannel) => {
-    const url = `/api/videos/count/history_notification/from_time_to_time/${idChannel}`;
+    const url = `/api/videos/count/history_notification_video/from_time_to_time/${idChannel}`;
     return axiosClient.get(url);
   },
 
@@ -52,12 +62,12 @@ const videoAPI = {
   },
 
   getAllNotificationCommentComment: (idChannel, page, size) => {
-    const url = `/api/videos/all/notification/comment_comment/${idChannel}/pageable/${page}/${size}`;
+    const url = `/api/comment_comments/all/notification/comment_comment/${idChannel}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
   getAllNotificationCommentVideo: (idChannel, page, size) => {
-    const url = `/api/videos/all/notification/comment_video/${idChannel}/pageable/${page}/${size}`;
+    const url = `/api/comment_videos/all/notification/comment_video/${idChannel}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
@@ -111,6 +121,16 @@ const videoAPI = {
     return axiosClient.post(url, data);
   },
 
+  updateCheckHistoryNotificationCommentComment: (idChannel) => {
+    const url = `/api/comment_comments/check/history/notification/comment_comment/${idChannel}`;
+    return axiosClient.post(url);
+  },
+
+  updateCheckHistoryNotificationCommentVideo: (idChannel) => {
+    const url = `/api/comment_videos/check/history/notification/comment_video/${idChannel}`;
+    return axiosClient.post(url);
+  },
+
   updateCheckHistoryNotificationVideo: (idChannel) => {
     const url = `/api/videos/check/history/notification/video/${idChannel}`;
     return axiosClient.post(url);
@@ -119,6 +139,33 @@ const videoAPI = {
   createVideo: (data, config) => {
     const url = "/api/videos";
     return axiosClient.post(url, data, config);
+  },
+
+  updateIsCheckHistoryNotificationCommentComment: (
+    idChannel,
+    idNotificationCommentComment,
+    data
+  ) => {
+    const url = `/api/comment_comments/is_check/history/notification/comment_comment/${idChannel}/${idNotificationCommentComment}`;
+    return axiosClient.put(url, data);
+  },
+
+  updateIsCheckHistoryNotificationCommentVideo: (
+    idChannel,
+    idNotificationCommentVideo,
+    data
+  ) => {
+    const url = `/api/comment_videos/is_check/history/notification/comment_video/${idChannel}/${idNotificationCommentVideo}`;
+    return axiosClient.put(url, data);
+  },
+
+  updateIsCheckHistoryNotificationVideo: (
+    idChannel,
+    idNotificationVideo,
+    data
+  ) => {
+    const url = `/api/videos/is_check/history/notification/video/${idChannel}/${idNotificationVideo}`;
+    return axiosClient.put(url, data);
   },
 
   updateCommentCommentContent: (idCommentInComment, data) => {
@@ -134,15 +181,6 @@ const videoAPI = {
   updateViewVideo: (idVideo) => {
     const url = `/api/videos/view/${idVideo}`;
     return axiosClient.put(url);
-  },
-
-  updateIsCheckHistoryNotificationVideo: (
-    idChannel,
-    idNotificationVideo,
-    data
-  ) => {
-    const url = `/api/videos/is_check/history/notification/video/${idChannel}/${idNotificationVideo}`;
-    return axiosClient.put(url, data);
   },
 
   deleteCommentVideo: (idCommentVideo) => {

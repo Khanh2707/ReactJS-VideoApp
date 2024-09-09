@@ -26,7 +26,7 @@ export default function InputCommentComment({
   handleRefreshCommentComment,
 }) {
   const { themeMode } = useContext(ThemeContext);
-  const { myAccount } = useContext(AppContext);
+  const { myAccount, sendNotification } = useContext(AppContext);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [valueComment, setValueComment] = useState("");
@@ -53,6 +53,7 @@ export default function InputCommentComment({
         handleOpenSnackbar("success", "Bình luận thành công!");
         handleRefreshCommentComment();
         handleCancelComment();
+        sendNotification();
       })
       .catch((error) => {});
   };

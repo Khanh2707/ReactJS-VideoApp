@@ -10,59 +10,83 @@ export const AppProvider = ({ children }) => {
   const [myAccount, setMyAccount] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stompClient, setStompClient] = useState(null);
-  const [notificationVideos, setNotificationVideos] = useState([]);
-  const [
-    amountHistoryNotificationVideoFromTimeToTime,
-    setAmountHistoryNotificationVideoFromTimeToTime,
-  ] = useState(0);
-  const [notificationCommentVideos, setNotificationCommentVideos] = useState(
-    []
-  );
-  const [notificationCommentComments, setNotificationCommentComments] =
-    useState([]);
+  const [mergedNotifications, setMergedNotification] = useState([]);
+  const [amountMergedNotification, setAmountMergedNotification] = useState(0);
 
-  const getAllNotificationVideo = (idChannel, page, size) => {
-    videoAPI
-      .getAllNotificationVideo(idChannel, page, size)
-      .then((response) => {
-        setNotificationVideos(response.result.content);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const fetchNotifications = async (idChannel, page, size) => {
+    try {
+      const [
+        notificationVideosResponse,
+        notificationCommentVideosResponse,
+        notificationCommentCommentsResponse,
+      ] = await Promise.all([
+        videoAPI.getAllNotificationVideo(idChannel, page, size),
+        videoAPI.getAllNotificationCommentVideo(idChannel, page, size),
+        videoAPI.getAllNotificationCommentComment(idChannel, page, size),
+      ]);
+
+      const notificationVideos =
+        notificationVideosResponse.result.content || [];
+      const notificationCommentVideos =
+        notificationCommentVideosResponse.result.content || [];
+      const notificationCommentComments =
+        notificationCommentCommentsResponse.result.content || [];
+
+      const mergedNotifications = [
+        ...notificationVideos.map((item) => ({
+          ...item,
+          type: "video",
+          dateTime: item.video.dateTimeCreate,
+        })),
+        ...notificationCommentVideos.map((item) => ({
+          ...item,
+          type: "commentVideo",
+          dateTime: item.commentVideo.dateTimeComment,
+        })),
+        ...notificationCommentComments.map((item) => ({
+          ...item,
+          type: "commentComment",
+          dateTime: item.commentInComment.dateTimeComment,
+        })),
+      ];
+
+      mergedNotifications.sort(
+        (a, b) => new Date(b.dateTime) - new Date(a.dateTime)
+      );
+
+      setMergedNotification(mergedNotifications);
+
+      console.log(mergedNotifications);
+    } catch (error) {}
   };
 
-  const countHistoryNotificationVideoFromTimeToTime = (idChannel) => {
-    videoAPI
-      .countHistoryNotificationVideoFromTimeToTime(idChannel)
-      .then((response) => {
-        setAmountHistoryNotificationVideoFromTimeToTime(response.result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  const fetchAmountNotification = async (idChannel) => {
+    try {
+      const [
+        amountNotificationVideoResponse,
+        amountNotificationCommentVideoResponse,
+        amountNotificationCommentCommentResponse,
+      ] = await Promise.all([
+        videoAPI.countHistoryNotificationVideoFromTimeToTime(idChannel),
+        videoAPI.countHistoryNotificationCommentVideoFromTimeToTime(idChannel),
+        videoAPI.countHistoryNotificationCommentCommentFromTimeToTime(
+          idChannel
+        ),
+      ]);
 
-  const getAllNotificationCommentVideo = (idChannel, page, size) => {
-    videoAPI
-      .getAllNotificationCommentVideo(idChannel, page, size)
-      .then((response) => {
-        setNotificationCommentVideos(response.result.content);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+      const amountNotificationVideo =
+        amountNotificationVideoResponse?.result || 0;
+      const amountNotificationCommentVideo =
+        amountNotificationCommentVideoResponse?.result || 0;
+      const amountNotificationCommentComment =
+        amountNotificationCommentCommentResponse?.result || 0;
 
-  const getAllNotificationCommentComment = (idChannel, page, size) => {
-    videoAPI
-      .getAllNotificationCommentComment(idChannel, page, size)
-      .then((response) => {
-        setNotificationCommentComments(response.result.content);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      setAmountMergedNotification(
+        amountNotificationVideo +
+          amountNotificationCommentVideo +
+          amountNotificationCommentComment
+      );
+    } catch (error) {}
   };
 
   const getMyAccount = () => {
@@ -102,10 +126,8 @@ export const AppProvider = ({ children }) => {
           `/notification`,
           (payload) => {
             if (myAccount?.channel?.idChannel) {
-              getAllNotificationVideo(myAccount.channel.idChannel, 0, 6);
-              countHistoryNotificationVideoFromTimeToTime(
-                myAccount.channel.idChannel
-              );
+              fetchNotifications(myAccount.channel.idChannel, 0, 6);
+              fetchAmountNotification(myAccount.channel.idChannel);
             }
           }
         );
@@ -163,14 +185,10 @@ export const AppProvider = ({ children }) => {
         myAccount,
         setMyAccount,
         sendNotification,
-        notificationVideos,
-        getAllNotificationVideo,
-        amountHistoryNotificationVideoFromTimeToTime,
-        countHistoryNotificationVideoFromTimeToTime,
-        notificationCommentVideos,
-        getAllNotificationCommentVideo,
-        notificationCommentComments,
-        getAllNotificationCommentComment,
+        mergedNotifications,
+        fetchNotifications,
+        amountMergedNotification,
+        fetchAmountNotification,
       }}
     >
       {children}

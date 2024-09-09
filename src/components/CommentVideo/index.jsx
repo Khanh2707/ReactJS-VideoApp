@@ -58,6 +58,7 @@ export default function CommentVideo({
   idCommentInComment,
   avatar,
   nameUnique,
+  nameUniqueByVideo,
   dateTimeComment,
   comment,
   type,
@@ -69,7 +70,7 @@ export default function CommentVideo({
 }) {
   const theme = useTheme();
 
-  const { myAccount } = useContext(AppContext);
+  const { myAccount, sendNotification } = useContext(AppContext);
 
   const [stateRefreshCommentComment, dispatch] = useReducer(
     reducer,
@@ -187,6 +188,7 @@ export default function CommentVideo({
       .then((response) => {
         getAllCommentVideo();
         countCommentVideosByVideo();
+        sendNotification();
       })
       .catch((error) => {});
   };
@@ -199,6 +201,7 @@ export default function CommentVideo({
         getAllCommentComment();
         countCommentByCommentVideo();
         countCommentVideosByVideo();
+        sendNotification();
       })
       .catch((error) => {});
   };
@@ -340,7 +343,8 @@ export default function CommentVideo({
               </Typography>
             ))}
         </Box>
-        {myAccount?.channel.nameUnique === nameUnique && (
+        {(myAccount?.channel.nameUnique === nameUnique ||
+          myAccount?.channel.nameUnique === nameUniqueByVideo) && (
           <Box sx={{ position: "relative" }}>
             <IconButton
               ref={editCommentedButtonRef}
@@ -397,6 +401,7 @@ export default function CommentVideo({
             countCommentVideosByVideo={countCommentVideosByVideo}
             handleOpenSnackbar={handleOpenSnackbar}
             refresh={stateRefreshCommentComment.refresh}
+            nameUniqueByVideo={nameUniqueByVideo}
           />
         )}
       <ConfirmDeleteCommentVideo

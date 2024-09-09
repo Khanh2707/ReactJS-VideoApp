@@ -54,7 +54,7 @@ export default function DetailVideo() {
   const navigate = useNavigate();
 
   const { themeMode } = useContext(ThemeContext);
-  const { myAccount } = useContext(AppContext);
+  const { myAccount, sendNotification } = useContext(AppContext);
 
   const { idVideo } = useParams();
 
@@ -138,6 +138,7 @@ export default function DetailVideo() {
         countCommentVideosByVideo();
         handleCancelComment();
         handleOpenSnackbar("success", "Bình luận thành công!");
+        sendNotification();
       })
       .catch((error) => {});
   };
@@ -802,6 +803,7 @@ export default function DetailVideo() {
                   idCommentVideo={item.idCommentVideo}
                   avatar={item.channel.avatar}
                   nameUnique={item.channel.nameUnique}
+                  nameUniqueByVideo={item.video.channel.nameUnique}
                   dateTimeComment={formatDistanceToNow(
                     parseISO(item.dateTimeComment),
                     { addSuffix: true, locale: vi }
