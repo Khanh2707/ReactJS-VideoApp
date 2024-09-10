@@ -21,35 +21,56 @@ import UpdateIcon from "@mui/icons-material/Update";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function LikedVideo() {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const { themeMode } = useContext(ThemeContext);
+  const { myAccount } = useContext(AppContext);
+
   const [likedVideos, setLikedVideos] = useState([]);
   const [openBackdropInfoVideo, setOpenBackdropInfoVideo] = useState(true);
   const [searchValue, setSearchValue] = useState("");
 
-  const theme = useTheme();
-
-  const { themeMode } = useContext(ThemeContext);
-
-  const { myAccount } = useContext(AppContext);
-
-  const navigate = useNavigate();
-
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
+    if (event.target.value === "") getAllVideoChannelLiked();
   };
 
   const handleClearSearch = () => {
     setSearchValue("");
+    getAllVideoChannelLiked();
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && searchValue) {
-      console.log("Searching for:", searchValue);
-      handleClearSearch();
+    if (event.key === "Enter") {
+      searchVideos();
     }
   };
 
-  // API
+  const searchVideos = () => {
+    setOpenBackdropInfoVideo(true);
+    if (searchValue.trim() === "") {
+      getAllVideoChannelLiked();
+    } else {
+      videoAPI
+        .getAllSearchVideoChannelLikedByTitle(
+          myAccount?.channel?.idChannel,
+          searchValue,
+          0,
+          4
+        )
+        .then((response) => {
+          setLikedVideos(response.result.content);
+          setOpenBackdropInfoVideo(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          setOpenBackdropInfoVideo(false);
+        });
+    }
+  };
+
   const getAllVideoChannelLiked = () => {
+    setOpenBackdropInfoVideo(true);
     videoAPI
       .getAllVideoChannelLiked(myAccount?.channel?.idChannel, 0, 4)
       .then((response) => {
@@ -57,7 +78,8 @@ export default function LikedVideo() {
         setOpenBackdropInfoVideo(false);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
+        setOpenBackdropInfoVideo(false);
       });
   };
 

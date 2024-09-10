@@ -76,13 +76,28 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
+  getAllSearchVideoChannelWatchedByTitle: (idChannel, keyword, page, size) => {
+    const url = `/api/videos/search/all/video/channel/watched/${idChannel}/${keyword}/pageable/${page}/${size}`;
+    return axiosClient.get(url);
+  },
+
   getAllVideoChannelWatched: (idChannel, page, size) => {
     const url = `/api/videos/all/video/channel/watched/${idChannel}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
+  getAllSearchVideoChannelLikedByTitle: (idChannel, keyword, page, size) => {
+    const url = `/api/videos/search/all/video/channel/liked/${idChannel}/${keyword}/pageable/${page}/${size}`;
+    return axiosClient.get(url);
+  },
+
   getAllVideoChannelLiked: (idChannel, page, size) => {
     const url = `/api/videos/all/video/channel/liked/${idChannel}/pageable/${page}/${size}`;
+    return axiosClient.get(url);
+  },
+
+  getAllSearchVideoChannelByTitle: (nameUnique, keyword, page, size) => {
+    const url = `/api/videos/search/all/video/channel/${nameUnique}/${keyword}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 

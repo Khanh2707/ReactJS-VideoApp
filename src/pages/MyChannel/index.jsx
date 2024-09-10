@@ -13,17 +13,20 @@ import {
   Snackbar,
   Alert,
   Box,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import MyVideoCard from "../../components/MyVideoCard";
-import { useTheme } from "@emotion/react";
+import { ThemeContext, useTheme } from "@emotion/react";
 import { Link, useLoaderData } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import channelAPI from "../../api/channelAPI";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import videoAPI from "../../api/videoAPI";
 
 const tab = [
   {
@@ -33,8 +36,13 @@ const tab = [
 ];
 
 export default function MyChannel() {
-  const { account, videos, amountSub: initialAmountSub } = useLoaderData();
+  const theme = useTheme();
+  const { themeMode } = useContext(ThemeContext);
+  const { myAccount } = useContext(AppContext);
+  const { account, amountSub: initialAmountSub } = useLoaderData();
 
+  const [videos, setVideos] = useState([]);
+  const [totalVideo, setTotalVideo] = useState(0);
   const [valueTab, setValueTab] = useState("1");
   const [searchValue, setSearchValue] = useState("");
   const [amountSub, setAmountSub] = useState(initialAmountSub.result);
@@ -42,10 +50,7 @@ export default function MyChannel() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [stateAlert, setStateAlert] = useState("info");
   const [contentAlert, setContentAlert] = useState("");
-
-  const theme = useTheme();
-
-  const { myAccount } = useContext(AppContext);
+  const [openBackdropInfoVideo, setOpenBackdropInfoVideo] = useState(true);
 
   const handleChangeTab = (event, newValue) => {
     setValueTab(newValue);
@@ -53,16 +58,17 @@ export default function MyChannel() {
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
+    if (event.target.value === "") getAllVideoChannel();
   };
 
   const handleClearSearch = () => {
     setSearchValue("");
+    getAllVideoChannel();
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && searchValue) {
-      console.log("Searching for:", searchValue);
-      handleClearSearch();
+    if (event.key === "Enter") {
+      searchVideos();
     }
   };
 
@@ -83,6 +89,44 @@ export default function MyChannel() {
     }
 
     setOpenSnackbar(false);
+  };
+
+  const searchVideos = () => {
+    setOpenBackdropInfoVideo(true);
+    if (searchValue.trim() === "") {
+      getAllVideoChannel();
+    } else {
+      videoAPI
+        .getAllSearchVideoChannelByTitle(
+          myAccount?.channel?.nameUnique,
+          searchValue,
+          0,
+          4
+        )
+        .then((response) => {
+          setVideos(response.result.content);
+          setOpenBackdropInfoVideo(false);
+        })
+        .catch((error) => {
+          console.error(error);
+          setOpenBackdropInfoVideo(false);
+        });
+    }
+  };
+
+  const getAllVideoChannel = () => {
+    setOpenBackdropInfoVideo(true);
+    videoAPI
+      .getAllByChannelNameUnique(myAccount?.channel?.nameUnique, 0, 6)
+      .then((response) => {
+        setVideos(response.result.content);
+        setTotalVideo(response.result.totalElements);
+        setOpenBackdropInfoVideo(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setOpenBackdropInfoVideo(false);
+      });
   };
 
   // API
@@ -157,6 +201,7 @@ export default function MyChannel() {
   };
 
   useEffect(() => {
+    getAllVideoChannel();
     getIsSub();
   }, []);
 
@@ -213,9 +258,7 @@ export default function MyChannel() {
               <Typography variant='subtitle2'>•</Typography>
             </Grid>
             <Grid item>
-              <Typography variant='subtitle2'>
-                {videos.result.content.length} video
-              </Typography>
+              <Typography variant='subtitle2'>{totalVideo} video</Typography>
             </Grid>
           </Grid>
           <Grid container spacing={1} sx={{ mt: "0", cursor: "pointer" }}>
@@ -320,24 +363,52 @@ export default function MyChannel() {
             ))}
           </TabList>
           <TabPanel value='1' sx={{ pl: "0", pr: "0" }}>
-            <Grid container spacing={2}>
-              {videos.result.content.map((item) => {
-                return (
-                  <Grid item md={4} sm={6} xs={12} key={item.idVideo}>
-                    <Link
-                      to={`/watch/${item.idVideo}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <MyVideoCard
-                        title={item.title}
-                        imagePreview={item.imagePreview}
-                        viewVideo={item.view}
-                        dateTimeCreate={item.dateTimeCreate}
-                      />
-                    </Link>
-                  </Grid>
-                );
-              })}
+            <Grid container spacing={2} position='relative'>
+              <Backdrop
+                sx={{
+                  zIndex: 100,
+                  position: "absolute",
+                  backgroundColor:
+                    themeMode === "light"
+                      ? "rgba(255, 255, 255, 0)"
+                      : "rgba(15, 18, 20, 0)",
+                }}
+                open={openBackdropInfoVideo}
+              >
+                <CircularProgress
+                  color='inherit'
+                  sx={{
+                    position: "absolute",
+                    top: "50px",
+                  }}
+                />
+              </Backdrop>
+              {!openBackdropInfoVideo && (
+                <>
+                  {videos.map((item) => {
+                    return (
+                      <Grid item md={4} sm={6} xs={12} key={item.idVideo}>
+                        <Link
+                          to={`/watch/${item.idVideo}`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <MyVideoCard
+                            title={item.title}
+                            imagePreview={item.imagePreview}
+                            viewVideo={item.view}
+                            dateTimeCreate={item.dateTimeCreate}
+                          />
+                        </Link>
+                      </Grid>
+                    );
+                  })}
+                  {videos.length === 0 && (
+                    <Grid item>
+                      <Typography sx={{ mt: "8px" }}>Không có video</Typography>
+                    </Grid>
+                  )}
+                </>
+              )}
             </Grid>
           </TabPanel>
         </TabContext>
