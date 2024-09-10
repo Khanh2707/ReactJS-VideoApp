@@ -11,19 +11,19 @@ import ListCategory from "../../components/ListCategory";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import videoAPI from "../../api/videoAPI";
 import { ThemeContext } from "../../context/ThemeContext";
+import { AppContext } from "../../context/AppContext";
 
 export default function Home() {
-  const { videos: allVideos } = useLoaderData();
+  const navigate = useNavigate();
 
-  const [selectedChip, setSelectedChip] = useState(0);
+  const { videos: allVideos } = useLoaderData();
+  const { themeMode } = useContext(ThemeContext);
+  const { selectedChip, setSelectedChip } = useContext(AppContext);
+
   const [videosByCategory, setVideosByCategory] = useState(
     allVideos.result.content
   );
-  const [openBackdropVideos, setOpenBackdropVideos] = useState(false);
-
-  const { themeMode } = useContext(ThemeContext);
-
-  const navigate = useNavigate();
+  const [openBackdropVideos, setOpenBackdropVideos] = useState(true);
 
   useEffect(() => {
     if (selectedChip !== 0) {

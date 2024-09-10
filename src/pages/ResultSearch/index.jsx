@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import ListCategory from "../../components/ListCategory";
 import { Link, useLoaderData } from "react-router-dom";
 import { Box, Chip, Grid } from "@mui/material";
 import TuneIcon from "@mui/icons-material/Tune";
 import ResultSearchCard from "../../components/ResultSearchCard";
+import { AppContext } from "../../context/AppContext";
 
 export default function ResultSearch() {
   const { videos } = useLoaderData();
+  const { selectedChip, setSelectedChip } = useContext(AppContext);
+
+  const [openBackdropVideos, setOpenBackdropVideos] = useState(true);
 
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <ListCategory />
+        <ListCategory
+          selectedChip={selectedChip}
+          setSelectedChip={setSelectedChip}
+          setOpenBackdropVideos={setOpenBackdropVideos}
+        />
         <Chip
           icon={<TuneIcon />}
           label='Bộ lọc'
@@ -27,7 +35,7 @@ export default function ResultSearch() {
         />
       </Box>
       <Grid container spacing={2}>
-        {videos.result.map((item) => {
+        {videos.result.content.map((item) => {
           return (
             <Grid item md={12} sm={12} xs={12} key={item.idVideo}>
               <Link

@@ -14,13 +14,12 @@ import CreateVideo from "../dialog/CreateVideo";
 import { ThemeContext } from "../../context/ThemeContext";
 
 export default function Header() {
-  const [openDialogCreateVideo, setOpenDialogCreateVideo] = useState(false);
+  const navigate = useNavigate();
 
   const { themeMode } = useContext(ThemeContext);
-
   const { myAccount } = useContext(AppContext);
 
-  const navigate = useNavigate();
+  const [openDialogCreateVideo, setOpenDialogCreateVideo] = useState(false);
 
   const handleClickOpenDialogCreateVideo = () => {
     navigate("/channel/editing/videos");

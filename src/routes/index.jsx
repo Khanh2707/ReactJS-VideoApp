@@ -180,7 +180,7 @@ export default createBrowserRouter([
             ),
             path: "/results",
             loader: async () => {
-              const videos = await videoAPI.getAll();
+              const videos = await videoAPI.getAll(0, 6);
 
               return { videos };
             },

@@ -12,6 +12,7 @@ export const AppProvider = ({ children }) => {
   const [stompClient, setStompClient] = useState(null);
   const [mergedNotifications, setMergedNotification] = useState([]);
   const [amountMergedNotification, setAmountMergedNotification] = useState(0);
+  const [selectedChip, setSelectedChip] = useState(0);
 
   const fetchNotifications = async (idChannel, page, size) => {
     try {
@@ -189,6 +190,8 @@ export const AppProvider = ({ children }) => {
         fetchNotifications,
         amountMergedNotification,
         fetchAmountNotification,
+        selectedChip,
+        setSelectedChip,
       }}
     >
       {children}
