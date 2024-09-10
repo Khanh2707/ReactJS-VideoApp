@@ -161,6 +161,22 @@ export const AppLightTheme = createTheme({
             outline: "none",
           },
         },
+        overlay: {
+          backgroundColor: "rgba(0, 0, 0, 0)",
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#1ac7b6",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#1ac7b6",
+            },
+          },
+        },
       },
     },
     MuiSlider: {
@@ -220,6 +236,13 @@ export const AppLightTheme = createTheme({
               color: "#0f0f0f", // Màu khi icon đã hoàn thành
             },
           },
+        },
+      },
+    },
+    MuiStepIcon: {
+      styleOverrides: {
+        text: {
+          fill: "#fff",
         },
       },
     },
@@ -445,6 +468,22 @@ export const AppDarkTheme = createTheme({
             outline: "none",
           },
         },
+        overlay: {
+          backgroundColor: "rgba(0, 0, 0, 0)",
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#1ac7b6",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#1ac7b6",
+            },
+          },
+        },
       },
     },
     MuiSlider: {
@@ -505,6 +544,13 @@ export const AppDarkTheme = createTheme({
               color: "#f1f1f1", // Màu khi icon đã hoàn thành
             },
           },
+        },
+      },
+    },
+    MuiStepIcon: {
+      styleOverrides: {
+        text: {
+          fill: "#fff",
         },
       },
     },

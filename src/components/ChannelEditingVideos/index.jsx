@@ -1,11 +1,39 @@
 import { Box } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  gridPageCountSelector,
+  useGridApiContext,
+  useGridSelector,
+} from "@mui/x-data-grid";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import videoAPI from "../../api/videoAPI";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
+import MuiPagination from "@mui/material/Pagination";
+import { GridPagination } from "@mui/x-data-grid";
+
+function Pagination({ page, onPageChange, className }) {
+  const apiRef = useGridApiContext();
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+  return (
+    <MuiPagination
+      color='primary'
+      className={className}
+      count={pageCount}
+      page={page + 1}
+      onChange={(event, newPage) => {
+        onPageChange(event, newPage - 1);
+      }}
+    />
+  );
+}
+
+function CustomPagination(props) {
+  return <GridPagination ActionsComponent={Pagination} {...props} />;
+}
 
 const columns = [
   {
@@ -67,6 +95,11 @@ const columns = [
     headerName: "Lượt thích",
     type: "number",
   },
+  {
+    field: "amountComment",
+    headerName: "Lượt bình luận",
+    type: "number",
+  },
 ];
 
 export default function ChannelEditingVideos() {
@@ -78,11 +111,14 @@ export default function ChannelEditingVideos() {
     page: 0,
     pageSize: 4,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   const { page, pageSize } = paginationModel;
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+
       try {
         const videoResponse = await videoAPI.getAllByChannelNameUnique(
           myAccount.channel.nameUnique,
@@ -98,9 +134,14 @@ export default function ChannelEditingVideos() {
               );
               const amountLike = amountLikeResponse.result;
 
+              const amountCommentResponse =
+                await videoAPI.countCommentVideosByVideo(video.idVideo);
+              const amountComment = amountCommentResponse.result;
+
               return {
                 ...video,
                 amountLike,
+                amountComment,
               };
             } catch (error) {
               console.log(
@@ -118,6 +159,8 @@ export default function ChannelEditingVideos() {
       } catch (error) {
         console.log("Error fetching videos:", error);
       }
+
+      setIsLoading(false);
     };
 
     fetchData();
@@ -143,6 +186,25 @@ export default function ChannelEditingVideos() {
       rowCount={rowCount}
       paginationModel={paginationModel}
       onPaginationModelChange={setPaginationModel}
+      localeText={{
+        MuiTablePagination: {
+          labelDisplayedRows: ({ from, to, count }) =>
+            `${from} - ${to} trên tổng số ${
+              count !== -1 ? count : `nhiều hơn ${to}`
+            }`,
+        },
+        noRowsLabel: "Không có video",
+      }}
+      loading={isLoading}
+      slotProps={{
+        loadingOverlay: {
+          variant: "skeleton",
+          noRowsVariant: "linear-progress",
+        },
+      }}
+      slots={{
+        pagination: CustomPagination,
+      }}
     />
   );
 }
