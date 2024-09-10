@@ -1,6 +1,7 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import {
   DataGrid,
+  GridToolbarQuickFilter,
   gridPageCountSelector,
   useGridApiContext,
   useGridSelector,
@@ -13,6 +14,7 @@ import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
 import MuiPagination from "@mui/material/Pagination";
 import { GridPagination } from "@mui/x-data-grid";
+import { useMovieData } from "@mui/x-data-grid-generator";
 
 function Pagination({ page, onPageChange, className }) {
   const apiRef = useGridApiContext();
@@ -35,11 +37,29 @@ function CustomPagination(props) {
   return <GridPagination ActionsComponent={Pagination} {...props} />;
 }
 
+function QuickSearchToolbar() {
+  return (
+    <Box
+      sx={{
+        p: "1px 8px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <Typography variant='h6' fontWeight='600'>
+        Tất cả video
+      </Typography>
+      <GridToolbarQuickFilter />
+    </Box>
+  );
+}
+
 const columns = [
   {
     field: "imagePreview",
     headerName: "Video",
-    width: 200,
+    width: 120,
     renderCell: (params) => (
       <Box
         sx={{
@@ -52,11 +72,15 @@ const columns = [
           <img
             src={params.value}
             alt='profile'
-            style={{ width: "160px", height: "90px", display: "block" }}
+            style={{ width: "100px", height: "56.25px", display: "block" }}
           />
         </Link>
       </Box>
     ),
+  },
+  {
+    field: "title",
+    headerName: "Tiêu đề",
   },
   {
     field: "hide",
@@ -103,6 +127,8 @@ const columns = [
 ];
 
 export default function ChannelEditingVideos() {
+  const data = useMovieData();
+
   const { myAccount } = useContext(AppContext);
 
   const [allVideos, setAllVideos] = useState([]);
@@ -114,6 +140,12 @@ export default function ChannelEditingVideos() {
   const [isLoading, setIsLoading] = useState(true);
 
   const { page, pageSize } = paginationModel;
+
+  const handleProcessRowUpdate = (newRow) => {
+    console.log("Row updated:", newRow);
+
+    return newRow;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -166,12 +198,6 @@ export default function ChannelEditingVideos() {
     fetchData();
   }, [myAccount.channel.nameUnique, page, pageSize]);
 
-  const handleProcessRowUpdate = (newRow) => {
-    console.log("Row updated:", newRow);
-
-    return newRow;
-  };
-
   return (
     <DataGrid
       editMode='row'
@@ -180,7 +206,6 @@ export default function ChannelEditingVideos() {
       getRowId={(row) => row.idVideo}
       autoHeight={true}
       rowHeight={110}
-      disableRowSelectionOnClick
       processRowUpdate={handleProcessRowUpdate}
       paginationMode='server'
       rowCount={rowCount}
@@ -196,14 +221,16 @@ export default function ChannelEditingVideos() {
         noRowsLabel: "Không có video",
       }}
       loading={isLoading}
+      disableRowSelectionOnClick
+      slots={{
+        pagination: CustomPagination,
+        toolbar: QuickSearchToolbar,
+      }}
       slotProps={{
         loadingOverlay: {
           variant: "skeleton",
           noRowsVariant: "linear-progress",
         },
-      }}
-      slots={{
-        pagination: CustomPagination,
       }}
     />
   );
