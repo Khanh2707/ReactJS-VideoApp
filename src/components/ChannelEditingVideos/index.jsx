@@ -1,7 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box, IconButton, InputBase, Typography } from "@mui/material";
 import {
   DataGrid,
-  GridToolbarQuickFilter,
   gridPageCountSelector,
   useGridApiContext,
   useGridSelector,
@@ -14,7 +13,9 @@ import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
 import MuiPagination from "@mui/material/Pagination";
 import { GridPagination } from "@mui/x-data-grid";
-import { useMovieData } from "@mui/x-data-grid-generator";
+import SearchIcon from "@mui/icons-material/Search";
+import { useTheme } from "@emotion/react";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function Pagination({ page, onPageChange, className }) {
   const apiRef = useGridApiContext();
@@ -37,11 +38,37 @@ function CustomPagination(props) {
   return <GridPagination ActionsComponent={Pagination} {...props} />;
 }
 
-function QuickSearchToolbar() {
+function QuickSearchToolbar({ searchValue, setSearchValue, fetchData }) {
+  const theme = useTheme();
+
+  const handleSearchChange = (event) => {
+    setSearchValue(event.target.value);
+    if (event.target.value === "") fetchData();
+  };
+
+  const handleClearSearch = () => {
+    setSearchValue("");
+    fetchData();
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      searchVideos();
+    }
+  };
+
+  const searchVideos = () => {
+    if (searchValue.trim() === "") {
+      fetchData();
+    } else {
+      fetchData(searchValue);
+    }
+  };
+
   return (
     <Box
       sx={{
-        p: "1px 8px",
+        pl: "8px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -50,7 +77,28 @@ function QuickSearchToolbar() {
       <Typography variant='h6' fontWeight='600'>
         Tất cả video
       </Typography>
-      <GridToolbarQuickFilter />
+      <Box>
+        <IconButton type='button'>
+          <SearchIcon />
+        </IconButton>
+        <InputBase
+          value={searchValue}
+          onChange={handleSearchChange}
+          onKeyDown={handleKeyDown}
+          sx={{
+            flexGrow: 1,
+            borderBottom: `1px solid ${theme.palette.text.primary}`,
+          }}
+          placeholder='Tìm kiếm... '
+        />
+        <IconButton
+          type='button'
+          onClick={handleClearSearch}
+          sx={{ visibility: searchValue ? "visible" : "hidden" }}
+        >
+          <ClearIcon />
+        </IconButton>
+      </Box>
     </Box>
   );
 }
@@ -81,6 +129,7 @@ const columns = [
   {
     field: "title",
     headerName: "Tiêu đề",
+    editable: true,
   },
   {
     field: "hide",
@@ -127,8 +176,6 @@ const columns = [
 ];
 
 export default function ChannelEditingVideos() {
-  const data = useMovieData();
-
   const { myAccount } = useContext(AppContext);
 
   const [allVideos, setAllVideos] = useState([]);
@@ -138,6 +185,7 @@ export default function ChannelEditingVideos() {
     pageSize: 4,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [searchValue, setSearchValue] = useState("");
 
   const { page, pageSize } = paginationModel;
 
@@ -147,54 +195,69 @@ export default function ChannelEditingVideos() {
     return newRow;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+  const fetchData = async (keyword) => {
+    setIsLoading(true);
 
-      try {
-        const videoResponse = await videoAPI.getAllByChannelNameUnique(
+    try {
+      let videoResponse;
+
+      if (!keyword) {
+        videoResponse = await videoAPI.getAllByChannelNameUnique(
           myAccount.channel.nameUnique,
           page,
           pageSize
         );
-
-        const updatedVideos = await Promise.all(
-          videoResponse.result.content.map(async (video) => {
-            try {
-              const amountLikeResponse = await videoAPI.countLikeVideo(
-                video.idVideo
-              );
-              const amountLike = amountLikeResponse.result;
-
-              const amountCommentResponse =
-                await videoAPI.countCommentVideosByVideo(video.idVideo);
-              const amountComment = amountCommentResponse.result;
-
-              return {
-                ...video,
-                amountLike,
-                amountComment,
-              };
-            } catch (error) {
-              console.log(
-                "Error fetching amountLike for video:",
-                video.idVideo,
-                error
-              );
-              return { ...video, amountLike: 0 };
-            }
-          })
+      } else {
+        videoResponse = await videoAPI.getAllSearchVideoChannelByTitle(
+          myAccount?.channel?.nameUnique,
+          keyword,
+          0,
+          4
         );
-
-        setAllVideos(updatedVideos);
-        setRowCount(videoResponse.result.totalElements);
-      } catch (error) {
-        console.log("Error fetching videos:", error);
       }
 
-      setIsLoading(false);
-    };
+      if (!videoResponse || !videoResponse.result) {
+        throw new Error("Invalid response from API");
+      }
 
+      const updatedVideos = await Promise.all(
+        videoResponse.result.content.map(async (video) => {
+          try {
+            const amountLikeResponse = await videoAPI.countLikeVideo(
+              video.idVideo
+            );
+            const amountLike = amountLikeResponse.result;
+
+            const amountCommentResponse =
+              await videoAPI.countCommentVideosByVideo(video.idVideo);
+            const amountComment = amountCommentResponse.result;
+
+            return {
+              ...video,
+              amountLike,
+              amountComment,
+            };
+          } catch (error) {
+            console.log(
+              "Error fetching amountLike or amountComment for video:",
+              video.idVideo,
+              error
+            );
+            return { ...video, amountLike: 0, amountComment: 0 };
+          }
+        })
+      );
+
+      setAllVideos(updatedVideos);
+      setRowCount(videoResponse.result.totalElements);
+    } catch (error) {
+      console.log("Error fetching videos:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [myAccount.channel.nameUnique, page, pageSize]);
 
@@ -230,6 +293,11 @@ export default function ChannelEditingVideos() {
         loadingOverlay: {
           variant: "skeleton",
           noRowsVariant: "linear-progress",
+        },
+        toolbar: {
+          searchValue: searchValue,
+          setSearchValue: setSearchValue,
+          fetchData: fetchData,
         },
       }}
     />
