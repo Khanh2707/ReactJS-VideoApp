@@ -1,4 +1,4 @@
-import { Box, IconButton, InputBase, Typography } from "@mui/material";
+import { Box, Chip, IconButton, InputBase, Typography } from "@mui/material";
 import {
   DataGrid,
   gridPageCountSelector,
@@ -16,6 +16,8 @@ import { GridPagination } from "@mui/x-data-grid";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTheme } from "@emotion/react";
 import ClearIcon from "@mui/icons-material/Clear";
+import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
+import ListFilterMyVideo from "../dialog/ListFilterMyVideo";
 
 function Pagination({ page, onPageChange, className }) {
   const apiRef = useGridApiContext();
@@ -38,7 +40,12 @@ function CustomPagination(props) {
   return <GridPagination ActionsComponent={Pagination} {...props} />;
 }
 
-function QuickSearchToolbar({ searchValue, setSearchValue, fetchData }) {
+function QuickSearchToolbar({
+  searchValue,
+  setSearchValue,
+  fetchData,
+  setOpenDialogListFilterMyVideo,
+}) {
   const theme = useTheme();
 
   const handleSearchChange = (event) => {
@@ -49,20 +56,6 @@ function QuickSearchToolbar({ searchValue, setSearchValue, fetchData }) {
   const handleClearSearch = () => {
     setSearchValue("");
     fetchData();
-  };
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      searchVideos();
-    }
-  };
-
-  const searchVideos = () => {
-    if (searchValue.trim() === "") {
-      fetchData();
-    } else {
-      fetchData(searchValue);
-    }
   };
 
   return (
@@ -77,27 +70,42 @@ function QuickSearchToolbar({ searchValue, setSearchValue, fetchData }) {
       <Typography variant='h6' fontWeight='600'>
         Tất cả video
       </Typography>
-      <Box>
-        <IconButton type='button'>
-          <SearchIcon />
-        </IconButton>
-        <InputBase
-          value={searchValue}
-          onChange={handleSearchChange}
-          onKeyDown={handleKeyDown}
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Box>
+          <IconButton type='button'>
+            <SearchIcon />
+          </IconButton>
+          <InputBase
+            value={searchValue}
+            onChange={handleSearchChange}
+            sx={{
+              flexGrow: 1,
+              borderBottom: `1px solid ${theme.palette.text.primary}`,
+            }}
+            placeholder='Tìm kiếm... '
+          />
+          <IconButton
+            type='button'
+            onClick={handleClearSearch}
+            sx={{ visibility: searchValue ? "visible" : "hidden" }}
+          >
+            <ClearIcon />
+          </IconButton>
+        </Box>
+        <Chip
+          icon={<SortOutlinedIcon />}
+          label='Sắp xếp'
           sx={{
-            flexGrow: 1,
-            borderBottom: `1px solid ${theme.palette.text.primary}`,
+            p: "4px",
+            fontSize: "14px",
+            fontWeight: "600",
+            bgcolor: "rgba(0, 0, 0, 0)",
+            "& .MuiChip-icon": {
+              color: "text.primary",
+            },
           }}
-          placeholder='Tìm kiếm... '
+          onClick={() => setOpenDialogListFilterMyVideo(true)}
         />
-        <IconButton
-          type='button'
-          onClick={handleClearSearch}
-          sx={{ visibility: searchValue ? "visible" : "hidden" }}
-        >
-          <ClearIcon />
-        </IconButton>
       </Box>
     </Box>
   );
@@ -129,7 +137,6 @@ const columns = [
   {
     field: "title",
     headerName: "Tiêu đề",
-    editable: true,
   },
   {
     field: "hide",
@@ -186,6 +193,10 @@ export default function ChannelEditingVideos() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [searchValue, setSearchValue] = useState("");
+  const [optionSort, setOptionSort] = useState("desc");
+  const [propertySearch, setPropertySearch] = useState("dateTimeCreate");
+  const [openDialogListFilterMyVideo, setOpenDialogListFilterMyVideo] =
+    useState(false);
 
   const { page, pageSize } = paginationModel;
 
@@ -195,7 +206,7 @@ export default function ChannelEditingVideos() {
     return newRow;
   };
 
-  const fetchData = async (keyword) => {
+  const fetchData = async (keyword = searchValue) => {
     setIsLoading(true);
 
     try {
@@ -204,6 +215,8 @@ export default function ChannelEditingVideos() {
       if (!keyword) {
         videoResponse = await videoAPI.getAllByChannelNameUnique(
           myAccount.channel.nameUnique,
+          propertySearch,
+          optionSort,
           page,
           pageSize
         );
@@ -211,8 +224,10 @@ export default function ChannelEditingVideos() {
         videoResponse = await videoAPI.getAllSearchVideoChannelByTitle(
           myAccount?.channel?.nameUnique,
           keyword,
-          0,
-          4
+          propertySearch,
+          optionSort,
+          page,
+          pageSize
         );
       }
 
@@ -258,48 +273,68 @@ export default function ChannelEditingVideos() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [myAccount.channel.nameUnique, page, pageSize]);
+    fetchData(searchValue);
+  }, [
+    myAccount.channel.nameUnique,
+    page,
+    pageSize,
+    searchValue,
+    propertySearch,
+    optionSort,
+  ]);
 
   return (
-    <DataGrid
-      editMode='row'
-      rows={allVideos}
-      columns={columns}
-      getRowId={(row) => row.idVideo}
-      autoHeight={true}
-      rowHeight={110}
-      processRowUpdate={handleProcessRowUpdate}
-      paginationMode='server'
-      rowCount={rowCount}
-      paginationModel={paginationModel}
-      onPaginationModelChange={setPaginationModel}
-      localeText={{
-        MuiTablePagination: {
-          labelDisplayedRows: ({ from, to, count }) =>
-            `${from} - ${to} trên tổng số ${
-              count !== -1 ? count : `nhiều hơn ${to}`
-            }`,
-        },
-        noRowsLabel: "Không có video",
-      }}
-      loading={isLoading}
-      disableRowSelectionOnClick
-      slots={{
-        pagination: CustomPagination,
-        toolbar: QuickSearchToolbar,
-      }}
-      slotProps={{
-        loadingOverlay: {
-          variant: "skeleton",
-          noRowsVariant: "linear-progress",
-        },
-        toolbar: {
-          searchValue: searchValue,
-          setSearchValue: setSearchValue,
-          fetchData: fetchData,
-        },
-      }}
-    />
+    <>
+      <DataGrid
+        editMode='row'
+        rows={allVideos}
+        columns={columns}
+        getRowId={(row) => row.idVideo}
+        autoHeight={true}
+        rowHeight={110}
+        processRowUpdate={handleProcessRowUpdate}
+        paginationMode='server'
+        rowCount={rowCount}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        localeText={{
+          MuiTablePagination: {
+            labelDisplayedRows: ({ from, to, count }) =>
+              `${from} - ${to} trên tổng số ${
+                count !== -1 ? count : `nhiều hơn ${to}`
+              }`,
+          },
+          noRowsLabel: "Không có video",
+        }}
+        loading={isLoading}
+        disableRowSelectionOnClick
+        slots={{
+          pagination: CustomPagination,
+          toolbar: QuickSearchToolbar,
+        }}
+        slotProps={{
+          loadingOverlay: {
+            variant: "skeleton",
+            noRowsVariant: "linear-progress",
+          },
+          toolbar: {
+            searchValue: searchValue,
+            setSearchValue: setSearchValue,
+            fetchData: fetchData,
+            setOpenDialogListFilterMyVideo: setOpenDialogListFilterMyVideo,
+          },
+        }}
+        disableColumnSorting
+        disableColumnMenu
+      />
+      <ListFilterMyVideo
+        openDialogListFilterMyVideo={openDialogListFilterMyVideo}
+        setOpenDialogListFilterMyVideo={setOpenDialogListFilterMyVideo}
+        optionSort={optionSort}
+        setOptionSort={setOptionSort}
+        propertySearch={propertySearch}
+        setPropertySearch={setPropertySearch}
+      />
+    </>
   );
 }

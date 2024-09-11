@@ -28,9 +28,15 @@ export default function ListCommentComment({
   const getAllCommentComment = () => {
     setOpenBackdropCommentVideo(true);
     videoAPI
-      .getAllCommentComment(idCommentVideo, stateSortComment)
+      .getAllCommentComment(
+        idCommentVideo,
+        "dateTimeComment",
+        stateSortComment,
+        0,
+        10
+      )
       .then((response) => {
-        setListCommentComment(response.result);
+        setListCommentComment(response.result.content);
         setOpenBackdropCommentVideo(false);
       })
       .catch((error) => {});

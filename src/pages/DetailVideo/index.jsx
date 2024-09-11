@@ -363,9 +363,9 @@ export default function DetailVideo() {
   const getAllCommentVideo = () => {
     setOpenBackdropCommentVideo(true);
     videoAPI
-      .getAllCommentVideo(idVideo, stateSortComment)
+      .getAllCommentVideo(idVideo, "dateTimeComment", stateSortComment, 0, 10)
       .then((response) => {
-        setListCommentVideo(response.result);
+        setListCommentVideo(response.result.content);
         setOpenBackdropCommentVideo(false);
       })
       .catch((error) => {});

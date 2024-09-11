@@ -100,6 +100,8 @@ export default function MyChannel() {
         .getAllSearchVideoChannelByTitle(
           myAccount?.channel?.nameUnique,
           searchValue,
+          "dateTimeCreate",
+          "desc",
           0,
           4
         )
@@ -117,7 +119,13 @@ export default function MyChannel() {
   const getAllVideoChannel = () => {
     setOpenBackdropInfoVideo(true);
     videoAPI
-      .getAllByChannelNameUnique(myAccount?.channel?.nameUnique, 0, 6)
+      .getAllByChannelNameUnique(
+        myAccount?.channel?.nameUnique,
+        "dateTimeCreate",
+        "desc",
+        0,
+        6
+      )
       .then((response) => {
         setVideos(response.result.content);
         setTotalVideo(response.result.totalElements);

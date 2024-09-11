@@ -51,13 +51,13 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  getAllCommentComment: (idCommentVideo, option) => {
-    const url = `/api/comment_comments/by/comment_video/${idCommentVideo}/${option}`;
+  getAllCommentComment: (idCommentVideo, propertySort, optionSort, page, size) => {
+    const url = `/api/comment_comments/by/comment_video/${idCommentVideo}/${propertySort}/${optionSort}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
-  getAllCommentVideo: (idVideo, option) => {
-    const url = `/api/comment_videos/by/video/${idVideo}/${option}`;
+  getAllCommentVideo: (idVideo, propertySort, optionSort, page, size) => {
+    const url = `/api/comment_videos/by/video/${idVideo}/${propertySort}/${optionSort}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
@@ -96,13 +96,13 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  getAllSearchVideoChannelByTitle: (nameUnique, keyword, page, size) => {
-    const url = `/api/videos/search/all/video/channel/${nameUnique}/${keyword}/pageable/${page}/${size}`;
+  getAllSearchVideoChannelByTitle: (nameUnique, keyword, propertySort, optionSort, page, size) => {
+    const url = `/api/videos/search/all/video/channel/${nameUnique}/${keyword}/${propertySort}/${optionSort}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
-  getAllByChannelNameUnique: (nameUniqueChannel, page, size) => {
-    const url = `/api/videos/all/by/channel/name_unique/${nameUniqueChannel}/pageable/${page}/${size}`;
+  getAllByChannelNameUnique: (nameUniqueChannel, propertySort, optionSort, page, size) => {
+    const url = `/api/videos/all/by/channel/name_unique/${nameUniqueChannel}/${propertySort}/${optionSort}/pageable/${page}/${size}`;
     return axiosClient.get(url);
   },
 
