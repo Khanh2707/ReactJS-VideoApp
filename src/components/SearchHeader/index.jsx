@@ -65,7 +65,7 @@ export default function SearchHeader() {
 
   const getAllHistorySearchByChannel = () => {
     historySearchAPI
-      .getAllHistorySearchByChannel(myAccount.channel.idChannel, 0, 6)
+      .getAllHistorySearchByChannel(myAccount?.channel.idChannel, 0, 6)
       .then((response) => {
         setListHistorySearch(response.result.content);
       })

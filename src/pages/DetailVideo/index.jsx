@@ -36,6 +36,8 @@ import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
 import channelAPI from "../../api/channelAPI";
 import videoAPI from "../../api/videoAPI";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ConfirmDeleteVideo from "../../components/dialog/ConfirmDeleteVideo";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -85,10 +87,13 @@ export default function DetailVideo() {
   const [isLike, setIsLike] = useState(null);
   const [amountLike, setAmountLike] = useState(initialAmountLike.result);
   const [openBackdropCommentVideo, setOpenBackdropCommentVideo] =
-    useState(false);
+    useState(true);
   const [amountCommentVideo, setAmountCommentVideo] = useState(0);
   const [listCommentVideo, setListCommentVideo] = useState([]);
   const [stateSortComment, setStateSortComment] = useState("desc");
+  const [openBackdropDeleteVideo, setOpenBackdropDeleteVideo] = useState(false);
+  const [openDialogConfirmDeleteVideo, setOpenDialogConfirmDeleteVideo] =
+    useState(false);
 
   const handleClickOutside = (event) => {
     if (
@@ -379,6 +384,26 @@ export default function DetailVideo() {
       .catch((error) => {});
   };
 
+  const handleDeleteVideo = () => {
+    setOpenBackdropDeleteVideo(true);
+    handleOpenSnackbar(
+      "info",
+      "Video đang đạng được xóa, vui lòng đừng rời khỏi trang!"
+    );
+
+    videoAPI
+      .deleteVideo(video.result.idVideo)
+      .then((response) => {
+        sendNotification();
+        setOpenBackdropDeleteVideo(false);
+        handleOpenSnackbar("info", "Video đã xóa thành công!");
+        setTimeout(() => {
+          navigate(`/`);
+        }, 1000);
+      })
+      .catch((error) => {});
+  };
+
   useEffect(() => {
     countCommentVideosByVideo();
     getAllCommentVideo();
@@ -408,7 +433,7 @@ export default function DetailVideo() {
   }, [video, isSub, amountSub, isLike, amountLike]);
 
   return (
-    <>
+    <Box sx={{ position: "relative" }}>
       <Box sx={{ display: "flex", pb: "450px" }}>
         <Box sx={{ width: "100%" }}>
           <Video
@@ -640,6 +665,22 @@ export default function DetailVideo() {
                               </Typography>
                             </ListItemButton>
                           </ListItem>
+                          {video.result.channel.idChannel ===
+                            myAccount?.channel.idChannel && (
+                            <ListItem
+                              disablePadding
+                              onClick={() =>
+                                setOpenDialogConfirmDeleteVideo(true)
+                              }
+                            >
+                              <ListItemButton>
+                                <DeleteOutlineIcon />
+                                <Typography sx={{ ml: "12px" }}>
+                                  Xóa video
+                                </Typography>
+                              </ListItemButton>
+                            </ListItem>
+                          )}
                         </List>
                       </Paper>
                     )}
@@ -747,7 +788,16 @@ export default function DetailVideo() {
                 variant='standard'
                 placeholder='Viết bình luận...'
                 sx={{ ml: "12px", mb: "12px", ...textFieldStyles }}
-                onClick={() => setShowActionComment(true)}
+                onClick={() => {
+                  if (myAccount) {
+                    setShowActionComment(true);
+                  } else {
+                    handleOpenSnackbar(
+                      "error",
+                      "Đăng nhập để có thể thực hiện chức năng!"
+                    );
+                  }
+                }}
                 value={valueComment}
                 onChange={handleComment}
               />
@@ -878,6 +928,30 @@ export default function DetailVideo() {
           })}
         </Box>
       </Box>
+      <Backdrop
+        sx={{
+          zIndex: 100,
+          position: "absolute",
+          backgroundColor:
+            themeMode === "light"
+              ? "rgba(255, 255, 255, 0.4)"
+              : "rgba(15, 18, 20, 0.4)",
+        }}
+        open={openBackdropDeleteVideo}
+      >
+        <CircularProgress
+          color='inherit'
+          sx={{
+            position: "absolute",
+            top: "200px",
+          }}
+        />
+      </Backdrop>
+      <ConfirmDeleteVideo
+        openDialogConfirmDeleteVideo={openDialogConfirmDeleteVideo}
+        setOpenDialogConfirmDeleteVideo={setOpenDialogConfirmDeleteVideo}
+        handleDeleteVideo={handleDeleteVideo}
+      />
       <ListRadioReportVideo
         openDialogListRadioReportVideo={openDialogListRadioReportVideo}
         setOpenDialogListRadioReportVideo={setOpenDialogListRadioReportVideo}
@@ -897,6 +971,6 @@ export default function DetailVideo() {
           {contentAlert}
         </Alert>
       </Snackbar>
-    </>
+    </Box>
   );
 }

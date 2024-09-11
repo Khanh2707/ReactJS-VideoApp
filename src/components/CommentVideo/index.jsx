@@ -339,7 +339,16 @@ export default function CommentVideo({
               <Typography
                 sx={{ fontSize: "13px", mt: "8px", cursor: "pointer" }}
                 fontWeight={600}
-                onClick={() => setOpenInputCommentComment(true)}
+                onClick={() => {
+                  if (myAccount) {
+                    setOpenInputCommentComment(true);
+                  } else {
+                    handleOpenSnackbar(
+                      "error",
+                      "Đăng nhập để có thể thực hiện chức năng!"
+                    );
+                  }
+                }}
               >
                 Phản hồi
               </Typography>

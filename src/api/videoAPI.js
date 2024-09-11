@@ -198,6 +198,11 @@ const videoAPI = {
     return axiosClient.put(url);
   },
 
+  deleteVideo: (idVideo) => {
+    const url = `/api/videos/${idVideo}`;
+    return axiosClient.delete(url);
+  },
+
   deleteCommentVideo: (idCommentVideo) => {
     const url = `/api/comment_videos/${idCommentVideo}`;
     return axiosClient.delete(url);
