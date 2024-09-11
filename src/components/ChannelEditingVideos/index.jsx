@@ -1,4 +1,12 @@
-import { Box, Chip, IconButton, InputBase, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Chip,
+  IconButton,
+  InputBase,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import {
   DataGrid,
   gridPageCountSelector,
@@ -197,11 +205,38 @@ export default function ChannelEditingVideos() {
   const [propertySearch, setPropertySearch] = useState("dateTimeCreate");
   const [openDialogListFilterMyVideo, setOpenDialogListFilterMyVideo] =
     useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [contentAlert, setContentAlert] = useState("");
+  const [stateAlert, setStateAlert] = useState("success");
 
   const { page, pageSize } = paginationModel;
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+  const handleOpenSnackbar = (state, message) => {
+    setOpenSnackbar(false);
+
+    setStateAlert(state);
+    setContentAlert(message);
+
+    setTimeout(() => {
+      setOpenSnackbar(true);
+    }, 100);
+  };
+
   const handleProcessRowUpdate = (newRow) => {
-    console.log("Row updated:", newRow);
+    videoAPI
+      .updateVideo(newRow.idVideo, newRow)
+      .then((response) => {
+        handleOpenSnackbar("success", "Cập nhật thành công!");
+      })
+      .catch((error) => {});
 
     return newRow;
   };
@@ -335,6 +370,21 @@ export default function ChannelEditingVideos() {
         propertySearch={propertySearch}
         setPropertySearch={setPropertySearch}
       />
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={stateAlert}
+          variant='filled'
+          sx={{ width: "100%" }}
+        >
+          {contentAlert}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

@@ -156,6 +156,11 @@ const videoAPI = {
     return axiosClient.post(url, data, config);
   },
 
+  updateVideo: (idVideo, data, config) => {
+    const url = `/api/videos/${idVideo}`;
+    return axiosClient.put(url, data, config);
+  },
+
   updateIsCheckHistoryNotificationCommentComment: (
     idChannel,
     idNotificationCommentComment,
