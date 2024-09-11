@@ -74,7 +74,12 @@ export default createBrowserRouter([
             ),
             path: "/",
             loader: async () => {
-              const videos = await videoAPI.getAll(0, 4);
+              const videos = await videoAPI.getAllVideo(
+                "dateTimeCreate",
+                "desc",
+                0,
+                4
+              );
 
               return { videos };
             },
@@ -87,7 +92,12 @@ export default createBrowserRouter([
             ),
             path: "/watch/:idVideo",
             loader: async ({}) => {
-              const videos = await videoAPI.getAll(0, 8);
+              const videos = await videoAPI.getAllVideo(
+                "dateTimeCreate",
+                "desc",
+                0,
+                8
+              );
 
               return { videos };
             },
@@ -157,7 +167,12 @@ export default createBrowserRouter([
             element: <AdminLayout />,
             path: "dashboard",
             loader: async () => {
-              const videos = await videoAPI.getAll();
+              const videos = await videoAPI.getAllVideo(
+                "dateTimeCreate",
+                "desc",
+                0,
+                4
+              );
 
               return { videos };
             },
@@ -170,7 +185,12 @@ export default createBrowserRouter([
             ),
             path: "/results",
             loader: async () => {
-              const videos = await videoAPI.getAll(0, 6);
+              const videos = await videoAPI.getAllVideo(
+                "dateTimeCreate",
+                "desc",
+                0,
+                6
+              );
 
               return { videos };
             },

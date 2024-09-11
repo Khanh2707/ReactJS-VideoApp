@@ -28,7 +28,7 @@ export default function Home() {
   useEffect(() => {
     if (selectedChip !== 0) {
       videoAPI
-        .getAllByCategory(selectedChip, 0, 4)
+        .getAllVideoByCategory(selectedChip, "dateTimeCreate", "desc", 0, 4)
         .then((response) => {
           setVideosByCategory(response.result.content);
         })
