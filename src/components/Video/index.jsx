@@ -1,15 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { styled } from "@mui/material/styles";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import PlayerControls from "../PlayerControls";
 import screenfull from "screenfull";
 import videoAPI from "../../api/videoAPI";
+import { useParams } from "react-router-dom";
 
 const PlayerWrapper = styled(Box)(({ theme }) => ({
   position: "relative",
   borderRadius: "12px",
   overflow: "hidden",
+}));
+
+const LoadingWrapper = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  zIndex: 1000,
 }));
 
 const format = (seconds) => {
@@ -29,7 +38,13 @@ const format = (seconds) => {
   return `${mm}:${ss}`;
 };
 
-export default function Video({ idVideo, titleVideo, linkVideo }) {
+export default function Video({
+  idVideo,
+  titleVideo,
+  linkVideo,
+  imagePreview,
+}) {
+  const [duration, setDuration] = useState(0);
   const [width, setWidth] = useState(0);
   const [state, setState] = useState({
     playing: false,
@@ -39,38 +54,34 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
     played: 0,
     seeking: false,
   });
-
   const [timeDisplayFormat, setTimeDisplayFormat] = useState("normal");
   const [watchProgress, setWatchProgress] = useState(0);
   const [hasWatchedEnough, setHasWatchedEnough] = useState(false);
-
-  const { playing, muted, volume, playbackRate, played, seeking } = state;
+  const [isLoading, setIsLoading] = useState(true);
 
   const playerWrapperRef = useRef(null);
   const playerRef = useRef(null);
   const controlsRef = useRef(null);
+
+  const { playing, muted, volume, playbackRate, played, seeking } = state;
 
   const handlePlayPause = () => {
     setState({ ...state, playing: !state.playing });
     if (!playing) {
       setState((prevState) => ({ ...prevState, seeking: false }));
     }
-    console.log(`Play/Pause clicked: ${playing ? "Paused" : "Playing"}`);
   };
 
   const handleRewind = () => {
     playerRef.current.seekTo(playerRef.current.getCurrentTime() - 10);
-    console.log("Rewind 10 seconds");
   };
 
   const handleFastForward = () => {
     playerRef.current.seekTo(playerRef.current.getCurrentTime() + 10);
-    console.log("Fast Forward 10 seconds");
   };
 
   const handleMute = () => {
     setState({ ...state, muted: !state.muted });
-    console.log(`Mute toggled: ${!state.muted}`);
   };
 
   const handleVolumeChange = (e, newValue) => {
@@ -79,7 +90,6 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
       volume: parseFloat(newValue / 100),
       muted: newValue === 0 ? true : false,
     });
-    console.log(`Volume changed: ${newValue}`);
   };
 
   const handleVolumeSeekUp = (e, newValue) => {
@@ -88,17 +98,14 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
       volume: parseFloat(newValue / 100),
       muted: newValue === 0 ? true : false,
     });
-    console.log(`Volume Seek Up: ${newValue}`);
   };
 
   const handlePlaybackRateChange = (rate) => {
     setState({ ...state, playbackRate: rate });
-    console.log(`Playback Rate changed: ${rate}`);
   };
 
   const handleToggleFullScreen = () => {
     screenfull.toggle(playerWrapperRef.current);
-    console.log("Toggled Full Screen");
   };
 
   const handleProgress = (changeState) => {
@@ -107,14 +114,15 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
     setState({ ...state, ...changeState });
 
     const currentTime = playerRef.current.getCurrentTime();
-    const totalDuration = playerRef.current.getDuration();
+
+    console.log(currentTime);
 
     let requiredWatchTime = 0.5;
     if (playbackRate > 1) {
       requiredWatchTime = 0.8;
     }
 
-    const adjustedWatchTime = requiredWatchTime * totalDuration;
+    const adjustedWatchTime = requiredWatchTime * duration;
 
     setWatchProgress((prevProgress) => {
       const newProgress = Math.min(
@@ -130,44 +138,37 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
           .then((response) => {})
           .catch((error) => {});
       }
-      console.log(`Watch Progress: ${newProgress}%`);
       return newProgress;
     });
   };
 
   const handleSeekChange = (e, newValue) => {
     setState({ ...state, played: parseFloat(newValue / 100) });
-    console.log(`Seek Bar Changed: ${newValue}`);
   };
 
   const handleSeekMouseDown = () => {
     setState({ ...state, seeking: true });
-    console.log("Seeking started");
   };
 
   const handleSeekMouseUp = (e, newValue) => {
     setState({ ...state, seeking: false });
     playerRef.current.seekTo(newValue / 100);
-    console.log(`Seeking ended: ${newValue}`);
   };
 
   const handleChangeDisplayFormat = () => {
     setTimeDisplayFormat(
       timeDisplayFormat === "normal" ? "remaining" : "normal"
     );
-    console.log(`Time Display Format changed: ${timeDisplayFormat}`);
   };
 
   const handleEnded = () => {
     setHasWatchedEnough(false);
     setWatchProgress(0);
-    console.log("Video has ended.");
     setState({ ...state, playing: false });
   };
 
   const handleMouseMove = () => {
     controlsRef.current.style.visibility = "visible";
-    console.log("Mouse moved: Controls visible");
   };
 
   useEffect(() => {
@@ -187,6 +188,28 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
 
   return (
     <PlayerWrapper ref={playerWrapperRef} onMouseMove={handleMouseMove}>
+      {isLoading && (
+        <LoadingWrapper>
+          <CircularProgress color='secondary' />
+        </LoadingWrapper>
+      )}
+
+      {!playing && playerRef?.current?.getCurrentTime() === 0 ? (
+        <img
+          src={imagePreview}
+          alt={imagePreview}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 1,
+          }}
+        />
+      ) : null}
+
       <ReactPlayer
         ref={playerRef}
         width='100%'
@@ -199,6 +222,8 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
         playbackRate={playbackRate}
         onProgress={handleProgress}
         onEnded={handleEnded}
+        onDuration={(d) => setDuration(d)}
+        onReady={() => setIsLoading(false)}
       />
 
       <PlayerControls
@@ -222,7 +247,7 @@ export default function Video({ idVideo, titleVideo, linkVideo }) {
         onSeekMouseDown={handleSeekMouseDown}
         onSeekMouseUp={handleSeekMouseUp}
         elapsedTime={format(playerRef.current?.getCurrentTime() || 0)}
-        totalDuration={format(playerRef.current?.getDuration() || 0)}
+        totalDuration={format(duration)}
         onChangeDisplayFormat={handleChangeDisplayFormat}
       />
     </PlayerWrapper>

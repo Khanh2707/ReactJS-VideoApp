@@ -38,6 +38,7 @@ import channelAPI from "../../api/channelAPI";
 import videoAPI from "../../api/videoAPI";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ConfirmDeleteVideo from "../../components/dialog/ConfirmDeleteVideo";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -60,20 +61,12 @@ export default function DetailVideo() {
 
   const { idVideo } = useParams();
 
-  const {
-    video,
-    amountSub: initialAmountSub,
-    amountLike: initialAmountLike,
-    videos,
-  } = useLoaderData();
+  const { videos } = useLoaderData();
 
+  const [video, setVideo] = useState(null);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showListActionVideo, setShowListActionVideo] = useState(false);
-  const actionVideoButtonRef = useRef(null);
-  const listActionVideoRef = useRef(null);
   const [showListSortComment, setShowListSortComment] = useState(false);
-  const sortCommentButtonRef = useRef(null);
-  const listSorCommentRef = useRef(null);
   const [showActionComment, setShowActionComment] = useState(false);
   const [valueComment, setValueComment] = useState("");
   const [openDialogListRadioReportVideo, setOpenDialogListRadioReportVideo] =
@@ -83,9 +76,9 @@ export default function DetailVideo() {
   const [stateAlert, setStateAlert] = useState("info");
   const [contentAlert, setContentAlert] = useState("");
   const [isSub, setIsSub] = useState(null);
-  const [amountSub, setAmountSub] = useState(initialAmountSub.result);
+  const [amountSub, setAmountSub] = useState(0);
   const [isLike, setIsLike] = useState(null);
-  const [amountLike, setAmountLike] = useState(initialAmountLike.result);
+  const [amountLike, setAmountLike] = useState(0);
   const [openBackdropCommentVideo, setOpenBackdropCommentVideo] =
     useState(true);
   const [amountCommentVideo, setAmountCommentVideo] = useState(0);
@@ -94,6 +87,11 @@ export default function DetailVideo() {
   const [openBackdropDeleteVideo, setOpenBackdropDeleteVideo] = useState(false);
   const [openDialogConfirmDeleteVideo, setOpenDialogConfirmDeleteVideo] =
     useState(false);
+
+  const actionVideoButtonRef = useRef(null);
+  const listActionVideoRef = useRef(null);
+  const sortCommentButtonRef = useRef(null);
+  const listSorCommentRef = useRef(null);
 
   const handleClickOutside = (event) => {
     if (
@@ -181,10 +179,23 @@ export default function DetailVideo() {
     setOpenSnackbar(false);
   };
 
+  const getVideo = () => {
+    videoAPI
+      .getById(idVideo)
+      .then((response) => {
+        setVideo(response.result);
+        getIsSub(response.result.channel.idChannel);
+        getAmountSub(response.result.channel.idChannel);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   // API
-  const getAmountSub = () => {
+  const getAmountSub = (idChannelByVideo) => {
     channelAPI
-      .countSubChannel(video.result.channel.idChannel)
+      .countSubChannel(idChannelByVideo)
       .then((response) => {
         setAmountSub(response.result);
       })
@@ -194,13 +205,10 @@ export default function DetailVideo() {
   };
 
   // API
-  const getIsSub = () => {
+  const getIsSub = (idChannelByVideo) => {
     if (myAccount) {
       channelAPI
-        .checkChannelSubChannel(
-          myAccount?.channel?.idChannel,
-          video.result?.channel?.idChannel
-        )
+        .checkChannelSubChannel(myAccount?.channel?.idChannel, idChannelByVideo)
         .then((response) => {
           setIsSub(response.result);
         })
@@ -215,15 +223,14 @@ export default function DetailVideo() {
     channelAPI
       .createChannelSubChannel({
         idChannel1: myAccount.channel.idChannel,
-        idChannel2: video.result.channel.idChannel,
+        idChannel2: video?.channel.idChannel,
       })
       .then((response) => {
         console.log(response);
-        getIsSub();
-        getAmountSub();
+        getVideo();
         handleOpenSnackbar(
           "success",
-          `Bạn vừa đăng ký kênh ${video.result.channel.name}`
+          `Bạn vừa đăng ký kênh ${video?.channel.name}`
         );
       })
       .catch((error) => {
@@ -236,15 +243,14 @@ export default function DetailVideo() {
     channelAPI
       .deleteChannelSubChannel(
         myAccount.channel.idChannel,
-        video.result.channel.idChannel
+        video?.channel.idChannel
       )
       .then((response) => {
         console.log(response);
-        getIsSub();
-        getAmountSub();
+        getVideo();
         handleOpenSnackbar(
           "info",
-          `Bạn vừa hủy đăng ký kênh ${video.result.channel.name}`
+          `Bạn vừa hủy đăng ký kênh ${video?.channel.name}`
         );
       })
       .catch((error) => {
@@ -255,7 +261,7 @@ export default function DetailVideo() {
   // API
   const getAmountLike = () => {
     videoAPI
-      .countLikeVideo(video.result.idVideo)
+      .countLikeVideo(idVideo)
       .then((response) => {
         setAmountLike(response.result);
       })
@@ -268,10 +274,7 @@ export default function DetailVideo() {
   const getIsLike = () => {
     if (myAccount) {
       videoAPI
-        .checkChannelLikeVideo(
-          myAccount?.channel?.idChannel,
-          video.result.idVideo
-        )
+        .checkChannelLikeVideo(myAccount?.channel?.idChannel, idVideo)
         .then((response) => {
           setIsLike(response.result);
         })
@@ -286,16 +289,13 @@ export default function DetailVideo() {
     videoAPI
       .createChannelLikeVideo({
         idChannel: myAccount.channel.idChannel,
-        idVideo: video.result.idVideo,
+        idVideo: idVideo,
       })
       .then((response) => {
         console.log(response);
         getIsLike();
         getAmountLike();
-        handleOpenSnackbar(
-          "success",
-          `Bạn vừa like video ${video.result.title}`
-        );
+        handleOpenSnackbar("success", `Bạn vừa like video ${video?.title}`);
       })
       .catch((error) => {
         console.log(error);
@@ -305,15 +305,12 @@ export default function DetailVideo() {
   // API
   const handleUnLikeVideo = () => {
     videoAPI
-      .deleteHistoryLikeVideo(myAccount.channel.idChannel, video.result.idVideo)
+      .deleteHistoryLikeVideo(myAccount.channel.idChannel, idVideo)
       .then((response) => {
         console.log(response);
         getIsLike();
         getAmountLike();
-        handleOpenSnackbar(
-          "info",
-          `Bạn vừa hủy like video ${video.result.title}`
-        );
+        handleOpenSnackbar("info", `Bạn vừa hủy like video ${video?.title}`);
       })
       .catch((error) => {
         console.log(error);
@@ -324,7 +321,7 @@ export default function DetailVideo() {
   const handleDownloadVideo = () => {
     handleOpenSnackbar("info", "Video sắp được tải");
     videoAPI
-      .downloadVideo(video.result.idVideo, {
+      .downloadVideo(idVideo, {
         responseType: "blob",
         headers: {
           "Content-Type": "application/octet-stream",
@@ -334,7 +331,7 @@ export default function DetailVideo() {
         const url = window.URL.createObjectURL(new Blob([response]));
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${video.result.title}.mp4`;
+        a.download = `${video?.title}.mp4`;
         document.body.appendChild(a);
         a.click();
         a.remove();
@@ -351,7 +348,7 @@ export default function DetailVideo() {
       videoAPI
         .createHistoryWatchVideo({
           idChannel: myAccount?.channel?.idChannel,
-          idVideo: video.result.idVideo,
+          idVideo: idVideo,
         })
         .then((response) => {
           console.log(response);
@@ -392,7 +389,7 @@ export default function DetailVideo() {
     );
 
     videoAPI
-      .deleteVideo(video.result.idVideo)
+      .deleteVideo(idVideo)
       .then((response) => {
         sendNotification();
         setOpenBackdropDeleteVideo(false);
@@ -405,48 +402,50 @@ export default function DetailVideo() {
   };
 
   useEffect(() => {
-    countCommentVideosByVideo();
-    getAllCommentVideo();
-  }, [stateSortComment]);
-
-  useEffect(() => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
 
+    getVideo();
     handleWatchVideo();
+  }, [idVideo]);
 
-    getIsSub();
-    getAmountSub();
+  useEffect(() => {
+    countCommentVideosByVideo();
+    getAllCommentVideo();
+  }, [idVideo, stateSortComment]);
+
+  useEffect(() => {
     getIsLike();
     getAmountLike();
 
-    if (isSub !== null && isLike !== null) {
-      setOpenBackdropInfoVideo(false);
-    }
+    if (isLike !== null) setOpenBackdropInfoVideo(false);
+  }, [idVideo, isLike, amountLike]);
 
+  useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [video, isSub, amountSub, isLike, amountLike]);
+  }, []);
 
   return (
     <Box sx={{ position: "relative" }}>
       <Box sx={{ display: "flex", pb: "450px" }}>
         <Box sx={{ width: "100%" }}>
           <Video
-            idVideo={video.result.idVideo}
-            titleVideo={video.result.title}
-            linkVideo={video.result.linkVideo}
+            idVideo={idVideo}
+            titleVideo={video?.title}
+            linkVideo={video?.linkVideo}
+            imagePreview={video?.imagePreview}
           />
           <Typography
             variant='h6'
             fontWeight='700'
             sx={{ mt: "12px", lineHeight: "1.4" }}
           >
-            {video.result.title}
+            {video?.title}
           </Typography>
           <Box sx={{ position: "relative" }}>
             <Backdrop
@@ -484,15 +483,15 @@ export default function DetailVideo() {
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Box
                     onClick={() => {
-                      navigate(`/${video.result.channel.nameUnique}`);
+                      navigate(`/${video?.channel.nameUnique}`);
                     }}
                   >
-                    <Avatar alt='' src={video.result.channel.avatar} />
+                    <Avatar alt='' src={video?.channel.avatar} />
                   </Box>
                   <Box sx={{ ml: "12px", lineHeight: "1" }}>
                     <Box
                       onClick={() => {
-                        navigate(`/${video.result.channel.nameUnique}`);
+                        navigate(`/${video?.channel.nameUnique}`);
                       }}
                     >
                       <Typography
@@ -500,7 +499,7 @@ export default function DetailVideo() {
                         sx={{ lineHeight: "1.3" }}
                         fontWeight='600'
                       >
-                        {video.result.channel.name}
+                        {video?.channel.name}
                       </Typography>
                     </Box>
                     <Typography
@@ -665,7 +664,7 @@ export default function DetailVideo() {
                               </Typography>
                             </ListItemButton>
                           </ListItem>
-                          {video.result.channel.idChannel ===
+                          {video?.channel.idChannel ===
                             myAccount?.channel.idChannel && (
                             <ListItem
                               disablePadding
@@ -677,6 +676,17 @@ export default function DetailVideo() {
                                 <DeleteOutlineIcon />
                                 <Typography sx={{ ml: "12px" }}>
                                   Xóa video
+                                </Typography>
+                              </ListItemButton>
+                            </ListItem>
+                          )}
+                          {(myAccount?.roles[0].name === "ADMIN" ||
+                            myAccount?.roles[0].name === "CENSOR") && (
+                            <ListItem disablePadding onClick={() => {}}>
+                              <ListItemButton>
+                                <LockOutlinedIcon />
+                                <Typography sx={{ ml: "12px" }}>
+                                  Khóa video
                                 </Typography>
                               </ListItemButton>
                             </ListItem>
@@ -711,12 +721,12 @@ export default function DetailVideo() {
                   lines={4}
                 >
                   {`${
-                    video.result.view
+                    video?.view
                   } lượt xem \u00A0\u00A0\u00A0 ${formatDistanceToNow(
-                    parseISO(video.result.dateTimeCreate),
+                    parseISO(video?.dateTimeCreate ?? new Date().toISOString()),
                     { addSuffix: true, locale: vi }
                   )}
-                  ${video.result.description}`}
+                  ${video?.description}`}
                 </ShowMoreText>
               </Box>
             </Box>
