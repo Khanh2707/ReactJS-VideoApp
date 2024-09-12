@@ -166,16 +166,6 @@ export default createBrowserRouter([
           {
             element: <AdminLayout />,
             path: "dashboard",
-            loader: async () => {
-              const videos = await videoAPI.getAllVideo(
-                "dateTimeCreate",
-                "desc",
-                0,
-                4
-              );
-
-              return { videos };
-            },
           },
           {
             element: (

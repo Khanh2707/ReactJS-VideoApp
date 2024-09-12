@@ -24,7 +24,7 @@ import { GridPagination } from "@mui/x-data-grid";
 import SearchIcon from "@mui/icons-material/Search";
 import { useTheme } from "@emotion/react";
 import ClearIcon from "@mui/icons-material/Clear";
-import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
+import TuneIcon from "@mui/icons-material/Tune";
 import ListFilterMyVideo from "../dialog/ListFilterMyVideo";
 
 function Pagination({ page, onPageChange, className }) {
@@ -101,8 +101,8 @@ function QuickSearchToolbar({
           </IconButton>
         </Box>
         <Chip
-          icon={<SortOutlinedIcon />}
-          label='Sắp xếp'
+          icon={<TuneIcon />}
+          label='Bộ lọc'
           sx={{
             p: "4px",
             fontSize: "14px",
@@ -203,6 +203,7 @@ export default function ChannelEditingVideos() {
   const [searchValue, setSearchValue] = useState("");
   const [optionSort, setOptionSort] = useState("desc");
   const [propertySearch, setPropertySearch] = useState("dateTimeCreate");
+  const [idCategory, setIdCategory] = useState(0);
   const [openDialogListFilterMyVideo, setOpenDialogListFilterMyVideo] =
     useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -253,7 +254,8 @@ export default function ChannelEditingVideos() {
           propertySearch,
           optionSort,
           page,
-          pageSize
+          pageSize,
+          idCategory
         );
       } else {
         videoResponse = await videoAPI.getAllSearchVideoChannelByTitle(
@@ -262,7 +264,8 @@ export default function ChannelEditingVideos() {
           propertySearch,
           optionSort,
           page,
-          pageSize
+          pageSize,
+          idCategory
         );
       }
 
@@ -316,6 +319,7 @@ export default function ChannelEditingVideos() {
     searchValue,
     propertySearch,
     optionSort,
+    idCategory,
   ]);
 
   return (
@@ -369,6 +373,8 @@ export default function ChannelEditingVideos() {
         setOptionSort={setOptionSort}
         propertySearch={propertySearch}
         setPropertySearch={setPropertySearch}
+        idCategory={idCategory}
+        setIdCategory={setIdCategory}
       />
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}

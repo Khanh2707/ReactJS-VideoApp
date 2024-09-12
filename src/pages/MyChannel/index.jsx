@@ -103,7 +103,8 @@ export default function MyChannel() {
           "dateTimeCreate",
           "desc",
           0,
-          4
+          4,
+          0
         )
         .then((response) => {
           setVideos(response.result.content);
@@ -124,7 +125,8 @@ export default function MyChannel() {
         "dateTimeCreate",
         "desc",
         0,
-        6
+        6,
+        0
       )
       .then((response) => {
         setVideos(response.result.content);
