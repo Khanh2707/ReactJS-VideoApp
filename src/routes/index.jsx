@@ -73,16 +73,6 @@ export default createBrowserRouter([
               </DefaultLayout>
             ),
             path: "/",
-            loader: async () => {
-              const videos = await videoAPI.getAllVideo(
-                "dateTimeCreate",
-                "desc",
-                0,
-                4
-              );
-
-              return { videos };
-            },
           },
           {
             element: (
@@ -96,7 +86,8 @@ export default createBrowserRouter([
                 "dateTimeCreate",
                 "desc",
                 0,
-                8
+                8,
+                0
               );
 
               return { videos };
@@ -179,7 +170,8 @@ export default createBrowserRouter([
                 "dateTimeCreate",
                 "desc",
                 0,
-                6
+                6,
+                0
               );
 
               return { videos };

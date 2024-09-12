@@ -147,14 +147,16 @@ const columns = [
     headerName: "Tiêu đề",
   },
   {
+    field: "idVideo",
+    headerName: "Id Video",
+    type: "number",
+  },
+  {
     field: "hide",
     headerName: "Hiển thị",
-    editable: true,
-    type: "singleSelect",
-    valueOptions: [
-      { value: false, label: "Công khai" },
-      { value: true, label: "Riêng tư" },
-    ],
+    valueGetter: (value) => {
+      return value ? "Riêng tư" : "Công khai";
+    },
   },
   {
     field: "ban",
@@ -166,11 +168,19 @@ const columns = [
   {
     field: "dateTimeCreate",
     headerName: "Thời gian tạo",
+    width: 150,
     valueGetter: (value) => {
       return formatDistanceToNow(parseISO(value), {
         addSuffix: true,
         locale: vi,
       });
+    },
+  },
+  {
+    field: "category",
+    headerName: "Thể loại",
+    valueGetter: (value) => {
+      return value?.nameCategory;
     },
   },
   {
@@ -187,6 +197,7 @@ const columns = [
     field: "amountComment",
     headerName: "Lượt bình luận",
     type: "number",
+    width: 120,
   },
 ];
 
@@ -242,15 +253,14 @@ export default function Table() {
     return newRow;
   };
 
-  const fetchData = async (keyword = searchValue) => {
+  const fetchData = async (searchValue) => {
     setIsLoading(true);
 
     try {
       let videoResponse;
 
-      if (!keyword) {
-        videoResponse = await videoAPI.getAllByChannelNameUnique(
-          myAccount.channel.nameUnique,
+      if (!searchValue) {
+        videoResponse = await videoAPI.getAllVideo(
           propertySearch,
           optionSort,
           page,
@@ -258,9 +268,8 @@ export default function Table() {
           idCategory
         );
       } else {
-        videoResponse = await videoAPI.getAllSearchVideoChannelByTitle(
-          myAccount?.channel?.nameUnique,
-          keyword,
+        videoResponse = await videoAPI.getAllSearchVideoByTitle(
+          searchValue,
           propertySearch,
           optionSort,
           page,
@@ -365,6 +374,7 @@ export default function Table() {
         }}
         disableColumnSorting
         disableColumnMenu
+        disableColumnResize
       />
       <ListFilterMyVideo
         openDialogListFilterMyVideo={openDialogListFilterMyVideo}

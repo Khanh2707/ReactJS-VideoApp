@@ -242,13 +242,13 @@ export default function ChannelEditingVideos() {
     return newRow;
   };
 
-  const fetchData = async (keyword = searchValue) => {
+  const fetchData = async (searchValue) => {
     setIsLoading(true);
 
     try {
       let videoResponse;
 
-      if (!keyword) {
+      if (!searchValue) {
         videoResponse = await videoAPI.getAllByChannelNameUnique(
           myAccount.channel.nameUnique,
           propertySearch,
@@ -260,7 +260,7 @@ export default function ChannelEditingVideos() {
       } else {
         videoResponse = await videoAPI.getAllSearchVideoChannelByTitle(
           myAccount?.channel?.nameUnique,
-          keyword,
+          searchValue,
           propertySearch,
           optionSort,
           page,
@@ -365,6 +365,7 @@ export default function ChannelEditingVideos() {
         }}
         disableColumnSorting
         disableColumnMenu
+        disableColumnResize
       />
       <ListFilterMyVideo
         openDialogListFilterMyVideo={openDialogListFilterMyVideo}

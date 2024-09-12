@@ -16,30 +16,22 @@ import { AppContext } from "../../context/AppContext";
 export default function Home() {
   const navigate = useNavigate();
 
-  const { videos: allVideos } = useLoaderData();
   const { themeMode } = useContext(ThemeContext);
   const { selectedChip, setSelectedChip } = useContext(AppContext);
 
-  const [videosByCategory, setVideosByCategory] = useState(
-    allVideos.result.content
-  );
+  const [videosByCategory, setVideosByCategory] = useState([]);
   const [openBackdropVideos, setOpenBackdropVideos] = useState(true);
 
   useEffect(() => {
-    if (selectedChip !== 0) {
-      videoAPI
-        .getAllVideoByCategory(selectedChip, "dateTimeCreate", "desc", 0, 4)
-        .then((response) => {
-          setVideosByCategory(response.result.content);
-        })
-        .catch((error) => {})
-        .finally(() => {
-          setOpenBackdropVideos(false);
-        });
-    } else {
-      setVideosByCategory(allVideos.result.content);
-      setOpenBackdropVideos(false);
-    }
+    videoAPI
+      .getAllVideo("dateTimeCreate", "desc", 0, 4, selectedChip)
+      .then((response) => {
+        setVideosByCategory(response.result.content);
+      })
+      .catch((error) => {})
+      .finally(() => {
+        setOpenBackdropVideos(false);
+      });
   }, [selectedChip]);
 
   return (
@@ -92,7 +84,7 @@ export default function Home() {
           /> */}
         </Backdrop>
       </Grid>
-      {videosByCategory.length == 0 && (
+      {videosByCategory.length == 0 && openBackdropVideos === false && (
         <Box
           sx={{
             width: "100%",

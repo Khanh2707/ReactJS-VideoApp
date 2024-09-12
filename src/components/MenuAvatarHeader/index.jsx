@@ -118,12 +118,14 @@ export default function MenuAvatarHeader() {
                 </Typography>
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton component={Link} to='/dashboard'>
-                <DashboardIcon />
-                <Typography sx={{ ml: "8px" }}>Trang quản trị</Typography>
-              </ListItemButton>
-            </ListItem>
+            {myAccount.roles[0].idRole !== 3 && (
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to='/dashboard'>
+                  <DashboardIcon />
+                  <Typography sx={{ ml: "8px" }}>Trang quản trị</Typography>
+                </ListItemButton>
+              </ListItem>
+            )}
           </List>
         </Paper>
       )}

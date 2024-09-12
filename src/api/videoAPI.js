@@ -127,13 +127,20 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  getAllVideo: (propertySort, optionSort, page, size) => {
-    const url = `/api/videos/${propertySort}/${optionSort}/pageable/${page}/${size}`;
+  getAllSearchVideoByTitle: (
+    keyword,
+    propertySort,
+    optionSort,
+    page,
+    size,
+    idCategory
+  ) => {
+    const url = `/api/videos/search/all/video/${keyword}/${propertySort}/${optionSort}/pageable/${page}/${size}/category/${idCategory}`;
     return axiosClient.get(url);
   },
 
-  getAllVideoByCategory: (idCategory, propertySort, optionSort, page, size) => {
-    const url = `/api/videos/all/by/category/${idCategory}/${propertySort}/${optionSort}/pageable/${page}/${size}`;
+  getAllVideo: (propertySort, optionSort, page, size, idCategory) => {
+    const url = `/api/videos/${propertySort}/${optionSort}/pageable/${page}/${size}/category/${idCategory}`;
     return axiosClient.get(url);
   },
 
