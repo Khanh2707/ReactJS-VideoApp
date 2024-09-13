@@ -40,6 +40,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockVideo from "../../components/dialog/LockVideo";
 import { SnackbarContext } from "../../context/SnackbarContext";
 import Error from "../Error";
+import { ReponsiveContext } from "../../context/ReponsiveContext";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -56,6 +57,9 @@ const textFieldStyles = {
 export default function DetailVideo() {
   const theme = useTheme();
   const navigate = useNavigate();
+
+  const { isXlDown, isLgDown, isMdDown, isSmDown, isXsDown } =
+    useContext(ReponsiveContext);
 
   const { themeMode } = useContext(ThemeContext);
   const { myAccount, sendNotification } = useContext(AppContext);
@@ -367,7 +371,7 @@ export default function DetailVideo() {
   const getAllCommentVideo = () => {
     setOpenBackdropCommentVideo(true);
     videoAPI
-      .getAllCommentVideo(idVideo, "dateTimeComment", stateSortComment, 0, 10)
+      .getAllCommentVideo(idVideo, "dateTimeComment", stateSortComment, 0, 100)
       .then((response) => {
         setListCommentVideo(response.result.content);
         setOpenBackdropCommentVideo(false);
@@ -602,6 +606,7 @@ export default function DetailVideo() {
                         sx={{
                           p: "4px",
                           ml: "24px",
+                          mr: '8px',
                           bgcolor: "text.primary",
                           color: "secondary.main",
                           "&:hover": {
@@ -731,8 +736,8 @@ export default function DetailVideo() {
                             zIndex: "10",
                             minWidth: "160px",
                             borderRadius: "8px",
-                            top: "0",
-                            left: "34px",
+                            top: "40px",
+                            right: "0",
                             bgcolor: theme.palette.customBgcolorMenu.main,
                             boxShadow: theme.palette.customBoxShadowMenu.main,
                           }}
@@ -1019,27 +1024,31 @@ export default function DetailVideo() {
               </Backdrop>
             </Box>
           </Box>
-          <Box sx={{ ml: "24px" }}>
-            {videos.result.content.map((item) => {
-              return (
-                <Box
-                  key={item.idVideo}
-                  onClick={() => {
-                    navigate(`/watch/${item.idVideo}`);
-                  }}
-                >
-                  <RecommendVideoCard
-                    title={item.title}
-                    nameChannel={item.channel.name}
-                    nameUnique={item.channel.nameUnique}
-                    viewVideo={item.view}
-                    dateTimeCreateVideo={item.dateTimeCreate}
-                    imagePreview={item.imagePreview}
-                  />
-                </Box>
-              );
-            })}
-          </Box>
+          {!isMdDown && (
+            <Box sx={{ ml: "24px" }}>
+              {videos.result.content
+                .filter((video) => !(video.ban || video.hide))
+                .map((item) => {
+                  return (
+                    <Box
+                      key={item.idVideo}
+                      onClick={() => {
+                        navigate(`/watch/${item.idVideo}`);
+                      }}
+                    >
+                      <RecommendVideoCard
+                        title={item.title}
+                        nameChannel={item.channel.name}
+                        nameUnique={item.channel.nameUnique}
+                        viewVideo={item.view}
+                        dateTimeCreateVideo={item.dateTimeCreate}
+                        imagePreview={item.imagePreview}
+                      />
+                    </Box>
+                  );
+                })}
+            </Box>
+          )}
         </Box>
       )}
       <Backdrop

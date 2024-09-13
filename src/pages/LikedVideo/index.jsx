@@ -56,7 +56,7 @@ export default function LikedVideo() {
           myAccount?.channel?.idChannel,
           searchValue,
           0,
-          4
+          1000
         )
         .then((response) => {
           setLikedVideos(response.result.content);
@@ -72,7 +72,7 @@ export default function LikedVideo() {
   const getAllVideoChannelLiked = () => {
     setOpenBackdropInfoVideo(true);
     videoAPI
-      .getAllVideoChannelLiked(myAccount?.channel?.idChannel, 0, 4)
+      .getAllVideoChannelLiked(myAccount?.channel?.idChannel, 0, 1000)
       .then((response) => {
         setLikedVideos(response.result.content);
         setOpenBackdropInfoVideo(false);

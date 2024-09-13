@@ -15,10 +15,14 @@ import historySearchAPI from "../../api/historySearchAPI";
 import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
+import { ReponsiveContext } from "../../context/ReponsiveContext";
 
 export default function SearchHeader() {
   const theme = useTheme();
   const navigate = useNavigate();
+
+  const { isXlDown, isLgDown, isMdDown, isSmDown, isXsDown } =
+    useContext(ReponsiveContext);
 
   const { myAccount } = useContext(AppContext);
   const { setValueSearchAllVideo } = useContext(SearchContext);
@@ -107,7 +111,7 @@ export default function SearchHeader() {
       sx={{
         display: "flex",
         alignItems: "center",
-        width: "400px",
+        width: { md: "100%", lg: "400px" },
         position: "relative",
         border: `1px solid ${theme.palette.text.primary}`,
         borderRadius: "4px",

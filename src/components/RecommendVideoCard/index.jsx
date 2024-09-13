@@ -6,10 +6,11 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
+import { ReponsiveContext } from "../../context/ReponsiveContext";
 
 export default function RecommendVideoCard({
   title,
@@ -21,17 +22,26 @@ export default function RecommendVideoCard({
 }) {
   const navigate = useNavigate();
 
+  const { isXlDown, isLgDown, isMdDown, isSmDown, isXsDown } =
+    useContext(ReponsiveContext);
+
   return (
     <Card
       sx={{
         display: "flex",
+        flexDirection: isLgDown ? "column" : "row",
         alignItems: "center",
         mb: "8px",
         gap: "8px",
         cursor: "pointer",
       }}
     >
-      <Box sx={{ width: "168px", height: "94px" }}>
+      <Box
+        sx={{
+          width: isXlDown ? "226px" : "168px",
+          height: isXlDown ? "127px" : "94px",
+        }}
+      >
         <CardMedia
           component='img'
           image={imagePreview}

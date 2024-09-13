@@ -137,7 +137,7 @@ export default function Notification() {
                             fetchNotifications(
                               myAccount.channel.idChannel,
                               0,
-                              6
+                              1000
                             );
                           })
                           .catch((error) => {})
@@ -238,7 +238,7 @@ export default function Notification() {
                             fetchNotifications(
                               myAccount.channel.idChannel,
                               0,
-                              6
+                              1000
                             );
                           })
                           .catch((error) => {})
@@ -346,7 +346,7 @@ export default function Notification() {
                             fetchNotifications(
                               myAccount.channel.idChannel,
                               0,
-                              6
+                              1000
                             );
                           })
                           .catch((error) => {})

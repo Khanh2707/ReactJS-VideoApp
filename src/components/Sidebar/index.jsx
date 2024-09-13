@@ -43,7 +43,14 @@ export default function Sidebar() {
   const { myAccount } = useContext(AppContext);
 
   return (
-    <List sx={{ p: "0", position: "sticky", top: "90px" }}>
+    <List
+      sx={{
+        p: "0",
+        position: "sticky",
+        top: { md: "0", lg: "90px" },
+        m: "8px",
+      }}
+    >
       {listContent.map((item, index) => {
         const isSelected = item.dynamic
           ? location.pathname.startsWith(item.route)

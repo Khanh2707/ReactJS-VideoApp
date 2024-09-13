@@ -1,4 +1,11 @@
-import { Chip, Container, Grid, IconButton, Paper } from "@mui/material";
+import {
+  Chip,
+  Container,
+  Drawer,
+  Grid,
+  IconButton,
+  Paper,
+} from "@mui/material";
 import React, { useContext, useState } from "react";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import ThemeSwitcher from "../ThemeSwitcher";
@@ -16,9 +23,15 @@ import videoAPI from "../../api/videoAPI";
 import { SnackbarContext } from "../../context/SnackbarContext";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
+import { ReponsiveContext } from "../../context/ReponsiveContext";
+import DensityMediumIcon from "@mui/icons-material/DensityMedium";
+import Sidebar from "../Sidebar";
 
 export default function Header() {
   const navigate = useNavigate();
+
+  const { isXlDown, isLgDown, isMdDown, isSmDown, isXsDown } =
+    useContext(ReponsiveContext);
 
   const { themeMode } = useContext(ThemeContext);
   const { myAccount } = useContext(AppContext);
@@ -31,8 +44,17 @@ export default function Header() {
     setOpenDialogCreateVideo(true);
   };
 
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = (newOpen) => {
+    setOpen(newOpen);
+  };
+
   return (
     <>
+      <Drawer anchor='right' open={open} onClose={() => toggleDrawer(false)}>
+        <Sidebar />
+      </Drawer>
       <Paper
         sx={{
           position: "fixed",
@@ -65,31 +87,36 @@ export default function Header() {
             <Grid item>
               <SearchHeader />
             </Grid>
-            <Grid item>
-              <Grid container alignItems='center' spacing={1}>
-                <Grid item>
-                  <ThemeSwitcher />
-                </Grid>
-                {myAccount ? (
-                  <>
+            {!isSmDown && (
+              <Grid item>
+                <Grid container alignItems='center' spacing={1}>
+                  {!isMdDown && (
                     <Grid item>
-                      <IconButton
-                        type='button'
-                        onClick={async () => {
-                          try {
-                            const channelIsBanResponse =
-                              await videoAPI.getChannelIsBan(
-                                myAccount.channel.idChannel
-                              );
+                      <ThemeSwitcher />
+                    </Grid>
+                  )}
+                  {myAccount ? (
+                    <>
+                      <Grid item>
+                        <IconButton
+                          type='button'
+                          onClick={async () => {
+                            try {
+                              const channelIsBanResponse =
+                                await videoAPI.getChannelIsBan(
+                                  myAccount.channel.idChannel
+                                );
 
-                            if (channelIsBanResponse?.result) {
-                              let dateTimeBan = new Date(
-                                channelIsBanResponse.result.dateTimeBan
-                              );
-                              dateTimeBan.setMonth(dateTimeBan.getMonth() + 3);
-                              handleOpenSnackbar(
-                                "error",
-                                `Bạn đã bị khóa đăng video do vi phạm 3 lần trở lên!\n
+                              if (channelIsBanResponse?.result) {
+                                let dateTimeBan = new Date(
+                                  channelIsBanResponse.result.dateTimeBan
+                                );
+                                dateTimeBan.setMonth(
+                                  dateTimeBan.getMonth() + 3
+                                );
+                                handleOpenSnackbar(
+                                  "error",
+                                  `Bạn đã bị khóa đăng video do vi phạm 3 lần trở lên!\n
                                 Bạn sẽ được mở tài khoản sau ${formatDistanceToNow(
                                   parseISO(dateTimeBan.toISOString()),
                                   {
@@ -97,54 +124,62 @@ export default function Header() {
                                     locale: vi,
                                   }
                                 )}`,
-                                "bottom",
-                                "center"
-                              );
+                                  "bottom",
+                                  "center"
+                                );
+                              }
+                            } catch (error) {
+                              if (error.response.data.code === 1023) {
+                                handleClickOpenDialogCreateVideo();
+                              }
                             }
-                          } catch (error) {
-                            if (error.response.data.code === 1023) {
-                              handleClickOpenDialogCreateVideo();
-                            }
-                          }
+                          }}
+                        >
+                          <VideoCallIcon />
+                        </IconButton>
+                      </Grid>
+                      <Grid item>
+                        <Notification />
+                      </Grid>
+                      <Grid item>
+                        <MenuAvatarHeader />
+                      </Grid>
+                    </>
+                  ) : (
+                    <Grid item>
+                      <Chip
+                        icon={<AccountCircleIcon />}
+                        label='Đăng nhập'
+                        variant='outlined'
+                        component={Link}
+                        to='/login'
+                        sx={{
+                          p: "4px",
+                          mr: "8px",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          backgroundColor: "rgba(0, 0, 0, 0)",
+                          "& .MuiChip-icon": {
+                            color: "rgb(62, 166, 255)",
+                          },
+                          "& .MuiChip-label": {
+                            color: "rgb(62, 166, 255)",
+                          },
+                          cursor: "pointer",
                         }}
-                      >
-                        <VideoCallIcon />
-                      </IconButton>
+                      />
                     </Grid>
-                    <Grid item>
-                      <Notification />
-                    </Grid>
-                    <Grid item>
-                      <MenuAvatarHeader />
-                    </Grid>
-                  </>
-                ) : (
-                  <Grid item>
-                    <Chip
-                      icon={<AccountCircleIcon />}
-                      label='Đăng nhập'
-                      variant='outlined'
-                      component={Link}
-                      to='/login'
-                      sx={{
-                        p: "4px",
-                        mr: "8px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        backgroundColor: "rgba(0, 0, 0, 0)",
-                        "& .MuiChip-icon": {
-                          color: "rgb(62, 166, 255)",
-                        },
-                        "& .MuiChip-label": {
-                          color: "rgb(62, 166, 255)",
-                        },
-                        cursor: "pointer",
-                      }}
-                    />
-                  </Grid>
-                )}
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
+            )}
+            {isSmDown && (
+              <Grid item>
+                <IconButton onClick={() => toggleDrawer(true)}>
+                  <DensityMediumIcon />
+                </IconButton>
+              </Grid>
+            )}
           </Grid>
         </Container>
       </Paper>

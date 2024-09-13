@@ -287,8 +287,9 @@ export default function MyChannel() {
           <Paper
             sx={{
               display: "flex",
+              flexDirection: "column",
               mt: "12px",
-              alignItems: "center",
+              alignItems: "start",
               gap: "8px",
             }}
           >

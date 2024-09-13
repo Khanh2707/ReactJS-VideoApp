@@ -26,7 +26,7 @@ export default function ResultSearch() {
   const getAllSearchVideoByTitle = () => {
     if (valueSearchAllVideo === "") {
       videoAPI
-        .getAllVideo(propertySearch, optionSort, 0, 100, selectedChip)
+        .getAllVideo(propertySearch, optionSort, 0, 1000, selectedChip)
         .then((response) => {
           const filteredVideos = response.result.content.filter(
             (video) => !(video.ban || video.hide)
@@ -42,7 +42,7 @@ export default function ResultSearch() {
           propertySearch,
           optionSort,
           0,
-          100,
+          1000,
           selectedChip
         )
         .then((response) => {

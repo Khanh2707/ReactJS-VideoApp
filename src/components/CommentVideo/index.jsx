@@ -375,6 +375,7 @@ export default function CommentVideo({
                 sx={{
                   position: "absolute",
                   zIndex: "10",
+                  left: "-110px",
                   minWidth: "150px",
                   borderRadius: "8px",
                   bgcolor: theme.palette.customBgcolorMenu.main,

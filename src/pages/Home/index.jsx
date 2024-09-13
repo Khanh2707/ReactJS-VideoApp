@@ -8,7 +8,7 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import MediaCard from "../../components/MediaCard";
 import ListCategory from "../../components/ListCategory";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import videoAPI from "../../api/videoAPI";
 import { ThemeContext } from "../../context/ThemeContext";
 import { AppContext } from "../../context/AppContext";
@@ -24,7 +24,7 @@ export default function Home() {
 
   useEffect(() => {
     videoAPI
-      .getAllVideo("dateTimeCreate", "desc", 0, 6, selectedChip)
+      .getAllVideo("dateTimeCreate", "desc", 0, 1000, selectedChip)
       .then((response) => {
         const filteredVideos = response.result.content.filter(
           (video) => !(video.ban || video.hide)

@@ -1,9 +1,14 @@
-import { Container, Grid } from "@mui/material";
-import React from "react";
+import { Box, Container, Grid, useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import React, { useContext } from "react";
 import Header from "../../Header";
 import Sidebar from "../../Sidebar";
+import { ReponsiveContext } from "../../../context/ReponsiveContext";
 
 export default function DefaultLayout({ children, hideSidebar }) {
+  const { isXlDown, isLgDown, isMdDown, isSmDown, isXsDown } =
+    useContext(ReponsiveContext);
+
   return (
     <>
       <Header />
@@ -14,7 +19,7 @@ export default function DefaultLayout({ children, hideSidebar }) {
           sx={{ pt: "96px", pb: "16px" }}
           gap={2}
         >
-          {!hideSidebar && (
+          {!(hideSidebar || isLgDown) && (
             <Grid item xl={2} lg={2} md={2} sm={2} xs={2}>
               <Sidebar />
             </Grid>
@@ -23,9 +28,9 @@ export default function DefaultLayout({ children, hideSidebar }) {
             item
             xl={hideSidebar ? 12 : 10}
             lg={hideSidebar ? 12 : 10}
-            md={hideSidebar ? 12 : 10}
-            sm={hideSidebar ? 12 : 10}
-            xs={hideSidebar ? 12 : 10}
+            md={12}
+            sm={12}
+            xs={12}
           >
             {children}
           </Grid>

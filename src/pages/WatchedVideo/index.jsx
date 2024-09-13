@@ -83,7 +83,7 @@ export default function WatchedVideo() {
           myAccount?.channel?.idChannel,
           searchValue,
           0,
-          4
+          1000
         )
         .then((response) => {
           setWatchedVideos(response.result.content);
@@ -99,7 +99,7 @@ export default function WatchedVideo() {
   const getAllVideoChannelWatched = () => {
     setOpenBackdropInfoVideo(true);
     videoAPI
-      .getAllVideoChannelWatched(myAccount?.channel?.idChannel, 0, 4)
+      .getAllVideoChannelWatched(myAccount?.channel?.idChannel, 0, 1000)
       .then((response) => {
         const filteredVideos = response.result.content.filter(
           (video) => !(video.ban || video.hide)
