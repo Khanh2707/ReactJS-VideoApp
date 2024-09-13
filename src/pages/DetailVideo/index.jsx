@@ -3,6 +3,7 @@ import {
   Avatar,
   Backdrop,
   Box,
+  Button,
   Chip,
   CircularProgress,
   List,
@@ -28,7 +29,7 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EmojiFlagsIcon from "@mui/icons-material/EmojiFlags";
 import ListRadioReportVideo from "../../components/dialog/ListRadioReportVideo";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
 import { AppContext } from "../../context/AppContext";
@@ -39,7 +40,6 @@ import ConfirmDeleteVideo from "../../components/dialog/ConfirmDeleteVideo";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockVideo from "../../components/dialog/LockVideo";
 import { SnackbarContext } from "../../context/SnackbarContext";
-import Error from "../Error";
 import { ReponsiveContext } from "../../context/ReponsiveContext";
 
 const textFieldStyles = {
@@ -487,6 +487,12 @@ export default function DetailVideo() {
       setVideoIsBan(false);
     } else if (
       video?.ban !== null &&
+      video?.ban === true &&
+      video?.hide === false
+    ) {
+      setDisplayWhenVideoCant(true);
+    } else if (
+      video?.ban !== null &&
       video?.ban === false &&
       video?.hide === true &&
       video?.channel.idChannel !== myAccount.channel.idChannel
@@ -503,587 +509,621 @@ export default function DetailVideo() {
   }, []);
 
   return (
-    <Box sx={{ position: "relative" }}>
-      <Backdrop
-        sx={{
-          zIndex: 100,
-          position: "absolute",
-          backgroundColor:
-            themeMode === "light" ? "rgb(255, 255, 255)" : "rgb(15, 18, 20)",
-        }}
-        open={openBackdropCheckVideoDisplay}
-      >
-        <CircularProgress
-          color='inherit'
+    <Box>
+      {displayWhenVideoCant ? (
+        <Paper
           sx={{
-            position: "absolute",
-            top: "200px",
+            textAlign: "center",
+            pt: "32px",
+            "& > *": { marginBottom: "16px" },
           }}
-        />
-      </Backdrop>
-      {displayWhenVideoCant && <Error />}
-      {!videoIsBan && (
-        <Box sx={{ display: "flex", pb: "450px" }}>
-          <Box sx={{ width: "100%" }}>
-            <Video
-              idVideo={idVideo}
-              titleVideo={video?.title}
-              linkVideo={video?.linkVideo}
-              imagePreview={video?.imagePreview}
+        >
+          <h1>Lỗi!</h1>
+          <p>Video này đã bị ẩn hoặc khóa.</p>
+          <Button variant='outlined' component={Link} to='/'>
+            Quay về trang chủ
+          </Button>
+        </Paper>
+      ) : (
+        <Box sx={{ position: "relative" }}>
+          <Backdrop
+            sx={{
+              zIndex: 100,
+              position: "absolute",
+              backgroundColor:
+                themeMode === "light"
+                  ? "rgb(255, 255, 255)"
+                  : "rgb(15, 18, 20)",
+            }}
+            open={openBackdropCheckVideoDisplay}
+          >
+            <CircularProgress
+              color='inherit'
+              sx={{
+                position: "absolute",
+                top: "200px",
+              }}
             />
-            <Typography
-              variant='h6'
-              fontWeight='700'
-              sx={{ mt: "12px", lineHeight: "1.4" }}
-            >
-              {video?.title}
-            </Typography>
-            <Box sx={{ position: "relative" }}>
-              <Backdrop
-                sx={{
-                  zIndex: 100,
-                  position: "absolute",
-                  backgroundColor:
-                    themeMode === "light"
-                      ? "rgb(255, 255, 255)"
-                      : "rgb(15, 18, 20)",
-                }}
-                open={openBackdropInfoVideo}
-              >
-                <CircularProgress
-                  color='inherit'
-                  sx={{
-                    position: "absolute",
-                  }}
+          </Backdrop>
+          {!videoIsBan && (
+            <Box sx={{ display: "flex", pb: "450px" }}>
+              <Box sx={{ width: "100%" }}>
+                <Video
+                  idVideo={idVideo}
+                  titleVideo={video?.title}
+                  linkVideo={video?.linkVideo}
+                  imagePreview={video?.imagePreview}
                 />
-              </Backdrop>
-              <Box
-                sx={{
-                  visibility: !openBackdropInfoVideo ? "visible" : "hidden",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    cursor: "pointer",
-                    mt: "12px",
-                  }}
+                <Typography
+                  variant='h6'
+                  fontWeight='700'
+                  sx={{ mt: "12px", lineHeight: "1.4" }}
                 >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box
-                      onClick={() => {
-                        navigate(`/${video?.channel.nameUnique}`);
-                      }}
-                    >
-                      <Avatar alt='' src={video?.channel.avatar} />
-                    </Box>
-                    <Box sx={{ ml: "12px", lineHeight: "1" }}>
-                      <Box
-                        onClick={() => {
-                          navigate(`/${video?.channel.nameUnique}`);
-                        }}
-                      >
-                        <Typography
-                          variant='subtitle1'
-                          sx={{ lineHeight: "1.3" }}
-                          fontWeight='600'
-                        >
-                          {video?.channel.name}
-                        </Typography>
-                      </Box>
-                      <Typography
-                        variant='caption'
-                        sx={{ color: "customGreySubTitle.main" }}
-                      >
-                        {amountSub} người đăng ký
-                      </Typography>
-                    </Box>
-                    {!isSub && (
-                      <Chip
-                        label='Đăng ký'
-                        sx={{
-                          p: "4px",
-                          ml: "24px",
-                          mr: '8px',
-                          bgcolor: "text.primary",
-                          color: "secondary.main",
-                          "&:hover": {
-                            bgcolor: "text.primary",
-                            opacity: "0.9",
-                          },
-                          fontSize: "14px",
-                          fontWeight: "600",
-                        }}
-                        onClick={() => {
-                          if (myAccount) {
-                            handleSubscribe();
-                          } else {
-                            handleOpenSnackbar(
-                              "error",
-                              "Đăng nhập để có thể thực hiện chức năng!",
-                              "bottom",
-                              "center"
-                            );
-                          }
-                        }}
-                      />
-                    )}
-                    {isSub && (
-                      <Chip
-                        icon={<NotificationsActiveIcon />}
-                        label='Đã đăng ký'
-                        sx={{
-                          p: "4px",
-                          ml: "24px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          "& .MuiChip-icon": {
-                            color: "text.primary",
-                          },
-                        }}
-                        onClick={() => {
-                          if (myAccount) {
-                            handleUnSubscribe();
-                          } else {
-                            handleOpenSnackbar(
-                              "error",
-                              "Đăng nhập để có thể thực hiện chức năng!",
-                              "bottom",
-                              "center"
-                            );
-                          }
-                        }}
-                      />
-                    )}
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Chip
-                      icon={isLike ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />}
-                      label={amountLike}
-                      sx={{
-                        p: "4px",
-                        mr: "8px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        "& .MuiChip-icon": {
-                          color: "text.primary",
-                        },
-                      }}
-                      onClick={() => {
-                        if (myAccount) {
-                          isLike ? handleUnLikeVideo() : handleLikeVideo();
-                        } else {
-                          handleOpenSnackbar(
-                            "error",
-                            "Đăng nhập để có thể thực hiện chức năng!",
-                            "bottom",
-                            "center"
-                          );
-                        }
-                      }}
-                    />
-                    <Chip
-                      icon={<VerticalAlignBottomIcon />}
-                      label='Tải xuống'
-                      sx={{
-                        p: "4px",
-                        mr: "8px",
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        "& .MuiChip-icon": {
-                          color: "text.primary",
-                        },
-                      }}
-                      onClick={() => {
-                        if (myAccount) {
-                          handleDownloadVideo();
-                        } else {
-                          handleOpenSnackbar(
-                            "error",
-                            "Đăng nhập để có thể thực hiện chức năng!",
-                            "bottom",
-                            "center"
-                          );
-                        }
-                      }}
-                    />
-                    <Box sx={{ position: "relative" }}>
-                      <Chip
-                        ref={actionVideoButtonRef}
-                        icon={<MoreHorizIcon />}
-                        sx={{
-                          width: 30,
-                          height: 30,
-                          borderRadius: "50%",
-                          padding: 0,
-                          "& .MuiChip-label": {
-                            display: "none",
-                          },
-                          "& .MuiChip-icon": {
-                            color: "text.primary",
-                            m: "0",
-                          },
-                        }}
-                        onClick={togglelistActionVideo}
-                      />
-                      {showListActionVideo && (
-                        <Paper
-                          ref={listActionVideoRef}
-                          sx={{
-                            position: "absolute",
-                            zIndex: "10",
-                            minWidth: "160px",
-                            borderRadius: "8px",
-                            top: "40px",
-                            right: "0",
-                            bgcolor: theme.palette.customBgcolorMenu.main,
-                            boxShadow: theme.palette.customBoxShadowMenu.main,
-                          }}
-                        >
-                          <List>
-                            <ListItem
-                              disablePadding
-                              onClick={() => {
-                                if (myAccount) {
-                                  handleClickOpenDialogListRadioReportVideo();
-                                } else {
-                                  handleOpenSnackbar(
-                                    "error",
-                                    "Đăng nhập để có thể thực hiện chức năng!",
-                                    "bottom",
-                                    "center"
-                                  );
-                                  setShowListActionVideo(false);
-                                }
-                              }}
-                            >
-                              <ListItemButton>
-                                <EmojiFlagsIcon />
-                                <Typography sx={{ ml: "12px" }}>
-                                  Báo vi phạm
-                                </Typography>
-                              </ListItemButton>
-                            </ListItem>
-                            {video?.channel.idChannel ===
-                              myAccount?.channel.idChannel && (
-                              <ListItem
-                                disablePadding
-                                onClick={() =>
-                                  setOpenDialogConfirmDeleteVideo(true)
-                                }
-                              >
-                                <ListItemButton>
-                                  <DeleteOutlineIcon />
-                                  <Typography sx={{ ml: "12px" }}>
-                                    Xóa video
-                                  </Typography>
-                                </ListItemButton>
-                              </ListItem>
-                            )}
-                            {(myAccount?.roles[0].name === "ADMIN" ||
-                              myAccount?.roles[0].name === "CENSOR") && (
-                              <ListItem
-                                disablePadding
-                                onClick={() => setOpenDialogLockVideo(true)}
-                              >
-                                <ListItemButton>
-                                  <LockOutlinedIcon />
-                                  <Typography sx={{ ml: "12px" }}>
-                                    Khóa video
-                                  </Typography>
-                                </ListItemButton>
-                              </ListItem>
-                            )}
-                          </List>
-                        </Paper>
-                      )}
-                    </Box>
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    bgcolor: "customBgcolorSecondary.main",
-                    borderRadius: "12px",
-                    p: "12px",
-                    mt: "16px",
-                    cursor: "pointer",
-                  }}
-                >
-                  <ShowMoreText
-                    more={
-                      <Typography variant='span' sx={{ fontWeight: "600" }}>
-                        thêm
-                      </Typography>
-                    }
-                    less={
-                      <Typography sx={{ fontWeight: "600", mt: "16px" }}>
-                        Ẩn bớt
-                      </Typography>
-                    }
-                    keepNewLines={true}
-                    lines={4}
-                  >
-                    {`${
-                      video?.view
-                    } lượt xem \u00A0\u00A0\u00A0 ${formatDistanceToNow(
-                      parseISO(
-                        video?.dateTimeCreate ?? new Date().toISOString()
-                      ),
-                      { addSuffix: true, locale: vi }
-                    )}
-                  ${video?.description}`}
-                  </ShowMoreText>
-                </Box>
-              </Box>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", mt: "24px" }}>
-              <Typography variant='h6' fontWeight='600'>
-                {amountCommentVideo} bình luận
-              </Typography>
-              <Box sx={{ position: "relative", ml: "32px" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    cursor: "pointer",
-                  }}
-                  onClick={toggleListSortComment}
-                >
-                  <SortIcon />
-                  <Typography
-                    ref={sortCommentButtonRef}
-                    sx={{ ml: "8px", userSelect: "none" }}
-                    variant='subtitle2'
-                    fontWeight='600'
-                  >
-                    Sắp xếp theo
-                  </Typography>
-                </Box>
-                {showListSortComment && (
-                  <Paper
-                    ref={listSorCommentRef}
+                  {video?.title}
+                </Typography>
+                <Box sx={{ position: "relative" }}>
+                  <Backdrop
                     sx={{
+                      zIndex: 100,
                       position: "absolute",
-                      zIndex: "10",
-                      minWidth: "173px",
-                      borderRadius: "8px",
-                      mt: "12px",
-                      bgcolor: theme.palette.customBgcolorMenu.main,
-                      boxShadow: theme.palette.customBoxShadowMenu.main,
+                      backgroundColor:
+                        themeMode === "light"
+                          ? "rgb(255, 255, 255)"
+                          : "rgb(15, 18, 20)",
                     }}
+                    open={openBackdropInfoVideo}
                   >
-                    <List>
-                      <ListItem
-                        disablePadding
-                        onClick={() => handleSelectStateSortComment("desc")}
-                      >
-                        <ListItemButton selected={stateSortComment === "desc"}>
-                          <Typography>Mới nhất xếp trước</Typography>
-                        </ListItemButton>
-                      </ListItem>
-                      <ListItem
-                        disablePadding
-                        onClick={() => handleSelectStateSortComment("asc")}
-                      >
-                        <ListItemButton selected={stateSortComment === "asc"}>
-                          <Typography>Mới nhất xếp sau</Typography>
-                        </ListItemButton>
-                      </ListItem>
-                    </List>
-                  </Paper>
-                )}
-              </Box>
-            </Box>
-            <Box sx={{ display: "flex", mt: "24px", width: "100%" }}>
-              <Avatar alt='' src={myAccount?.channel.avatar} />
-              <Box
-                sx={{ width: "100%", display: "flex", flexDirection: "column" }}
-              >
-                <TextField
-                  variant='standard'
-                  placeholder='Viết bình luận...'
-                  sx={{ ml: "12px", mb: "12px", ...textFieldStyles }}
-                  onClick={() => {
-                    if (myAccount) {
-                      setShowActionComment(true);
-                    } else {
-                      handleOpenSnackbar(
-                        "error",
-                        "Đăng nhập để có thể thực hiện chức năng!",
-                        "bottom",
-                        "center"
-                      );
-                    }
-                  }}
-                  value={valueComment}
-                  onChange={handleComment}
-                />
-                {showActionComment && (
+                    <CircularProgress
+                      color='inherit'
+                      sx={{
+                        position: "absolute",
+                      }}
+                    />
+                  </Backdrop>
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                      justifyContent: "space-between",
+                      visibility: !openBackdropInfoVideo ? "visible" : "hidden",
                     }}
                   >
-                    <Box sx={{ position: "relative", ml: "12px" }}>
-                      <InsertEmoticonIcon
-                        sx={{ cursor: "pointer" }}
-                        onClick={toggleEmojiPicker}
-                      />
-                      {showEmojiPicker && (
-                        <EmojiPicker
-                          theme={themeMode}
-                          emojiStyle='native'
-                          lazyLoadEmojis={true}
-                          onEmojiClick={handleEmojiClick}
-                          style={{ position: "absolute", zIndex: "1000" }}
-                        />
-                      )}
-                    </Box>
-                    <Box>
-                      <Chip
-                        label='Hủy'
-                        sx={{
-                          p: "4px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          userSelect: "none",
-                          bgcolor: "primary.main",
-                          cursor: "pointer",
-                          mr: "8px",
-                        }}
-                        onClick={handleCancelComment}
-                      />
-                      <Chip
-                        label='Bình luận'
-                        sx={{
-                          p: "4px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          userSelect: "none",
-                          cursor: "pointer",
-                          bgcolor: valueComment ? "#3da2f9" : "",
-                          color: valueComment ? "secondary.main" : "",
-                          "&:hover": {
-                            bgcolor: "#3da2f9",
-                            opacity: "0.9",
-                          },
-                        }}
-                        disabled={valueComment === ""}
-                        onClick={handlePostComment}
-                      />
-                    </Box>
-                  </Box>
-                )}
-              </Box>
-            </Box>
-            <Box sx={{ mt: "24px", position: "relative" }}>
-              {listCommentVideo.map((item) => {
-                return (
-                  <CommentVideo
-                    key={item.idCommentVideo}
-                    idCommentVideo={item.idCommentVideo}
-                    avatar={item.channel.avatar}
-                    nameUnique={item.channel.nameUnique}
-                    nameUniqueByVideo={item.video.channel.nameUnique}
-                    dateTimeComment={formatDistanceToNow(
-                      parseISO(item.dateTimeComment),
-                      { addSuffix: true, locale: vi }
-                    )}
-                    comment={item.content}
-                    type='comment-video'
-                    getAllCommentVideo={getAllCommentVideo}
-                    countCommentVideosByVideo={countCommentVideosByVideo}
-                    stateSortComment={stateSortComment}
-                    setOpenBackdropCommentVideo={setOpenBackdropCommentVideo}
-                  />
-                );
-              })}
-              <Backdrop
-                sx={{
-                  zIndex: 100,
-                  position: "absolute",
-                  backgroundColor:
-                    themeMode === "light"
-                      ? "rgba(255, 255, 255, 0.4)"
-                      : "rgba(15, 18, 20, 0.4)",
-                }}
-                open={openBackdropCommentVideo}
-              >
-                <CircularProgress
-                  color='inherit'
-                  sx={{
-                    position: "absolute",
-                    top: "70px",
-                  }}
-                />
-              </Backdrop>
-            </Box>
-          </Box>
-          {!isMdDown && (
-            <Box sx={{ ml: "24px" }}>
-              {videos.result.content
-                .filter((video) => !(video.ban || video.hide))
-                .map((item) => {
-                  return (
                     <Box
-                      key={item.idVideo}
-                      onClick={() => {
-                        navigate(`/watch/${item.idVideo}`);
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        cursor: "pointer",
+                        mt: "12px",
                       }}
                     >
-                      <RecommendVideoCard
-                        title={item.title}
-                        nameChannel={item.channel.name}
-                        nameUnique={item.channel.nameUnique}
-                        viewVideo={item.view}
-                        dateTimeCreateVideo={item.dateTimeCreate}
-                        imagePreview={item.imagePreview}
-                      />
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Box
+                          onClick={() => {
+                            navigate(`/${video?.channel.nameUnique}`);
+                          }}
+                        >
+                          <Avatar alt='' src={video?.channel.avatar} />
+                        </Box>
+                        <Box sx={{ ml: "12px", lineHeight: "1" }}>
+                          <Box
+                            onClick={() => {
+                              navigate(`/${video?.channel.nameUnique}`);
+                            }}
+                          >
+                            <Typography
+                              variant='subtitle1'
+                              sx={{ lineHeight: "1.3" }}
+                              fontWeight='600'
+                            >
+                              {video?.channel.name}
+                            </Typography>
+                          </Box>
+                          <Typography
+                            variant='caption'
+                            sx={{ color: "customGreySubTitle.main" }}
+                          >
+                            {amountSub} người đăng ký
+                          </Typography>
+                        </Box>
+                        {!isSub && (
+                          <Chip
+                            label='Đăng ký'
+                            sx={{
+                              p: "4px",
+                              ml: "24px",
+                              mr: "8px",
+                              bgcolor: "text.primary",
+                              color: "secondary.main",
+                              "&:hover": {
+                                bgcolor: "text.primary",
+                                opacity: "0.9",
+                              },
+                              fontSize: "14px",
+                              fontWeight: "600",
+                            }}
+                            onClick={() => {
+                              if (myAccount) {
+                                handleSubscribe();
+                              } else {
+                                handleOpenSnackbar(
+                                  "error",
+                                  "Đăng nhập để có thể thực hiện chức năng!",
+                                  "bottom",
+                                  "center"
+                                );
+                              }
+                            }}
+                          />
+                        )}
+                        {isSub && (
+                          <Chip
+                            icon={<NotificationsActiveIcon />}
+                            label='Đã đăng ký'
+                            sx={{
+                              p: "4px",
+                              ml: "24px",
+                              fontSize: "14px",
+                              fontWeight: "600",
+                              "& .MuiChip-icon": {
+                                color: "text.primary",
+                              },
+                            }}
+                            onClick={() => {
+                              if (myAccount) {
+                                handleUnSubscribe();
+                              } else {
+                                handleOpenSnackbar(
+                                  "error",
+                                  "Đăng nhập để có thể thực hiện chức năng!",
+                                  "bottom",
+                                  "center"
+                                );
+                              }
+                            }}
+                          />
+                        )}
+                      </Box>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Chip
+                          icon={
+                            isLike ? <ThumbUpAltIcon /> : <ThumbUpOffAltIcon />
+                          }
+                          label={amountLike}
+                          sx={{
+                            p: "4px",
+                            mr: "8px",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            "& .MuiChip-icon": {
+                              color: "text.primary",
+                            },
+                          }}
+                          onClick={() => {
+                            if (myAccount) {
+                              isLike ? handleUnLikeVideo() : handleLikeVideo();
+                            } else {
+                              handleOpenSnackbar(
+                                "error",
+                                "Đăng nhập để có thể thực hiện chức năng!",
+                                "bottom",
+                                "center"
+                              );
+                            }
+                          }}
+                        />
+                        <Chip
+                          icon={<VerticalAlignBottomIcon />}
+                          label='Tải xuống'
+                          sx={{
+                            p: "4px",
+                            mr: "8px",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            "& .MuiChip-icon": {
+                              color: "text.primary",
+                            },
+                          }}
+                          onClick={() => {
+                            if (myAccount) {
+                              handleDownloadVideo();
+                            } else {
+                              handleOpenSnackbar(
+                                "error",
+                                "Đăng nhập để có thể thực hiện chức năng!",
+                                "bottom",
+                                "center"
+                              );
+                            }
+                          }}
+                        />
+                        <Box sx={{ position: "relative" }}>
+                          <Chip
+                            ref={actionVideoButtonRef}
+                            icon={<MoreHorizIcon />}
+                            sx={{
+                              width: 30,
+                              height: 30,
+                              borderRadius: "50%",
+                              padding: 0,
+                              "& .MuiChip-label": {
+                                display: "none",
+                              },
+                              "& .MuiChip-icon": {
+                                color: "text.primary",
+                                m: "0",
+                              },
+                            }}
+                            onClick={togglelistActionVideo}
+                          />
+                          {showListActionVideo && (
+                            <Paper
+                              ref={listActionVideoRef}
+                              sx={{
+                                position: "absolute",
+                                zIndex: "10",
+                                minWidth: "160px",
+                                borderRadius: "8px",
+                                top: "40px",
+                                right: "0",
+                                bgcolor: theme.palette.customBgcolorMenu.main,
+                                boxShadow:
+                                  theme.palette.customBoxShadowMenu.main,
+                              }}
+                            >
+                              <List>
+                                <ListItem
+                                  disablePadding
+                                  onClick={() => {
+                                    if (myAccount) {
+                                      handleClickOpenDialogListRadioReportVideo();
+                                    } else {
+                                      handleOpenSnackbar(
+                                        "error",
+                                        "Đăng nhập để có thể thực hiện chức năng!",
+                                        "bottom",
+                                        "center"
+                                      );
+                                      setShowListActionVideo(false);
+                                    }
+                                  }}
+                                >
+                                  <ListItemButton>
+                                    <EmojiFlagsIcon />
+                                    <Typography sx={{ ml: "12px" }}>
+                                      Báo vi phạm
+                                    </Typography>
+                                  </ListItemButton>
+                                </ListItem>
+                                {video?.channel.idChannel ===
+                                  myAccount?.channel.idChannel && (
+                                  <ListItem
+                                    disablePadding
+                                    onClick={() =>
+                                      setOpenDialogConfirmDeleteVideo(true)
+                                    }
+                                  >
+                                    <ListItemButton>
+                                      <DeleteOutlineIcon />
+                                      <Typography sx={{ ml: "12px" }}>
+                                        Xóa video
+                                      </Typography>
+                                    </ListItemButton>
+                                  </ListItem>
+                                )}
+                                {(myAccount?.roles[0].name === "ADMIN" ||
+                                  myAccount?.roles[0].name === "CENSOR") && (
+                                  <ListItem
+                                    disablePadding
+                                    onClick={() => setOpenDialogLockVideo(true)}
+                                  >
+                                    <ListItemButton>
+                                      <LockOutlinedIcon />
+                                      <Typography sx={{ ml: "12px" }}>
+                                        Khóa video
+                                      </Typography>
+                                    </ListItemButton>
+                                  </ListItem>
+                                )}
+                              </List>
+                            </Paper>
+                          )}
+                        </Box>
+                      </Box>
                     </Box>
-                  );
-                })}
+                    <Box
+                      sx={{
+                        bgcolor: "customBgcolorSecondary.main",
+                        borderRadius: "12px",
+                        p: "12px",
+                        mt: "16px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <ShowMoreText
+                        more={
+                          <Typography variant='span' sx={{ fontWeight: "600" }}>
+                            thêm
+                          </Typography>
+                        }
+                        less={
+                          <Typography sx={{ fontWeight: "600", mt: "16px" }}>
+                            Ẩn bớt
+                          </Typography>
+                        }
+                        keepNewLines={true}
+                        lines={4}
+                      >
+                        {`${
+                          video?.view
+                        } lượt xem \u00A0\u00A0\u00A0 ${formatDistanceToNow(
+                          parseISO(
+                            video?.dateTimeCreate ?? new Date().toISOString()
+                          ),
+                          { addSuffix: true, locale: vi }
+                        )}
+                  ${video?.description}`}
+                      </ShowMoreText>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", mt: "24px" }}>
+                  <Typography variant='h6' fontWeight='600'>
+                    {amountCommentVideo} bình luận
+                  </Typography>
+                  <Box sx={{ position: "relative", ml: "32px" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        cursor: "pointer",
+                      }}
+                      onClick={toggleListSortComment}
+                    >
+                      <SortIcon />
+                      <Typography
+                        ref={sortCommentButtonRef}
+                        sx={{ ml: "8px", userSelect: "none" }}
+                        variant='subtitle2'
+                        fontWeight='600'
+                      >
+                        Sắp xếp theo
+                      </Typography>
+                    </Box>
+                    {showListSortComment && (
+                      <Paper
+                        ref={listSorCommentRef}
+                        sx={{
+                          position: "absolute",
+                          zIndex: "10",
+                          minWidth: "173px",
+                          borderRadius: "8px",
+                          mt: "12px",
+                          bgcolor: theme.palette.customBgcolorMenu.main,
+                          boxShadow: theme.palette.customBoxShadowMenu.main,
+                        }}
+                      >
+                        <List>
+                          <ListItem
+                            disablePadding
+                            onClick={() => handleSelectStateSortComment("desc")}
+                          >
+                            <ListItemButton
+                              selected={stateSortComment === "desc"}
+                            >
+                              <Typography>Mới nhất xếp trước</Typography>
+                            </ListItemButton>
+                          </ListItem>
+                          <ListItem
+                            disablePadding
+                            onClick={() => handleSelectStateSortComment("asc")}
+                          >
+                            <ListItemButton
+                              selected={stateSortComment === "asc"}
+                            >
+                              <Typography>Mới nhất xếp sau</Typography>
+                            </ListItemButton>
+                          </ListItem>
+                        </List>
+                      </Paper>
+                    )}
+                  </Box>
+                </Box>
+                <Box sx={{ display: "flex", mt: "24px", width: "100%" }}>
+                  <Avatar alt='' src={myAccount?.channel.avatar} />
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <TextField
+                      variant='standard'
+                      placeholder='Viết bình luận...'
+                      sx={{ ml: "12px", mb: "12px", ...textFieldStyles }}
+                      onClick={() => {
+                        if (myAccount) {
+                          setShowActionComment(true);
+                        } else {
+                          handleOpenSnackbar(
+                            "error",
+                            "Đăng nhập để có thể thực hiện chức năng!",
+                            "bottom",
+                            "center"
+                          );
+                        }
+                      }}
+                      value={valueComment}
+                      onChange={handleComment}
+                    />
+                    {showActionComment && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Box sx={{ position: "relative", ml: "12px" }}>
+                          <InsertEmoticonIcon
+                            sx={{ cursor: "pointer" }}
+                            onClick={toggleEmojiPicker}
+                          />
+                          {showEmojiPicker && (
+                            <EmojiPicker
+                              theme={themeMode}
+                              emojiStyle='native'
+                              lazyLoadEmojis={true}
+                              onEmojiClick={handleEmojiClick}
+                              style={{ position: "absolute", zIndex: "1000" }}
+                            />
+                          )}
+                        </Box>
+                        <Box>
+                          <Chip
+                            label='Hủy'
+                            sx={{
+                              p: "4px",
+                              fontSize: "14px",
+                              fontWeight: "600",
+                              userSelect: "none",
+                              bgcolor: "primary.main",
+                              cursor: "pointer",
+                              mr: "8px",
+                            }}
+                            onClick={handleCancelComment}
+                          />
+                          <Chip
+                            label='Bình luận'
+                            sx={{
+                              p: "4px",
+                              fontSize: "14px",
+                              fontWeight: "600",
+                              userSelect: "none",
+                              cursor: "pointer",
+                              bgcolor: valueComment ? "#3da2f9" : "",
+                              color: valueComment ? "secondary.main" : "",
+                              "&:hover": {
+                                bgcolor: "#3da2f9",
+                                opacity: "0.9",
+                              },
+                            }}
+                            disabled={valueComment === ""}
+                            onClick={handlePostComment}
+                          />
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+                <Box sx={{ mt: "24px", position: "relative" }}>
+                  {listCommentVideo.map((item) => {
+                    return (
+                      <CommentVideo
+                        key={item.idCommentVideo}
+                        idCommentVideo={item.idCommentVideo}
+                        avatar={item.channel.avatar}
+                        nameUnique={item.channel.nameUnique}
+                        nameUniqueByVideo={item.video.channel.nameUnique}
+                        dateTimeComment={formatDistanceToNow(
+                          parseISO(item.dateTimeComment),
+                          { addSuffix: true, locale: vi }
+                        )}
+                        comment={item.content}
+                        type='comment-video'
+                        getAllCommentVideo={getAllCommentVideo}
+                        countCommentVideosByVideo={countCommentVideosByVideo}
+                        stateSortComment={stateSortComment}
+                        setOpenBackdropCommentVideo={
+                          setOpenBackdropCommentVideo
+                        }
+                      />
+                    );
+                  })}
+                  <Backdrop
+                    sx={{
+                      zIndex: 100,
+                      position: "absolute",
+                      backgroundColor:
+                        themeMode === "light"
+                          ? "rgba(255, 255, 255, 0.4)"
+                          : "rgba(15, 18, 20, 0.4)",
+                    }}
+                    open={openBackdropCommentVideo}
+                  >
+                    <CircularProgress
+                      color='inherit'
+                      sx={{
+                        position: "absolute",
+                        top: "70px",
+                      }}
+                    />
+                  </Backdrop>
+                </Box>
+              </Box>
+              {!isMdDown && (
+                <Box sx={{ ml: "24px" }}>
+                  {videos.result.content
+                    .filter((video) => !(video.ban || video.hide))
+                    .map((item) => {
+                      return (
+                        <Box
+                          key={item.idVideo}
+                          onClick={() => {
+                            navigate(`/watch/${item.idVideo}`);
+                          }}
+                        >
+                          <RecommendVideoCard
+                            title={item.title}
+                            nameChannel={item.channel.name}
+                            nameUnique={item.channel.nameUnique}
+                            viewVideo={item.view}
+                            dateTimeCreateVideo={item.dateTimeCreate}
+                            imagePreview={item.imagePreview}
+                          />
+                        </Box>
+                      );
+                    })}
+                </Box>
+              )}
             </Box>
           )}
+          <Backdrop
+            sx={{
+              zIndex: 100,
+              position: "absolute",
+              backgroundColor:
+                themeMode === "light"
+                  ? "rgba(255, 255, 255, 0.4)"
+                  : "rgba(15, 18, 20, 0.4)",
+            }}
+            open={openBackdropDeleteVideo}
+          >
+            <CircularProgress
+              color='inherit'
+              sx={{
+                position: "absolute",
+                top: "200px",
+              }}
+            />
+          </Backdrop>
+          <ConfirmDeleteVideo
+            openDialogConfirmDeleteVideo={openDialogConfirmDeleteVideo}
+            setOpenDialogConfirmDeleteVideo={setOpenDialogConfirmDeleteVideo}
+            handleDeleteVideo={handleDeleteVideo}
+          />
+          <ListRadioReportVideo
+            openDialogListRadioReportVideo={openDialogListRadioReportVideo}
+            setOpenDialogListRadioReportVideo={
+              setOpenDialogListRadioReportVideo
+            }
+          />
+          <LockVideo
+            openDialogLockVideo={openDialogLockVideo}
+            setOpenDialogLockVideo={setOpenDialogLockVideo}
+            handleUpdateLockVideo={handleUpdateLockVideo}
+          />
         </Box>
       )}
-      <Backdrop
-        sx={{
-          zIndex: 100,
-          position: "absolute",
-          backgroundColor:
-            themeMode === "light"
-              ? "rgba(255, 255, 255, 0.4)"
-              : "rgba(15, 18, 20, 0.4)",
-        }}
-        open={openBackdropDeleteVideo}
-      >
-        <CircularProgress
-          color='inherit'
-          sx={{
-            position: "absolute",
-            top: "200px",
-          }}
-        />
-      </Backdrop>
-      <ConfirmDeleteVideo
-        openDialogConfirmDeleteVideo={openDialogConfirmDeleteVideo}
-        setOpenDialogConfirmDeleteVideo={setOpenDialogConfirmDeleteVideo}
-        handleDeleteVideo={handleDeleteVideo}
-      />
-      <ListRadioReportVideo
-        openDialogListRadioReportVideo={openDialogListRadioReportVideo}
-        setOpenDialogListRadioReportVideo={setOpenDialogListRadioReportVideo}
-      />
-      <LockVideo
-        openDialogLockVideo={openDialogLockVideo}
-        setOpenDialogLockVideo={setOpenDialogLockVideo}
-        handleUpdateLockVideo={handleUpdateLockVideo}
-      />
     </Box>
   );
 }
