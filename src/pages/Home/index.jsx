@@ -41,11 +41,7 @@ export default function Home() {
 
   return (
     <>
-      <ListCategory
-        selectedChip={selectedChip}
-        setSelectedChip={setSelectedChip}
-        setOpenBackdropVideos={setOpenBackdropVideos}
-      />
+      <ListCategory setOpenBackdropVideos={setOpenBackdropVideos} />
       <Grid container spacing={2} sx={{ position: "relative" }}>
         {videosByCategory.map((item) => (
           <Grid

@@ -1,16 +1,15 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { Chip, Grid, IconButton } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import categoryVideoAPI from "../../api/categoryVideoAPI";
+import { AppContext } from "../../context/AppContext";
 
 const scrollBy = 200;
 
-export default function ListCategory({
-  selectedChip,
-  setSelectedChip,
-  setOpenBackdropVideos,
-}) {
+export default function ListCategory({ setOpenBackdropVideos }) {
+  const { selectedChip, setSelectedChip } = useContext(AppContext);
+
   const [position, setPosition] = useState(0);
 
   const [categories, setCategories] = useState([]);

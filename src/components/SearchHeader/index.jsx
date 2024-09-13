@@ -14,16 +14,18 @@ import { useTheme } from "@emotion/react";
 import historySearchAPI from "../../api/historySearchAPI";
 import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { SearchContext } from "../../context/SearchContext";
 
 export default function SearchHeader() {
   const theme = useTheme();
   const navigate = useNavigate();
 
   const { myAccount } = useContext(AppContext);
+  const { setValueSearchAllVideo } = useContext(SearchContext);
 
-  const [valueSearch, setValueSearch] = useState("");
   const [showResultHistorySearch, setShowResultHistorySearch] = useState(false);
   const [listHistorySearch, setListHistorySearch] = useState([]);
+  const [valueSearchTemp, setValueSearchTemp] = useState("");
 
   const inputSearchRef = useRef(null);
   const listHistorySearchRef = useRef(null);
@@ -32,11 +34,12 @@ export default function SearchHeader() {
     if (showResultHistorySearch) {
       setShowResultHistorySearch(false);
     }
-    setValueSearch(event.target.value);
+    setValueSearchTemp(event.target.value);
   };
 
   const clearInput = () => {
-    setValueSearch("");
+    setValueSearchTemp("");
+    setValueSearchAllVideo("");
   };
 
   const handleKeyDown = (e) => {
@@ -55,14 +58,6 @@ export default function SearchHeader() {
     }
   };
 
-  const handleCreateHistorySearch = () => {
-    if (valueSearch !== "") {
-      createHistorySearch();
-      clearInput();
-      navigate("/results");
-    }
-  };
-
   const getAllHistorySearchByChannel = () => {
     historySearchAPI
       .getAllHistorySearchByChannel(myAccount?.channel.idChannel, 0, 6)
@@ -72,16 +67,20 @@ export default function SearchHeader() {
       .catch((error) => {});
   };
 
-  const createHistorySearch = () => {
-    historySearchAPI
-      .createHistorySearch({
-        content: valueSearch,
-        idChannel: myAccount.channel.idChannel,
-      })
-      .then((response) => {
-        getAllHistorySearchByChannel();
-      })
-      .catch((error) => {});
+  const handleCreateHistorySearch = () => {
+    if (valueSearchTemp !== "") {
+      historySearchAPI
+        .createHistorySearch({
+          content: valueSearchTemp,
+          idChannel: myAccount.channel.idChannel,
+        })
+        .then((response) => {
+          setValueSearchAllVideo(valueSearchTemp);
+          getAllHistorySearchByChannel();
+          navigate("/results");
+        })
+        .catch((error) => {});
+    }
   };
 
   const deleteHistorySearch = (idHistorySearch) => {
@@ -117,13 +116,13 @@ export default function SearchHeader() {
       <InputBase
         sx={{ flex: 1, ml: "10px" }}
         placeholder='Tìm kiếm...'
-        value={valueSearch}
+        value={valueSearchTemp}
         onKeyDown={handleKeyDown}
         onChange={handleInputChange}
         onClick={() => setShowResultHistorySearch(true)}
         ref={inputSearchRef}
       />
-      {valueSearch && (
+      {valueSearchTemp && (
         <IconButton type='button' onClick={clearInput}>
           <ClearIcon />
         </IconButton>
@@ -149,8 +148,11 @@ export default function SearchHeader() {
                 disablePadding
                 key={item.idHistorySearch}
                 onClick={() => {
-                  navigate("/results");
+                  setValueSearchTemp(item.content);
+                  setValueSearchAllVideo(item.content);
                   setShowResultHistorySearch(false);
+                  getAllHistorySearchByChannel();
+                  navigate("/results");
                 }}
               >
                 <ListItemButton>
