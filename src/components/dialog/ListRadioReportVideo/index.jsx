@@ -9,59 +9,22 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-
-const listRadioReport = [
-  {
-    value: "1",
-    label: "Nội dung khiêu dâm",
-  },
-  {
-    value: "2",
-    label: "Nội dung bạo lực hoặc phản cảm",
-  },
-  {
-    value: "3",
-    label: "Nội dung lăng mạ hoặc kích động thù hận",
-  },
-  {
-    value: "4",
-    label: "Nội dung quấy rối hoặc bắt nạt",
-  },
-  {
-    value: "5",
-    label: "Hành động gây hại hoặc nguy hiểm",
-  },
-  {
-    value: "6",
-    label: "Thông tin sai lệch",
-  },
-  {
-    value: "7",
-    label: "Nội dung liên quan đến việc ngược đãi trẻ em",
-  },
-  {
-    value: "8",
-    label: "Nội dung quảng bá chủ nghĩa khủng bố",
-  },
-  {
-    value: "9",
-    label: "Nội dung gian lận/vi phạm hoặc gây hiểu lầm",
-  },
-  {
-    value: "10",
-    label: "Vấn đề pháp lý",
-  },
-  {
-    value: "11",
-    label: "Phụ đề có vấn đề",
-  },
-];
+import React, { useContext, useEffect, useState } from "react";
+import typeReportVideoAPI from "../../../api/typeReportVideoAPI";
+import reportVideoAPI from "../../../api/reportVideoAPI";
+import { AppContext } from "../../../context/AppContext";
+import { useParams } from "react-router-dom";
 
 export default function ListRadioReportVideo({
   openDialogListRadioReportVideo,
   setOpenDialogListRadioReportVideo,
+  handleOpenSnackbar,
 }) {
+  const { myAccount } = useContext(AppContext);
+
+  const { idVideo } = useParams();
+
+  const [listTypeReportVideo, setListTypeReportVideo] = useState([]);
   const [valueReportVideo, setValueReportVideo] = useState("");
 
   const handleCloseDialogListRadioReportVideo = () => {
@@ -70,38 +33,60 @@ export default function ListRadioReportVideo({
   };
 
   const handleRadioChange = (event) => {
+    console.log(event.target.value);
     setValueReportVideo(event.target.value);
   };
 
   const handleSubmit = () => {
+    createReportVideo();
+
     handleCloseDialogListRadioReportVideo();
+  };
+
+  const getAllTypeReportVideo = () => {
+    typeReportVideoAPI
+      .getAllTypeReportVideos(0, 100)
+      .then((response) => {
+        setListTypeReportVideo(response.result.content);
+      })
+      .catch((error) => {});
+  };
+
+  useEffect(() => {
+    getAllTypeReportVideo();
+  }, []);
+
+  const createReportVideo = () => {
+    reportVideoAPI
+      .createReportVideo({
+        idTypeReportVideo: valueReportVideo,
+        idChannel: myAccount.channel.idChannel,
+        idVideo: idVideo,
+      })
+      .then((response) => {
+        handleOpenSnackbar("success", "Chúng tôi đã ghi nhận báo cáo của bạn!");
+      })
+      .catch((error) => {});
   };
 
   return (
     <Dialog
       open={openDialogListRadioReportVideo}
       onClose={handleCloseDialogListRadioReportVideo}
-      aria-labelledby='alert-dialog-title'
-      aria-describedby='alert-dialog-description'
       disableScrollLock
     >
-      <DialogTitle id='alert-dialog-title'>
+      <DialogTitle>
         <FormControl>
           <Typography variant='h6' sx={{ mb: "24px" }}>
             Báo video vi phạm
           </Typography>
-          <RadioGroup
-            aria-labelledby='demo-radio-buttons-group-label'
-            name='radio-buttons-group'
-            value={valueReportVideo}
-            onChange={handleRadioChange}
-          >
-            {listRadioReport.map((item, index) => {
+          <RadioGroup value={valueReportVideo} onChange={handleRadioChange}>
+            {listTypeReportVideo.map((item, index) => {
               return (
                 <FormControlLabel
-                  key={item.value}
-                  value={item.value}
-                  label={item.label}
+                  key={item.idTypeReportVideo}
+                  value={item.idTypeReportVideo}
+                  label={item.description}
                   control={<Radio />}
                 />
               );

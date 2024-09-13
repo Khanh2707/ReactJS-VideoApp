@@ -78,7 +78,7 @@ function QuickSearchToolbar({
       }}
     >
       <Typography variant='h6' fontWeight='600'>
-        Tất cả video
+        Tất cả tài khoản
       </Typography>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Box>
@@ -191,8 +191,6 @@ const columns = [
 ];
 
 export default function DataGridAllAccount() {
-  const { myAccount } = useContext(AppContext);
-
   const [allAccounts, setAllAccounts] = useState([]);
   const [rowCount, setRowCount] = useState(0);
   const [paginationModel, setPaginationModel] = useState({
@@ -306,14 +304,7 @@ export default function DataGridAllAccount() {
 
   useEffect(() => {
     fetchData(searchValue);
-  }, [
-    page,
-    pageSize,
-    searchValue,
-    propertySearch,
-    optionSort,
-    idRole,
-  ]);
+  }, [page, pageSize, searchValue, propertySearch, optionSort, idRole]);
 
   return (
     <>

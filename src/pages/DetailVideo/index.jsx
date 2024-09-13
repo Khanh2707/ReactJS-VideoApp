@@ -965,6 +965,7 @@ export default function DetailVideo() {
       <ListRadioReportVideo
         openDialogListRadioReportVideo={openDialogListRadioReportVideo}
         setOpenDialogListRadioReportVideo={setOpenDialogListRadioReportVideo}
+        handleOpenSnackbar={handleOpenSnackbar}
       />
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
