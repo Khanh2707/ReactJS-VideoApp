@@ -36,8 +36,8 @@ const videoAPI = {
     return axiosClient.get(url);
   },
 
-  countAllByChannelNameUnique: (param) => {
-    const url = `/api/videos/count/all/by/channel/name_unique/${param}`;
+  countAllByChannelNameUnique: (nameUnique) => {
+    const url = `/api/videos/count/all/by/channel/name_unique/${nameUnique}`;
     return axiosClient.get(url);
   },
 

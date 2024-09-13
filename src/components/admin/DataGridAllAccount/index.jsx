@@ -1,5 +1,6 @@
 import {
   Alert,
+  Avatar,
   Box,
   Chip,
   IconButton,
@@ -14,7 +15,6 @@ import {
   useGridSelector,
 } from "@mui/x-data-grid";
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import videoAPI from "../../../api/videoAPI";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { vi } from "date-fns/locale";
@@ -25,7 +25,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useTheme } from "@emotion/react";
 import ClearIcon from "@mui/icons-material/Clear";
 import TuneIcon from "@mui/icons-material/Tune";
-import ListFilterMyVideo from "../../dialog/ListFilterMyVideo";
+import accountAPI from "../../../api/accountAPI";
+import { Link } from "react-router-dom";
+import ListFilterAccount from "../../ListFilterAccount";
 
 function Pagination({ page, onPageChange, className }) {
   const apiRef = useGridApiContext();
@@ -52,7 +54,7 @@ function QuickSearchToolbar({
   searchValue,
   setSearchValue,
   fetchData,
-  setOpenDialogListFilterMyVideo,
+  setOpenDialogListFilterAccount,
 }) {
   const theme = useTheme();
 
@@ -112,7 +114,7 @@ function QuickSearchToolbar({
               color: "text.primary",
             },
           }}
-          onClick={() => setOpenDialogListFilterMyVideo(true)}
+          onClick={() => setOpenDialogListFilterAccount(true)}
         />
       </Box>
     </Box>
@@ -121,49 +123,27 @@ function QuickSearchToolbar({
 
 const columns = [
   {
-    field: "imagePreview",
-    headerName: "Video",
-    width: 120,
+    field: "avatarChannel",
+    headerName: "Ảnh đại diện",
     renderCell: (params) => (
       <Box
         sx={{
           height: "100%",
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <Link to={`/watch/${params.row.idVideo}`}>
-          <img
-            src={params.value}
-            alt='profile'
-            style={{ width: "100px", height: "56.25px", display: "block" }}
-          />
+        <Link to={`/${params.row.channel?.nameUnique}`}>
+          <Avatar alt='' src={params.row.channel?.avatar} />
         </Link>
       </Box>
     ),
   },
   {
-    field: "title",
-    headerName: "Tiêu đề",
-  },
-  {
-    field: "idVideo",
-    headerName: "Id Video",
-    type: "number",
-  },
-  {
-    field: "hide",
-    headerName: "Hiển thị",
-    valueGetter: (value) => {
-      return value ? "Riêng tư" : "Công khai";
-    },
-  },
-  {
-    field: "ban",
-    headerName: "Hạn chế",
-    valueGetter: (value) => {
-      return value ? "Bị gỡ" : "Không";
-    },
+    field: "username",
+    headerName: "Tên tài khoản",
+    width: 150,
   },
   {
     field: "dateTimeCreate",
@@ -177,34 +157,43 @@ const columns = [
     },
   },
   {
-    field: "category",
-    headerName: "Thể loại",
-    valueGetter: (value) => {
-      return value?.nameCategory;
+    field: "nameUniqueChannel",
+    headerName: "Id kênh",
+    width: 150,
+    valueGetter: (params, row) => {
+      return row.channel?.nameUnique;
     },
   },
   {
-    field: "view",
-    headerName: "Lượt xem",
-    type: "number",
+    field: "nameChannel",
+    headerName: "Tên kênh",
+    width: 150,
+    valueGetter: (params, row) => {
+      return row.channel?.name;
+    },
   },
   {
-    field: "amountLike",
-    headerName: "Lượt thích",
-    type: "number",
+    field: "roles",
+    headerName: "Vai trò",
+    width: 150,
+    valueGetter: (value) => {
+      if (value[0].name === "ADMIN") return "Người quản trị";
+      else if (value[0].name === "CENSOR") return "Người kiểm duyệt";
+      else if (value[0].name === "USER") return "Người dùng";
+    },
   },
   {
-    field: "amountComment",
-    headerName: "Lượt bình luận",
-    type: "number",
+    field: "amountVideo",
+    headerName: "Số lượng video",
     width: 120,
+    type: "number",
   },
 ];
 
-export default function Table() {
+export default function DataGridAllAccount() {
   const { myAccount } = useContext(AppContext);
 
-  const [allVideos, setAllVideos] = useState([]);
+  const [allAccounts, setAllAccounts] = useState([]);
   const [rowCount, setRowCount] = useState(0);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -214,8 +203,8 @@ export default function Table() {
   const [searchValue, setSearchValue] = useState("");
   const [optionSort, setOptionSort] = useState("desc");
   const [propertySearch, setPropertySearch] = useState("dateTimeCreate");
-  const [idCategory, setIdCategory] = useState(0);
-  const [openDialogListFilterMyVideo, setOpenDialogListFilterMyVideo] =
+  const [idRole, setIdRole] = useState(0);
+  const [openDialogListFilterAccount, setOpenDialogListFilterAccount] =
     useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [contentAlert, setContentAlert] = useState("");
@@ -244,7 +233,7 @@ export default function Table() {
 
   const handleProcessRowUpdate = (newRow) => {
     videoAPI
-      .updateVideo(newRow.idVideo, newRow)
+      .updateRoleAccount(newRow.roles.idRole, newRow)
       .then((response) => {
         handleOpenSnackbar("success", "Cập nhật thành công!");
       })
@@ -257,47 +246,43 @@ export default function Table() {
     setIsLoading(true);
 
     try {
-      let videoResponse;
+      let accountResponse;
 
       if (!searchValue) {
-        videoResponse = await videoAPI.getAllVideo(
+        accountResponse = await accountAPI.getAllAccount(
           propertySearch,
           optionSort,
           page,
           pageSize,
-          idCategory
+          idRole
         );
       } else {
-        videoResponse = await videoAPI.getAllSearchVideoByTitle(
+        accountResponse = await accountAPI.getAllSearchAccountByChannelName(
           searchValue,
           propertySearch,
           optionSort,
           page,
           pageSize,
-          idCategory
+          idRole
         );
       }
 
-      if (!videoResponse || !videoResponse.result) {
+      if (!accountResponse || !accountResponse.result) {
         throw new Error("Invalid response from API");
       }
 
-      const updatedVideos = await Promise.all(
-        videoResponse.result.content.map(async (video) => {
+      const updatedAccounts = await Promise.all(
+        accountResponse.result.content.map(async (account) => {
           try {
-            const amountLikeResponse = await videoAPI.countLikeVideo(
-              video.idVideo
-            );
-            const amountLike = amountLikeResponse.result;
-
-            const amountCommentResponse =
-              await videoAPI.countCommentVideosByVideo(video.idVideo);
-            const amountComment = amountCommentResponse.result;
+            const amountVideoResponse =
+              await videoAPI.countAllByChannelNameUnique(
+                account?.channel?.nameUnique
+              );
+            const amountVideo = amountVideoResponse.result;
 
             return {
-              ...video,
-              amountLike,
-              amountComment,
+              ...account,
+              amountVideo,
             };
           } catch (error) {
             console.log(
@@ -305,13 +290,13 @@ export default function Table() {
               video.idVideo,
               error
             );
-            return { ...video, amountLike: 0, amountComment: 0 };
+            return { ...video, amountVideo: 0 };
           }
         })
       );
 
-      setAllVideos(updatedVideos);
-      setRowCount(videoResponse.result.totalElements);
+      setAllAccounts(updatedAccounts);
+      setRowCount(accountResponse.result.totalElements);
     } catch (error) {
       console.log("Error fetching videos:", error);
     } finally {
@@ -322,22 +307,24 @@ export default function Table() {
   useEffect(() => {
     fetchData(searchValue);
   }, [
-    myAccount.channel.nameUnique,
     page,
     pageSize,
     searchValue,
     propertySearch,
     optionSort,
-    idCategory,
+    idRole,
   ]);
 
   return (
     <>
+      <Typography variant='h4' fontWeight='700' sx={{ pb: "20px" }}>
+        Thống kê tài khoản
+      </Typography>
       <DataGrid
         editMode='row'
-        rows={allVideos}
+        rows={allAccounts}
         columns={columns}
-        getRowId={(row) => row.idVideo}
+        getRowId={(row) => row.idAccount}
         autoHeight={true}
         rowHeight={110}
         processRowUpdate={handleProcessRowUpdate}
@@ -352,7 +339,7 @@ export default function Table() {
                 count !== -1 ? count : `nhiều hơn ${to}`
               }`,
           },
-          noRowsLabel: "Không có video",
+          noRowsLabel: "Không có tài khoản",
         }}
         loading={isLoading}
         disableRowSelectionOnClick
@@ -369,22 +356,22 @@ export default function Table() {
             searchValue: searchValue,
             setSearchValue: setSearchValue,
             fetchData: fetchData,
-            setOpenDialogListFilterMyVideo: setOpenDialogListFilterMyVideo,
+            setOpenDialogListFilterAccount: setOpenDialogListFilterAccount,
           },
         }}
         disableColumnSorting
         disableColumnMenu
         disableColumnResize
       />
-      <ListFilterMyVideo
-        openDialogListFilterMyVideo={openDialogListFilterMyVideo}
-        setOpenDialogListFilterMyVideo={setOpenDialogListFilterMyVideo}
+      <ListFilterAccount
+        openDialogListFilterAccount={openDialogListFilterAccount}
+        setOpenDialogListFilterAccount={setOpenDialogListFilterAccount}
         optionSort={optionSort}
         setOptionSort={setOptionSort}
         propertySearch={propertySearch}
         setPropertySearch={setPropertySearch}
-        idCategory={idCategory}
-        setIdCategory={setIdCategory}
+        idRole={idRole}
+        setIdRole={setIdRole}
       />
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}

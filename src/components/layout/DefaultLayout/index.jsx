@@ -7,18 +7,25 @@ export default function DefaultLayout({ children, hideSidebar }) {
   return (
     <>
       <Header />
-      <Container maxWidth='lg'>
-        <Grid container flexWrap='nowrap' sx={{ pt: "96px", pb: "16px" }} gap={2}>
+      <Container maxWidth='xl'>
+        <Grid
+          container
+          flexWrap='nowrap'
+          sx={{ pt: "96px", pb: "16px" }}
+          gap={2}
+        >
           {!hideSidebar && (
-            <Grid item md={3} sm={3} xs={3}>
+            <Grid item xl={2} lg={2} md={2} sm={2} xs={2}>
               <Sidebar />
             </Grid>
           )}
           <Grid
             item
-            md={hideSidebar ? 12 : 9}
-            sm={hideSidebar ? 12 : 9}
-            xs={hideSidebar ? 12 : 9}
+            xl={hideSidebar ? 12 : 10}
+            lg={hideSidebar ? 12 : 10}
+            md={hideSidebar ? 12 : 10}
+            sm={hideSidebar ? 12 : 10}
+            xs={hideSidebar ? 12 : 10}
           >
             {children}
           </Grid>

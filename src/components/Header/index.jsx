@@ -37,7 +37,7 @@ export default function Header() {
         }}
       >
         <Container
-          maxWidth='lg'
+          maxWidth='xl'
           sx={{ display: "flex", alignItems: "center", height: "48px" }}
         >
           <Grid container alignItems='center' justifyContent='space-between'>

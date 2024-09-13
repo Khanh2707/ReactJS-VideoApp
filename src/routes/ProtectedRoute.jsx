@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 export default function ProtectedRoute({ children }) {
-  // const navigate = useNavigate();
+  const {myAccount} = useContext(AppContext)
 
-  // if (!localStorage.getItem("accessToken")) {
-  //   navigate("/login");
-  //   return;
-  // }
+  console.log(myAccount);
 
   return <Outlet />;
 }

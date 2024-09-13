@@ -23,6 +23,9 @@ import videoAPI from "../api/videoAPI";
 import channelAPI from "../api/channelAPI";
 import LikedVideo from "../pages/LikedVideo";
 import ResultSearch from "../pages/ResultSearch";
+import DataGridAllVideo from "../components/admin/DataGridAllVideo";
+import DataGridAllAccount from "../components/admin/DataGridAllAccount";
+import DataReport from "../components/admin/DataReport";
 
 const AuthLayout = () => {
   const { themeMode } = useContext(ThemeContext);
@@ -64,118 +67,147 @@ export default createBrowserRouter([
         path: "/reset-password",
       },
       {
+        element: (
+          <DefaultLayout>
+            <Home />
+          </DefaultLayout>
+        ),
+        path: "/",
+      },
+      {
+        element: (
+          <DefaultLayout hideSidebar>
+            <DetailVideo />
+          </DefaultLayout>
+        ),
+        path: "/watch/:idVideo",
+        loader: async ({}) => {
+          const videos = await videoAPI.getAllVideo(
+            "dateTimeCreate",
+            "desc",
+            0,
+            8,
+            0
+          );
+
+          return { videos };
+        },
+      },
+      {
+        element: (
+          <DefaultLayout>
+            <MyChannel />
+          </DefaultLayout>
+        ),
+        path: "/:nameUniqueChannel",
+        loader: async ({ params }) => {
+          const account = await accountAPI.getByChannelNameUnique(
+            params.nameUniqueChannel
+          );
+
+          const amountSub = await channelAPI.countSubChannel(
+            account.result.channel.idChannel
+          );
+
+          return { account, amountSub };
+        },
+      },
+      {
+        element: (
+          <DefaultLayout>
+            <WatchedVideo />
+          </DefaultLayout>
+        ),
+        path: "/history/watch",
+      },
+      {
+        element: (
+          <DefaultLayout>
+            <LikedVideo />
+          </DefaultLayout>
+        ),
+        path: "/history/like",
+      },
+      {
+        element: (
+          <DefaultLayout>
+            <ChannelEditing />
+          </DefaultLayout>
+        ),
+        path: "/channel/editing",
+        children: [
+          {
+            path: "",
+            element: <Navigate to='images' replace />,
+          },
+          {
+            element: <ChannelEditingImages />,
+            path: "images",
+          },
+          {
+            element: <ChannelEditingDetails />,
+            path: "details",
+          },
+          {
+            element: <ChannelEditingVideos />,
+            path: "videos",
+          },
+        ],
+      },
+      {
+        element: (
+          <DefaultLayout>
+            <ResultSearch />
+          </DefaultLayout>
+        ),
+        path: "/results",
+        loader: async () => {
+          const videos = await videoAPI.getAllVideo(
+            "dateTimeCreate",
+            "desc",
+            0,
+            6,
+            0
+          );
+
+          return { videos };
+        },
+      },
+      {
         element: <ProtectedRoute />,
         children: [
           {
-            element: (
-              <DefaultLayout>
-                <Home />
-              </DefaultLayout>
-            ),
-            path: "/",
-          },
-          {
-            element: (
-              <DefaultLayout hideSidebar>
-                <DetailVideo />
-              </DefaultLayout>
-            ),
-            path: "/watch/:idVideo",
-            loader: async ({}) => {
-              const videos = await videoAPI.getAllVideo(
-                "dateTimeCreate",
-                "desc",
-                0,
-                8,
-                0
-              );
-
-              return { videos };
-            },
-          },
-          {
-            element: (
-              <DefaultLayout>
-                <MyChannel />
-              </DefaultLayout>
-            ),
-            path: "/:nameUniqueChannel",
-            loader: async ({ params }) => {
-              const account = await accountAPI.getByChannelNameUnique(
-                params.nameUniqueChannel
-              );
-
-              const amountSub = await channelAPI.countSubChannel(
-                account.result.channel.idChannel
-              );
-
-              return { account, amountSub };
-            },
-          },
-          {
-            element: (
-              <DefaultLayout>
-                <WatchedVideo />
-              </DefaultLayout>
-            ),
-            path: "/history/watch",
-          },
-          {
-            element: (
-              <DefaultLayout>
-                <LikedVideo />
-              </DefaultLayout>
-            ),
-            path: "/history/like",
-          },
-          {
-            element: (
-              <DefaultLayout>
-                <ChannelEditing />
-              </DefaultLayout>
-            ),
-            path: "/channel/editing",
+            path: "/dashboard",
             children: [
               {
                 path: "",
-                element: <Navigate to='images' replace />,
+                element: <Navigate to='videos' replace />,
               },
               {
-                element: <ChannelEditingImages />,
-                path: "images",
-              },
-              {
-                element: <ChannelEditingDetails />,
-                path: "details",
-              },
-              {
-                element: <ChannelEditingVideos />,
+                element: (
+                  <AdminLayout>
+                    <DataGridAllVideo />
+                  </AdminLayout>
+                ),
                 path: "videos",
               },
+              {
+                element: (
+                  <AdminLayout>
+                    <DataGridAllAccount />
+                  </AdminLayout>
+                ),
+                path: "accounts",
+              },
+              {
+                element: (
+                  <AdminLayout>
+                    <DataReport />
+                  </AdminLayout>
+                ),
+                path: "reports",
+              },
             ],
-          },
-          {
-            element: <AdminLayout />,
-            path: "dashboard",
-          },
-          {
-            element: (
-              <DefaultLayout>
-                <ResultSearch />
-              </DefaultLayout>
-            ),
-            path: "/results",
-            loader: async () => {
-              const videos = await videoAPI.getAllVideo(
-                "dateTimeCreate",
-                "desc",
-                0,
-                6,
-                0
-              );
-
-              return { videos };
-            },
           },
         ],
       },

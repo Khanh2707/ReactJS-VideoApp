@@ -24,7 +24,7 @@ export default function Home() {
 
   useEffect(() => {
     videoAPI
-      .getAllVideo("dateTimeCreate", "desc", 0, 4, selectedChip)
+      .getAllVideo("dateTimeCreate", "desc", 0, 6, selectedChip)
       .then((response) => {
         setVideosByCategory(response.result.content);
       })
@@ -45,8 +45,10 @@ export default function Home() {
         {videosByCategory.map((item) => (
           <Grid
             item
-            md={6}
-            sm={12}
+            xl={3}
+            lg={4}
+            md={4}
+            sm={6}
             xs={12}
             key={item.idVideo}
             onClick={() => {

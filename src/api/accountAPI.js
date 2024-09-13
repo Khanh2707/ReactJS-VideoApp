@@ -11,9 +11,31 @@ const accountAPI = {
     return axiosClient.get(url);
   },
 
+  getAllSearchAccountByChannelName: (
+    keyword,
+    propertySort,
+    optionSort,
+    page,
+    size,
+    idRole
+  ) => {
+    const url = `/api/accounts/search/all/account/${keyword}/${propertySort}/${optionSort}/pageable/${page}/${size}/role/${idRole}`;
+    return axiosClient.get(url);
+  },
+
+  getAllAccount: (propertySort, optionSort, page, size, idRole) => {
+    const url = `/api/accounts/${propertySort}/${optionSort}/pageable/${page}/${size}/role/${idRole}`;
+    return axiosClient.get(url);
+  },
+
   createAccount: (data) => {
     const url = "/api/accounts";
     return axiosClient.post(url, data);
+  },
+
+  updateRoleAccount: (username, data) => {
+    const url = `api/accounts/role/${username}`;
+    return axiosClient.put(url, data);
   },
 
   changePasswordAccount: (id, data) => {
