@@ -11,6 +11,11 @@ const channelAPI = {
     return axiosClient.get(url);
   },
 
+  createBanChannel: (data) => {
+    const url = `/api/ban_channels`;
+    return axiosClient.post(url, data);
+  },
+
   createChannelSubChannel: (data) => {
     const url = `/api/channels/sub`;
     return axiosClient.post(url, data);

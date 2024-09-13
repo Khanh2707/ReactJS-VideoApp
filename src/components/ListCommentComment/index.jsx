@@ -13,7 +13,6 @@ export default function ListCommentComment({
   showListCommentComment,
   setShowListCommentComment,
   countCommentVideosByVideo,
-  handleOpenSnackbar,
   refresh,
   nameUniqueByVideo,
   stateSortComment,
@@ -99,7 +98,6 @@ export default function ListCommentComment({
               comment={item.content}
               type='comment-comment'
               countCommentVideosByVideo={countCommentVideosByVideo}
-              handleOpenSnackbar={handleOpenSnackbar}
               getAllCommentComment={getAllCommentComment}
               countCommentByCommentVideo={countCommentByCommentVideo}
               stateSortComment={stateSortComment}

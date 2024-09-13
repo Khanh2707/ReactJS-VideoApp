@@ -129,8 +129,11 @@ export default function MyChannel() {
         0
       )
       .then((response) => {
-        setVideos(response.result.content);
-        setTotalVideo(response.result.totalElements);
+        const filteredVideos = response.result.content.filter(
+          (video) => !(video.ban || video.hide)
+        );
+        setVideos(filteredVideos);
+        setTotalVideo(filteredVideos.length);
         setOpenBackdropInfoVideo(false);
       })
       .catch((error) => {

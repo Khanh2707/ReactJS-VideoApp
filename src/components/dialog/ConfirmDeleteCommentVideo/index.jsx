@@ -6,7 +6,8 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { SnackbarContext } from "../../../context/SnackbarContext";
 
 export default function ConfirmDeleteCommentVideo({
   type,
@@ -14,8 +15,9 @@ export default function ConfirmDeleteCommentVideo({
   setOpenDialogConfirmDeleteComment,
   deleteCommentVideo,
   deleteCommentComment,
-  handleOpenSnackbar,
 }) {
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
+
   const handleCloseDialogConfirmDeleteComment = () => {
     if (type === "comment-video") {
       deleteCommentVideo();
@@ -23,7 +25,7 @@ export default function ConfirmDeleteCommentVideo({
     if (type === "comment-comment") {
       deleteCommentComment();
     }
-    handleOpenSnackbar("info", "Xóa bình luận thành công!");
+    handleOpenSnackbar("info", "Xóa bình luận thành công!", "bottom", "center");
     setOpenDialogConfirmDeleteComment(false);
   };
 

@@ -6,6 +6,16 @@ const videoAPI = {
     return axiosClient.get(url, config);
   },
 
+  getChannelIsBan: (idChannel) => {
+    const url = `/api/ban_channels/channel/${idChannel}`;
+    return axiosClient.get(url);
+  },
+
+  countVideoIsBan: (idChannel) => {
+    const url = `/api/videos/count/ban/${idChannel}`;
+    return axiosClient.get(url);
+  },
+
   countCommentByCommentVideo: (idCommentVideo) => {
     const url = `/api/comment_comments/count/by/comment_video/${idCommentVideo}`;
     return axiosClient.get(url);

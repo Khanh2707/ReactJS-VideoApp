@@ -30,6 +30,7 @@ import { useTheme } from "@emotion/react";
 import ListSelectCategory from "../../ListSelectCategory";
 import videoAPI from "../../../api/videoAPI";
 import { AppContext } from "../../../context/AppContext";
+import { SnackbarContext } from "../../../context/SnackbarContext";
 
 const steps = ["Chi tiết", "Chế độ hiển thị"];
 
@@ -48,6 +49,20 @@ export default function CreateVideo({
   openDialogCreateVideo,
   setOpenDialogCreateVideo,
 }) {
+  const theme = useTheme();
+
+  const { themeMode } = useContext(ThemeContext);
+  const { myAccount, sendNotification } = useContext(AppContext);
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
+
+  const {
+    handleSubmit,
+    register,
+    clearErrors,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
   const [fileVideo, setFileVideo] = useState();
   const [fileImagePreview, setFileImagePreview] = useState();
   const [error, setError] = useState("");
@@ -64,21 +79,8 @@ export default function CreateVideo({
   const [errorCategory, setErrorCategory] = useState("");
   const [openBackdropCreateVideo, setOpenBackdropCreateVideo] = useState(false);
 
-  const { themeMode } = useContext(ThemeContext);
-  const { myAccount, sendNotification } = useContext(AppContext);
-
   const buttonSelectFileVideoRef = useRef(null);
   const videoControlsRef = useRef(null);
-
-  const theme = useTheme();
-
-  const {
-    handleSubmit,
-    register,
-    clearErrors,
-    setValue,
-    formState: { errors },
-  } = useForm();
 
   const handleCloseDialogCreateVideo = () => {
     if (tabContext !== "1") {
@@ -198,6 +200,12 @@ export default function CreateVideo({
             console.log(error);
           })
           .finally(() => {
+            handleOpenSnackbar(
+              "success",
+              "Đăng tải video thành công!",
+              "bottom",
+              "center"
+            );
             setOpenBackdropCreateVideo(false);
             handleCancelCreateVideo();
           });

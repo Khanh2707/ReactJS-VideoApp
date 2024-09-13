@@ -7,8 +7,8 @@ export default function Error() {
 
   return (
     <Paper sx={{ textAlign: 'center', pt: '32px', '& > *': { marginBottom: '16px' } }}>
-      <h1>Opps!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
+      <h1>Lỗi!</h1>
+      <p>Hình như có lỗi nào đó xảy ra với website.</p>
       <p>
         <i>{error.statusText || error.message}</i>
       </p>

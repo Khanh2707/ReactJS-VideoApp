@@ -101,7 +101,10 @@ export default function WatchedVideo() {
     videoAPI
       .getAllVideoChannelWatched(myAccount?.channel?.idChannel, 0, 4)
       .then((response) => {
-        setWatchedVideos(response.result.content);
+        const filteredVideos = response.result.content.filter(
+          (video) => !(video.ban || video.hide)
+        );
+        setWatchedVideos(filteredVideos);
         setOpenBackdropInfoVideo(false);
       })
       .catch((error) => {

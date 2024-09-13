@@ -29,6 +29,7 @@ import EmojiPicker from "emoji-picker-react";
 import { AppContext } from "../../context/AppContext";
 import videoAPI from "../../api/videoAPI";
 import ListCommentComment from "../ListCommentComment";
+import { SnackbarContext } from "../../context/SnackbarContext";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -66,13 +67,13 @@ export default function CommentVideo({
   countCommentVideosByVideo,
   getAllCommentComment,
   countCommentByCommentVideo,
-  handleOpenSnackbar,
   stateSortComment,
   setOpenBackdropCommentVideo,
 }) {
   const theme = useTheme();
 
   const { myAccount, sendNotification } = useContext(AppContext);
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
 
   const [stateRefreshCommentComment, dispatch] = useReducer(
     reducer,
@@ -157,7 +158,9 @@ export default function CommentVideo({
           setValueEditComment(response.result.content);
           handleOpenSnackbar(
             "success",
-            "Thay đổi nội dung bình luận thành công!"
+            "Thay đổi nội dung bình luận thành công!",
+            "bottom",
+            "center"
           );
         }
       })
@@ -176,7 +179,9 @@ export default function CommentVideo({
           setValueEditComment(response.result.content);
           handleOpenSnackbar(
             "success",
-            "Thay đổi nội dung bình luận thành công!"
+            "Thay đổi nội dung bình luận thành công!",
+            "bottom",
+            "center"
           );
         }
       })
@@ -332,7 +337,6 @@ export default function CommentVideo({
                 idCommentVideo={idCommentVideo}
                 setOpenInputCommentComment={setOpenInputCommentComment}
                 setShowListCommentComment={setShowListCommentComment}
-                handleOpenSnackbar={handleOpenSnackbar}
                 handleRefreshCommentComment={handleRefreshCommentComment}
               />
             ) : (
@@ -345,7 +349,9 @@ export default function CommentVideo({
                   } else {
                     handleOpenSnackbar(
                       "error",
-                      "Đăng nhập để có thể thực hiện chức năng!"
+                      "Đăng nhập để có thể thực hiện chức năng!",
+                      "bottom",
+                      "center"
                     );
                   }
                 }}
@@ -410,7 +416,6 @@ export default function CommentVideo({
             showListCommentComment={showListCommentComment}
             setShowListCommentComment={setShowListCommentComment}
             countCommentVideosByVideo={countCommentVideosByVideo}
-            handleOpenSnackbar={handleOpenSnackbar}
             refresh={stateRefreshCommentComment.refresh}
             nameUniqueByVideo={nameUniqueByVideo}
             stateSortComment={stateSortComment}
@@ -423,7 +428,6 @@ export default function CommentVideo({
         setOpenDialogConfirmDeleteComment={setOpenDialogConfirmDeleteComment}
         deleteCommentVideo={deleteCommentVideo}
         deleteCommentComment={deleteCommentComment}
-        handleOpenSnackbar={handleOpenSnackbar}
       />
     </>
   );

@@ -9,8 +9,6 @@ import {
   useTheme,
   InputAdornment,
   IconButton,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,6 +17,7 @@ import iconGoogle from "../../assets/icon-google.png";
 import authAPI from "../../api/authAPI";
 import { AppContext } from "../../context/AppContext";
 import { OAuthConfig } from "../../configurations/configurations";
+import { SnackbarContext } from "../../context/SnackbarContext";
 
 const textFieldStyles = {
   "& .MuiOutlinedInput-root": {
@@ -46,15 +45,11 @@ const textFieldStyles = {
 };
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const { getMyAccount } = useContext(AppContext);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [contentAlert, setContentAlert] = useState("");
-  const [stateAlert, setStateAlert] = useState("success");
-
+  const theme = useTheme();
   const navigate = useNavigate();
 
-  const theme = useTheme();
+  const { getMyAccount } = useContext(AppContext);
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
 
   const {
     register,
@@ -63,27 +58,10 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
-  };
-
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSnackbar(false);
-  };
-
-  const handleOpenSnackbar = (state, message) => {
-    setOpenSnackbar(false);
-
-    setStateAlert(state);
-    setContentAlert(message);
-
-    setTimeout(() => {
-      setOpenSnackbar(true);
-    }, 100);
   };
 
   // API
@@ -112,7 +90,12 @@ export default function Login() {
         console.log(response);
       })
       .catch((error) => {
-        handleOpenSnackbar("error", "Thông tin đăng nhập chưa chính xác!");
+        handleOpenSnackbar(
+          "error",
+          "Thông tin đăng nhập chưa chính xác!",
+          "top",
+          "right"
+        );
         console.log(error);
       });
   };
@@ -289,21 +272,6 @@ export default function Login() {
           </Box>
         </Paper>
       </Paper>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity={stateAlert}
-          variant='filled'
-          sx={{ width: "100%" }}
-        >
-          {contentAlert}
-        </Alert>
-      </Snackbar>
     </>
   );
 }

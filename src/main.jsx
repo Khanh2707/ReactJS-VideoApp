@@ -6,21 +6,24 @@ import { CssBaseline, Paper } from "@mui/material";
 import { ThemeContextProvider } from "./context/ThemeContext";
 import "./index.css";
 import { AppProvider } from "./context/AppContext.jsx";
+import { SnackbarProvider } from "./context/SnackbarContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
   <ThemeContextProvider>
-    <AppProvider>
-      <CssBaseline />
-      <Paper
-        sx={{
-          width: "100%",
-          minHeight: "100vh",
-        }}
-      >
-        <RouterProvider router={routes} />
-      </Paper>
-    </AppProvider>
+    <SnackbarProvider>
+      <AppProvider>
+        <CssBaseline />
+        <Paper
+          sx={{
+            width: "100%",
+            minHeight: "100vh",
+          }}
+        >
+          <RouterProvider router={routes} />
+        </Paper>
+      </AppProvider>
+    </SnackbarProvider>
   </ThemeContextProvider>
   // </React.StrictMode>,
 );

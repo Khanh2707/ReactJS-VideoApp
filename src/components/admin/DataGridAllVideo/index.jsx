@@ -160,9 +160,9 @@ const columns = [
   },
   {
     field: "ban",
-    headerName: "Hạn chế",
+    headerName: "Vi phạm",
     valueGetter: (value) => {
-      return value ? "Bị gỡ" : "Không";
+      return value ? "Vi phạm" : "Không";
     },
   },
   {

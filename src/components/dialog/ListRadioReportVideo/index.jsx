@@ -14,13 +14,14 @@ import typeReportVideoAPI from "../../../api/typeReportVideoAPI";
 import reportVideoAPI from "../../../api/reportVideoAPI";
 import { AppContext } from "../../../context/AppContext";
 import { useParams } from "react-router-dom";
+import { SnackbarContext } from "../../../context/SnackbarContext";
 
 export default function ListRadioReportVideo({
   openDialogListRadioReportVideo,
   setOpenDialogListRadioReportVideo,
-  handleOpenSnackbar,
 }) {
   const { myAccount } = useContext(AppContext);
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
 
   const { idVideo } = useParams();
 
@@ -64,7 +65,12 @@ export default function ListRadioReportVideo({
         idVideo: idVideo,
       })
       .then((response) => {
-        handleOpenSnackbar("success", "Chúng tôi đã ghi nhận báo cáo của bạn!");
+        handleOpenSnackbar(
+          "success",
+          "Chúng tôi đã ghi nhận báo cáo của bạn!",
+          "bottom",
+          "center"
+        );
       })
       .catch((error) => {});
   };

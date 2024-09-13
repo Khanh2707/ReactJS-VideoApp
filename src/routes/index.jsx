@@ -26,9 +26,19 @@ import ResultSearch from "../pages/ResultSearch";
 import DataGridAllVideo from "../components/admin/DataGridAllVideo";
 import DataGridAllAccount from "../components/admin/DataGridAllAccount";
 import DataReport from "../components/admin/DataReport";
+import { Alert, Snackbar } from "@mui/material";
+import { SnackbarContext } from "../context/SnackbarContext";
 
 const AuthLayout = () => {
   const { themeMode } = useContext(ThemeContext);
+  const {
+    openSnackbar,
+    contentAlert,
+    stateAlert,
+    verticalSnackbar,
+    horizontalSnackbar,
+    handleCloseSnackbar,
+  } = useContext(SnackbarContext);
 
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -41,6 +51,24 @@ const AuthLayout = () => {
     <AuthProvider>
       <style>{`:root { color-scheme: var(--theme-color-scheme); }`}</style>
       <Outlet />
+      <Snackbar
+        anchorOrigin={{
+          vertical: verticalSnackbar,
+          horizontal: horizontalSnackbar,
+        }}
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={stateAlert}
+          variant='filled'
+          sx={{ width: "100%" }}
+        >
+          {contentAlert}
+        </Alert>
+      </Snackbar>
     </AuthProvider>
   );
 };

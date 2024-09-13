@@ -5,6 +5,7 @@ import EmojiPicker from "emoji-picker-react";
 import { ThemeContext } from "../../context/ThemeContext";
 import videoAPI from "../../api/videoAPI";
 import { AppContext } from "../../context/AppContext";
+import { SnackbarContext } from "../../context/SnackbarContext";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -22,11 +23,11 @@ export default function InputCommentComment({
   idCommentVideo,
   setOpenInputCommentComment,
   setShowListCommentComment,
-  handleOpenSnackbar,
   handleRefreshCommentComment,
 }) {
   const { themeMode } = useContext(ThemeContext);
   const { myAccount, sendNotification } = useContext(AppContext);
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [valueComment, setValueComment] = useState("");
@@ -51,7 +52,12 @@ export default function InputCommentComment({
       .then((response) => {
         sendNotification();
         setShowListCommentComment(true);
-        handleOpenSnackbar("success", "Bình luận thành công!");
+        handleOpenSnackbar(
+          "success",
+          "Bình luận thành công!",
+          "bottom",
+          "center"
+        );
         handleRefreshCommentComment();
         handleCancelComment();
       })

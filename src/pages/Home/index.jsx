@@ -26,9 +26,14 @@ export default function Home() {
     videoAPI
       .getAllVideo("dateTimeCreate", "desc", 0, 6, selectedChip)
       .then((response) => {
-        setVideosByCategory(response.result.content);
+        const filteredVideos = response.result.content.filter(
+          (video) => !(video.ban || video.hide)
+        );
+        setVideosByCategory(filteredVideos);
       })
-      .catch((error) => {})
+      .catch((error) => {
+        console.error("Error fetching videos:", error);
+      })
       .finally(() => {
         setOpenBackdropVideos(false);
       });

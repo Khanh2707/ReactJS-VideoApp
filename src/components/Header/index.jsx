@@ -12,12 +12,17 @@ import { AppContext } from "../../context/AppContext";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CreateVideo from "../dialog/CreateVideo";
 import { ThemeContext } from "../../context/ThemeContext";
+import videoAPI from "../../api/videoAPI";
+import { SnackbarContext } from "../../context/SnackbarContext";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { vi } from "date-fns/locale";
 
 export default function Header() {
   const navigate = useNavigate();
 
   const { themeMode } = useContext(ThemeContext);
   const { myAccount } = useContext(AppContext);
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
 
   const [openDialogCreateVideo, setOpenDialogCreateVideo] = useState(false);
 
@@ -70,7 +75,38 @@ export default function Header() {
                     <Grid item>
                       <IconButton
                         type='button'
-                        onClick={handleClickOpenDialogCreateVideo}
+                        onClick={async () => {
+                          try {
+                            const channelIsBanResponse =
+                              await videoAPI.getChannelIsBan(
+                                myAccount.channel.idChannel
+                              );
+
+                            if (channelIsBanResponse?.result) {
+                              let dateTimeBan = new Date(
+                                channelIsBanResponse.result.dateTimeBan
+                              );
+                              dateTimeBan.setMonth(dateTimeBan.getMonth() + 3);
+                              handleOpenSnackbar(
+                                "error",
+                                `Bạn đã bị khóa đăng video do vi phạm 3 lần trở lên!\n
+                                Bạn sẽ được mở tài khoản sau ${formatDistanceToNow(
+                                  parseISO(dateTimeBan.toISOString()),
+                                  {
+                                    addSuffix: true,
+                                    locale: vi,
+                                  }
+                                )}`,
+                                "bottom",
+                                "center"
+                              );
+                            }
+                          } catch (error) {
+                            if (error.response.data.code === 1023) {
+                              handleClickOpenDialogCreateVideo();
+                            }
+                          }
+                        }}
                       >
                         <VideoCallIcon />
                       </IconButton>
