@@ -86,7 +86,10 @@ export default function WatchedVideo() {
           1000
         )
         .then((response) => {
-          setWatchedVideos(response.result.content);
+          const filteredVideos = response.result.content.filter(
+            (video) => !(video.ban || video.hide)
+          );
+          setWatchedVideos(filteredVideos);
           setOpenBackdropInfoVideo(false);
         })
         .catch((error) => {

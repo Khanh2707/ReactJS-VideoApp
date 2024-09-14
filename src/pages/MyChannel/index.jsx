@@ -103,11 +103,14 @@ export default function MyChannel() {
           "dateTimeCreate",
           "desc",
           0,
-          4,
+          1000,
           0
         )
         .then((response) => {
-          setVideos(response.result.content);
+          const filteredVideos = response.result.content.filter(
+            (video) => !(video.ban || video.hide)
+          );
+          setVideos(filteredVideos);
           setOpenBackdropInfoVideo(false);
         })
         .catch((error) => {
@@ -125,7 +128,7 @@ export default function MyChannel() {
         "dateTimeCreate",
         "desc",
         0,
-        6,
+        1000,
         0
       )
       .then((response) => {

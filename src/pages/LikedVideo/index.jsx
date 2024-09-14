@@ -59,7 +59,10 @@ export default function LikedVideo() {
           1000
         )
         .then((response) => {
-          setLikedVideos(response.result.content);
+          const filteredVideos = response.result.content.filter(
+            (video) => !(video.ban || video.hide)
+          );
+          setLikedVideos(filteredVideos);
           setOpenBackdropInfoVideo(false);
         })
         .catch((error) => {
@@ -74,7 +77,10 @@ export default function LikedVideo() {
     videoAPI
       .getAllVideoChannelLiked(myAccount?.channel?.idChannel, 0, 1000)
       .then((response) => {
-        setLikedVideos(response.result.content);
+        const filteredVideos = response.result.content.filter(
+          (video) => !(video.ban || video.hide)
+        );
+        setLikedVideos(filteredVideos);
         setOpenBackdropInfoVideo(false);
       })
       .catch((error) => {
