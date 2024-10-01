@@ -41,6 +41,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import LockVideo from "../../components/dialog/LockVideo";
 import { SnackbarContext } from "../../context/SnackbarContext";
 import { ReponsiveContext } from "../../context/ReponsiveContext";
+import { ReducerContext } from "../../context/ReducerContext";
 
 const textFieldStyles = {
   "& .MuiInput-underline:before": {
@@ -64,6 +65,7 @@ export default function DetailVideo() {
   const { themeMode } = useContext(ThemeContext);
   const { myAccount, sendNotification } = useContext(AppContext);
   const { handleOpenSnackbar } = useContext(SnackbarContext);
+  const { reloadComponent, handleReloadComponent } = useContext(ReducerContext);
 
   const { idVideo } = useParams();
 
@@ -459,19 +461,19 @@ export default function DetailVideo() {
 
     getVideo();
     handleWatchVideo();
-  }, [idVideo]);
+  }, [idVideo, reloadComponent]);
 
   useEffect(() => {
     countCommentVideosByVideo();
     getAllCommentVideo();
-  }, [idVideo, stateSortComment]);
+  }, [idVideo, stateSortComment, reloadComponent]);
 
   useEffect(() => {
     getIsLike();
     getAmountLike();
 
     if (isLike !== null) setOpenBackdropInfoVideo(false);
-  }, [idVideo, isLike, amountLike]);
+  }, [idVideo, isLike, amountLike, reloadComponent]);
 
   useEffect(() => {
     if (video?.ban !== null && video?.ban === false && video?.hide === false) {
@@ -499,14 +501,14 @@ export default function DetailVideo() {
     ) {
       setDisplayWhenVideoCant(true);
     }
-  }, [video]);
+  }, [video, reloadComponent]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [reloadComponent]);
 
   return (
     <Box>
@@ -1070,6 +1072,7 @@ export default function DetailVideo() {
                           key={item.idVideo}
                           onClick={() => {
                             navigate(`/watch/${item.idVideo}`);
+                            handleReloadComponent();
                           }}
                         >
                           <RecommendVideoCard

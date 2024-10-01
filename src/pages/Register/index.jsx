@@ -58,8 +58,10 @@ export default function Register() {
     setError,
     clearErrors,
     watch,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+  });
 
   const usernameValue = watch("username");
 
@@ -288,7 +290,6 @@ export default function Register() {
                   name='nameChannel'
                   helperText={errors.nameChannel?.message || ""}
                   {...register("nameChannel", {
-                    required: "Vui lòng nhập trường này",
                     onChange: () => clearErrors("nameChannel"),
                   })}
                   sx={textFieldStyles}
@@ -308,7 +309,6 @@ export default function Register() {
                   name='nameUniqueChannel'
                   helperText={errors.nameUniqueChannel?.message || ""}
                   {...register("nameUniqueChannel", {
-                    required: "Vui lòng nhập trường này",
                     onChange: () => clearErrors("nameUniqueChannel"),
                   })}
                   sx={textFieldStyles}
@@ -380,6 +380,7 @@ export default function Register() {
               type='submit'
               fullWidth
               variant='contained'
+              disabled={!isValid}
               sx={{
                 mt: "32px",
                 p: "8px",

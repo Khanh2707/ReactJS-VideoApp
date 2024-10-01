@@ -26,6 +26,7 @@ import { useTheme } from "@emotion/react";
 import ClearIcon from "@mui/icons-material/Clear";
 import TuneIcon from "@mui/icons-material/Tune";
 import ListFilterMyVideo from "../dialog/ListFilterMyVideo";
+import { ReducerContext } from "../../context/ReducerContext";
 
 function Pagination({ page, onPageChange, className }) {
   const apiRef = useGridApiContext();
@@ -192,6 +193,7 @@ const columns = [
 
 export default function ChannelEditingVideos() {
   const { myAccount } = useContext(AppContext);
+  const { reloadComponent } = useContext(ReducerContext);
 
   const [allVideos, setAllVideos] = useState([]);
   const [rowCount, setRowCount] = useState(0);
@@ -320,6 +322,7 @@ export default function ChannelEditingVideos() {
     propertySearch,
     optionSort,
     idCategory,
+    reloadComponent,
   ]);
 
   return (

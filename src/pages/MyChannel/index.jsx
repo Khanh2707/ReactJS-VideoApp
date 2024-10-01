@@ -98,7 +98,7 @@ export default function MyChannel() {
     } else {
       videoAPI
         .getAllSearchVideoChannelByTitle(
-          myAccount?.channel?.nameUnique,
+          account.result?.channel.nameUnique,
           searchValue,
           "dateTimeCreate",
           "desc",
@@ -124,7 +124,7 @@ export default function MyChannel() {
     setOpenBackdropInfoVideo(true);
     videoAPI
       .getAllByChannelNameUnique(
-        myAccount?.channel?.nameUnique,
+        account.result?.channel.nameUnique,
         "dateTimeCreate",
         "desc",
         0,

@@ -48,7 +48,6 @@ export default function Sidebar() {
         p: "0",
         position: "sticky",
         top: { md: "0", lg: "90px" },
-        m: "8px",
       }}
     >
       {listContent.map((item, index) => {

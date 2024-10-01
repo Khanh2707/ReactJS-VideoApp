@@ -14,7 +14,7 @@ import channelAPI from "../../api/channelAPI";
 import ConfirmDeleteChannelAvatar from "../dialog/ConfirmDeleteChannelAvatar";
 
 export default function ChannelEditingImages() {
-  const { myAccount } = useContext(AppContext);
+  const { myAccount, getMyAccount } = useContext(AppContext);
 
   const [avatar, setAvatar] = useState(myAccount?.channel.avatar);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -72,6 +72,7 @@ export default function ChannelEditingImages() {
         )
         .then((response) => {
           setAvatar(response.result.avatar);
+          getMyAccount();
           handleOpenSnackbar("success", "Thay đổi ảnh hồ sơ thành công!");
         })
         .catch((error) => {
@@ -99,6 +100,7 @@ export default function ChannelEditingImages() {
       })
       .then((response) => {
         setAvatar(null);
+        getMyAccount();
         handleOpenSnackbar("success", "Ảnh hồ sơ đã xóa thành công!");
       })
       .catch((error) => {

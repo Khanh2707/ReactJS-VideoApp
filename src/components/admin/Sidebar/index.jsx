@@ -15,6 +15,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import { ThemeContext } from "../../../context/ThemeContext";
 import vineoDark from "../../../assets/vineo-dark.svg";
 import vineoLight from "../../../assets/vineo-light.svg";
+import { AppContext } from "../../../context/AppContext";
 
 const menuItemSidebar = [
   {
@@ -43,6 +44,20 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   const { themeMode } = useContext(ThemeContext);
+  const { myAccount } = useContext(AppContext);
+
+  const isCensor = myAccount.roles[0].name === "CENSOR";
+
+  const filteredMenuItems = menuItemSidebar.filter((item) => {
+    if (
+      isCensor &&
+      (item.route === "/dashboard/videos" ||
+        item.route === "/dashboard/accounts")
+    ) {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <>
@@ -50,7 +65,7 @@ export default function Sidebar() {
         <img src={themeMode === "light" ? vineoDark : vineoLight} alt='' />
       </Box>
       <List sx={{ p: "0", position: "sticky", top: "40px", pt: "16px" }}>
-        {menuItemSidebar.map((item, index) => {
+        {filteredMenuItems.map((item, index) => {
           const isSelected = item.dynamic
             ? location.pathname.startsWith(item.route)
             : location.pathname === item.route;

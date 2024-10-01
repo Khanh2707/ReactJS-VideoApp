@@ -7,6 +7,7 @@ import { vi } from "date-fns/locale";
 import CommentVideo from "../CommentVideo";
 import { ThemeContext } from "../../context/ThemeContext";
 import videoAPI from "../../api/videoAPI";
+import { ReducerContext } from "../../context/ReducerContext";
 
 export default function ListCommentComment({
   idCommentVideo,
@@ -19,6 +20,7 @@ export default function ListCommentComment({
   setOpenBackdropCommentVideo,
 }) {
   const { themeMode } = useContext(ThemeContext);
+  const { reloadComponent } = useContext(ReducerContext);
 
   const [listCommentComment, setListCommentComment] = useState([]);
   const [amountCommentComment, setAmountCommentComment] = useState(0);
@@ -54,7 +56,7 @@ export default function ListCommentComment({
   useEffect(() => {
     getAllCommentComment();
     countCommentByCommentVideo();
-  }, [refresh]);
+  }, [refresh, reloadComponent]);
 
   return (
     <>

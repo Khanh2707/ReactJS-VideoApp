@@ -39,7 +39,7 @@ const textFieldStyles = {
 };
 
 export default function ChannelEditingDetails() {
-  const { myAccount } = useContext(AppContext);
+  const { myAccount, getMyAccount } = useContext(AppContext);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [contentAlert, setContentAlert] = useState("");
@@ -91,6 +91,7 @@ export default function ChannelEditingDetails() {
         description: formData.descriptionChannel,
       })
       .then((response) => {
+        getMyAccount();
         handleOpenSnackbar("success", "Thay đổi thông tin cơ bản thành công!");
       })
       .catch((error) => {

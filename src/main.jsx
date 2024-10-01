@@ -9,27 +9,30 @@ import { AppProvider } from "./context/AppContext.jsx";
 import { SnackbarProvider } from "./context/SnackbarContext.jsx";
 import { SearchProvider } from "./context/SearchContext.jsx";
 import { ReponsiveProvider } from "./context/ReponsiveContext.jsx";
+import { ReducerProvider } from "./context/ReducerContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
-  <ThemeContextProvider>
-    <SnackbarProvider>
-      <SearchProvider>
-        <ReponsiveProvider>
-          <AppProvider>
-            <CssBaseline />
-            <Paper
-              sx={{
-                width: "100%",
-                minHeight: "100vh",
-              }}
-            >
-              <RouterProvider router={routes} />
-            </Paper>
-          </AppProvider>
-        </ReponsiveProvider>
-      </SearchProvider>
-    </SnackbarProvider>
-  </ThemeContextProvider>
+  <ReducerProvider>
+    <ThemeContextProvider>
+      <SnackbarProvider>
+        <SearchProvider>
+          <ReponsiveProvider>
+            <AppProvider>
+              <CssBaseline />
+              <Paper
+                sx={{
+                  width: "100%",
+                  minHeight: "100vh",
+                }}
+              >
+                <RouterProvider router={routes} />
+              </Paper>
+            </AppProvider>
+          </ReponsiveProvider>
+        </SearchProvider>
+      </SnackbarProvider>
+    </ThemeContextProvider>
+  </ReducerProvider>
   // </React.StrictMode>,
 );

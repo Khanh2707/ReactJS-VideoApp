@@ -31,6 +31,7 @@ import ListSelectCategory from "../../ListSelectCategory";
 import videoAPI from "../../../api/videoAPI";
 import { AppContext } from "../../../context/AppContext";
 import { SnackbarContext } from "../../../context/SnackbarContext";
+import { ReducerContext } from "../../../context/ReducerContext";
 
 const steps = ["Chi tiết", "Chế độ hiển thị"];
 
@@ -54,6 +55,7 @@ export default function CreateVideo({
   const { themeMode } = useContext(ThemeContext);
   const { myAccount, sendNotification } = useContext(AppContext);
   const { handleOpenSnackbar } = useContext(SnackbarContext);
+  const { handleReloadComponent } = useContext(ReducerContext);
 
   const {
     handleSubmit,
@@ -180,7 +182,7 @@ export default function CreateVideo({
         const formDataCreateVideo = new FormData();
         formDataCreateVideo.append("title", formData?.titleVideo);
         formDataCreateVideo.append("description", formData?.descriptionVideo);
-        formDataCreateVideo.append("hide", displayMode === 0 ? false : true);
+        formDataCreateVideo.append("hide", displayMode === 0 ? true : false);
         formDataCreateVideo.append("idCategory", category?.idCategory);
         formDataCreateVideo.append("idChannel", myAccount?.channel?.idChannel);
         formDataCreateVideo.append("fileVideo", fileVideo);
@@ -207,6 +209,7 @@ export default function CreateVideo({
               "center"
             );
             setOpenBackdropCreateVideo(false);
+            handleReloadComponent();
             handleCancelCreateVideo();
           });
       }
@@ -224,8 +227,6 @@ export default function CreateVideo({
     <Dialog
       open={openDialogCreateVideo}
       onClose={handleCloseDialogCreateVideo}
-      aria-labelledby='alert-dialog-title'
-      aria-describedby='alert-dialog-description'
       disableScrollLock
       maxWidth={false}
       PaperProps={{
@@ -241,7 +242,7 @@ export default function CreateVideo({
         <>
           <DialogTitle>{"Hủy đăng video?"}</DialogTitle>
           <DialogContent sx={{ width: "300px" }}>
-            <DialogContentText id='alert-dialog-description'>
+            <DialogContentText>
               Nếu hùy đăng video, mọi tùy chọn với video sẽ bị mất?
             </DialogContentText>
           </DialogContent>

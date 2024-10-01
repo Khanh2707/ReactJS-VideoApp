@@ -16,6 +16,7 @@ import { AppContext } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { SearchContext } from "../../context/SearchContext";
 import { ReponsiveContext } from "../../context/ReponsiveContext";
+import { SnackbarContext } from "../../context/SnackbarContext";
 
 export default function SearchHeader() {
   const theme = useTheme();
@@ -23,6 +24,8 @@ export default function SearchHeader() {
 
   const { isXlDown, isLgDown, isMdDown, isSmDown, isXsDown } =
     useContext(ReponsiveContext);
+
+  const { handleOpenSnackbar } = useContext(SnackbarContext);
 
   const { myAccount } = useContext(AppContext);
   const { setValueSearchAllVideo } = useContext(SearchContext);
@@ -76,14 +79,21 @@ export default function SearchHeader() {
       historySearchAPI
         .createHistorySearch({
           content: valueSearchTemp,
-          idChannel: myAccount.channel.idChannel,
+          idChannel: myAccount?.channel?.idChannel,
         })
         .then((response) => {
           setValueSearchAllVideo(valueSearchTemp);
           getAllHistorySearchByChannel();
           navigate("/results");
         })
-        .catch((error) => {});
+        .catch((error) => {
+          handleOpenSnackbar(
+            "error",
+            "Đăng nhập để có thể thực hiện chức năng!",
+            "bottom",
+            "center"
+          );
+        });
     }
   };
 

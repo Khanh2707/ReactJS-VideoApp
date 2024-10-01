@@ -18,6 +18,7 @@ import { vi } from "date-fns/locale";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import videoAPI from "../../api/videoAPI";
+import { ReducerContext } from "../../context/ReducerContext";
 
 export default function Notification() {
   const theme = useTheme();
@@ -30,6 +31,8 @@ export default function Notification() {
     amountMergedNotification,
     fetchAmountNotification,
   } = useContext(AppContext);
+
+  const { handleReloadComponent } = useContext(ReducerContext);
 
   const [showListNotification, setShowListNotification] = useState(false);
 
@@ -125,6 +128,7 @@ export default function Notification() {
                       key={index}
                       onClick={() => {
                         navigate(`/watch/${item.video.idVideo}`);
+                        handleReloadComponent();
                         videoAPI
                           .updateIsCheckHistoryNotificationVideo(
                             myAccount.channel.idChannel,
@@ -226,6 +230,7 @@ export default function Notification() {
                       key={index}
                       onClick={() => {
                         navigate(`/watch/${item.commentVideo.video.idVideo}`);
+                        handleReloadComponent();
                         videoAPI
                           .updateIsCheckHistoryNotificationCommentVideo(
                             myAccount.channel.idChannel,
@@ -334,6 +339,7 @@ export default function Notification() {
                         navigate(
                           `/watch/${item.commentInComment.commentVideo.video.idVideo}`
                         );
+                        handleReloadComponent();
                         videoAPI
                           .updateIsCheckHistoryNotificationCommentComment(
                             myAccount.channel.idChannel,
